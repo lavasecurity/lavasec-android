@@ -390,9 +390,8 @@ jobs:
 
       - name: Build the WireGuard engine into jniLibs
         if: ${{ needs.changes.outputs.full_build != 'false' }}
-        # Owned runs only: a fork PR must not execute PR-authored build scripts, and the
-        # engine's own workflow already proves the cross-compile. `github.repository` is the
-        # BASE repo on a pull_request, so the fork test must compare the head repo explicitly.
+        # Public/fork builds use isolated hosted runners without production credentials.
+        # Build the checked-out engines before packaging either app edition.
         run: bash scripts/prepare-wireguard-core-android.sh
 
       - name: Verify and build

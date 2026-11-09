@@ -44,7 +44,7 @@ def classify(files, *, event, repository, force_full=False):
         "docs_only": docs_only,
         "native_required": native,
         "engine_required": engine,
-        "full_build": native and (repository == PUBLIC_REPOSITORY or extended),
+        "full_build": not docs_only and (extended or (native and repository == PUBLIC_REPOSITORY)),
         # UI-only main changes still need real rendered/device qualification.
         "qualification_required": not docs_only and extended,
     }

@@ -30,7 +30,11 @@ class AndroidCiScopeTest(unittest.TestCase):
             with self.subTest(path=path):
                 self.assertFalse(self.scope([path])["native_required"])
                 self.assertFalse(self.scope([path])["docs_only"])
-                self.assertTrue(self.scope([path], "push")["qualification_required"])
+                for repo in (INTERNAL, PUBLIC):
+                    result = self.scope([path], "push", repo)
+                    self.assertTrue(result["qualification_required"])
+                    self.assertTrue(result["full_build"])
+                    self.assertFalse(self.scope([path], repository=repo)["full_build"])
 
     def test_native_abi_dependencies_and_unknown_paths_rebuild(self):
         for path in ("android/app/src/main/kotlin/App.kt", "android/app/src/main/res/values/strings.xml",
