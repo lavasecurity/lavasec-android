@@ -2661,7 +2661,7 @@ internal object com {
 
     def test_wrapper_is_gradle_9_5_all_with_verified_artifacts(self) -> None:
         properties = self.read("android/gradle/wrapper/gradle-wrapper.properties")
-        self.assertIn("distributionUrl=https\\://services.gradle.org/distributions/gradle-9.5.0-all.zip", properties)
+        self.assertIn("distributionUrl=https\\://github.com/gradle/gradle-distributions/releases/download/v9.5.0/gradle-9.5.0-all.zip?download=1", properties)
         self.assertIn(
             "distributionSha256Sum=a3c4ba4aca8f0075688b9c5b18939fd28e8cb4357c227da5c1d9f38343791439",
             properties,

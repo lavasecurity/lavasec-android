@@ -2426,7 +2426,7 @@ def verify_wrapper(root: Path, contract: dict[str, object], errors: list[str]) -
     relative = "android/gradle/wrapper/gradle-wrapper.properties"
     properties = read_text(root, relative, errors)
     if properties is not None:
-        expected_url = f"distributionUrl=https\\://services.gradle.org/distributions/gradle-{contract['gradle']}-all.zip"
+        expected_url = f"distributionUrl=https\\://github.com/gradle/gradle-distributions/releases/download/v{contract['gradle']}/gradle-{contract['gradle']}-all.zip?download=1"
         expected_checksum = f"distributionSha256Sum={EXPECTED_DISTRIBUTION_SHA256}"
         if properties.count(expected_url) != 1 or properties.count(expected_checksum) != 1:
             errors.append(f"{relative} must pin the canonical Gradle distribution and checksum")
