@@ -16,10 +16,12 @@ contexts report successful scope receipts while expensive work stays off.
 | Advisory analysis | Shared mobile SAST; public-only CodeQL job stays inert | Java/Kotlin CodeQL on source pushes, weekly and manual runs |
 
 Documentation-only changes run lightweight checks and report every required
-context. Known JavaScript-only changes run UI validation and core tests while
+context. Known JavaScript-only PR changes run UI validation and core tests while
 native compilation reports a scope receipt. Specs, native files, dependency locks,
 build configuration, CI changes and unknown paths rebuild. Missing/invalid Git
 ranges, initial pushes and manual runs never become documentation-only.
+Every non-documentation main push, including UI-only updates, retains Release
+packaging and optimized startup qualification.
 Classification uses the complete local Git diff, with rename detection disabled;
 source deletion cannot hide behind a documentation destination. PR classification
 uses the base revision's policy, so a PR cannot rewrite its own scheduling rules.
@@ -44,3 +46,16 @@ build also requires successful UI validation before it may report success.
 A docs/JS scope receipt is not fresh native or device qualification. Device and
 optimized-startup evidence remain tied to the exact built source and APK. Source
 publication does not claim store approval or F-Droid admission.
+
+## Requesting deeper checks
+
+Keep work in draft while iterating, then mark the PR ready to run its normal
+change-based tiers. Add the `full-build` label when a PR needs Release packaging,
+optimized startup and API 28/36 journeys, including for documentation or UI-only
+changes. Removing the label refreshes the normal tiers and cancels the obsolete
+PR run.
+
+For a fresh qualification of main, manually run both **Android CI** and **Android
+device tests** at the intended main revision. Check each run's source SHA before
+using its APK or device evidence. Successful scope receipts on a later docs-only
+commit do not qualify a new native artifact.
