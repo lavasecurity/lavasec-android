@@ -71,8 +71,9 @@ cd android
   :app:bundlePlayRelease :app:assembleFossRelease
 ```
 
-The build installs locked dependencies and bundles the committed shared UI;
-no private checkout or prebuilt JS/native output is needed. Release artifacts
+The Gradle `bundleReactNativeJs` task installs dependencies pinned by
+`package-lock.json` and bundles the committed shared UI. No private checkout or
+prebuilt JS/native output is needed. Release artifacts
 above are unsigned. Never use the public debug key for a release. See
 [candidate qualification](docs/android-release-ci.md) for release build checks.
 
