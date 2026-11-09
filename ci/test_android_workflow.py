@@ -42,82 +42,64 @@ def _retention_days(source: str) -> list[str]:
     return re.findall(r"(?m)^\s*retention-days:\s*(\d+)\s*$", source)
 
 
+def _job(source: str, name: str) -> str:
+    match = re.search(r"(?m)^  " + re.escape(name) + r":\n", source)
+    if match is None:
+        raise AssertionError("missing job " + name)
+    tail = source[match.end():]
+    next_job = re.search(r"(?m)^  [a-zA-Z][a-zA-Z0-9_-]*:\n", tail)
+    return tail[:next_job.start()] if next_job else tail
+
+
 class AndroidWorkflowContractTest(unittest.TestCase):
     def read(self, path: Path) -> str:
         self.assertTrue(path.is_file(), f"missing {path}")
         return path.read_text(encoding="utf-8")
 
     def test_engine_scope_handles_large_diffs_and_fails_closed_on_diff_errors(self) -> None:
-        source = self.read(WIREGUARD_WORKFLOW)
-        script = textwrap.dedent(source.split("id: scope\n        run: |\n", 1)[1].split("\n  build:", 1)[0])
-        script = script.replace("${{ github.event_name }}", "pull_request")
-        script = script.replace("${{ github.event.pull_request.base.sha }}", "exact-event-base")
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            fake_git = root / "git"
-            fake_git.write_text("#!/usr/bin/env python3\n" + textwrap.dedent('''\
-                import os, sys
-                mode = os.environ['SCOPE_TEST_DIFF']
-                if sys.argv[1:] != ['diff', '--name-only', 'exact-event-base...HEAD']:
-                    sys.exit(24)
-                if mode == 'error':
-                    sys.exit(23)
-                if mode == 'large':
-                    print('ThirdParty/doq-core/src/lib.rs')
-                    for index in range(5000):
-                        print('android/app/src/main/kotlin/fixture/' + str(index) + '/' + 'long-path' * 12 + '.kt')
-                else:
-                    print('docs/status.md')
-                '''))
-            fake_git.chmod(0o755)
-            for mode, expected in (("large", "true"), ("ordinary", "false"), ("error", None)):
-                with self.subTest(mode=mode):
-                    output = root / (mode + ".output")
-                    result = subprocess.run(
-                        ["bash", "--noprofile", "--norc", "-e", "-o", "pipefail", "-c", script],
-                        env={**os.environ, "PATH": str(root) + os.pathsep + os.environ["PATH"],
-                             "GITHUB_OUTPUT": str(output), "SCOPE_TEST_DIFF": mode},
-                        capture_output=True, text=True,
-                    )
-                    if expected is None:
-                        self.assertNotEqual(0, result.returncode)
-                        self.assertFalse(output.exists(), "A failed diff must not publish a green no-op")
-                    else:
-                        self.assertEqual(0, result.returncode, result.stderr)
-                        self.assertEqual("changed=" + expected, output.read_text().strip())
+        from ci.android_ci_scope import classify
+        scope = _job(self.read(WIREGUARD_WORKFLOW), "scope")
+        self.assertIn('git show "$BASE:ci/android_ci_scope.py"', scope)
+        self.assertIn("engine_required=true", scope)  # unavailable base policy runs fully
+        files = ["ThirdParty/doq-core/src/lib.rs"] + [f"docs/{n}.md" for n in range(5000)]
+        for event in ("pull_request", "push"):
+            self.assertTrue(classify(files, event=event, repository="lavasecurity/lavasec-android")["engine_required"])
+            self.assertTrue(classify(None, event=event, repository="lavasecurity/lavasec-android")["engine_required"])
+            self.assertFalse(classify(["docs/only.md"], event=event, repository="lavasecurity/lavasec-android")["engine_required"])
 
     def test_triggers_permissions_and_concurrency_are_bounded(self) -> None:
-        source = self.read(WORKFLOW)
-        self.assertIn("push:", source)
-        self.assertIn("branches: [main]", source)
-        self.assertIn("pull_request:", source)
-        self.assertIn("permissions:\n  contents: read", source)
-        self.assertIn("group: android-ci-${{ github.workflow }}-${{ github.ref }}", source)
-        self.assertIn(
-            "cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}",
-            source,
-        )
+        for path, prefix in ((WORKFLOW, "android-ci"), (DEVICE_WORKFLOW, "android-device"), (WIREGUARD_WORKFLOW, "wireguard-core-android")):
+            source = self.read(path)
+            for event in ("opened", "synchronize", "reopened", "labeled", "unlabeled", "ready_for_review", "converted_to_draft"):
+                self.assertIn(event, source)
+            self.assertIn("permissions:\n  contents: read", source)
+            self.assertIn(prefix + "-${{ github.event_name == 'push' && github.run_id || github.ref }}", source)
+            self.assertIn("cancel-in-progress: true", source)
+            self.assertNotIn("paths-ignore:", source)
+            self.assertIn("github.event.pull_request.draft != true", source)
 
-    def test_every_direct_job_uses_ubicloud_without_runner_overrides(self) -> None:
-        workflows = ROOT / ".github" / "workflows"
-        for path in sorted([*workflows.glob("*.yml"), *workflows.glob("*.yaml")]):
+    def test_internal_and_public_jobs_have_explicit_runner_trust_boundaries(self) -> None:
+        for path in sorted((ROOT / ".github/workflows").glob("*.yml")):
             source = self.read(path)
             for line in source.splitlines():
-                if line.lstrip().startswith("#"):
+                if not line.lstrip().startswith("runs-on:"):
                     continue
-                if "runs-on" in line:
-                    with self.subTest(workflow=path.name, declaration=line):
-                        self.assertRegex(
-                            line,
-                            r"^ +runs-on: ubicloud-standard-(2|4)(?: +#.*)?$",
-                        )
-        source = self.read(WORKFLOW)
-        self.assertNotIn("prepare:", source)
-        self.assertNotIn("selected-runner", source)
-        self.assertIn("runs-on: ubicloud-standard-4", source)
+                with self.subTest(workflow=path.name, declaration=line):
+                    self.assertNotIn("vars.", line)
+                    self.assertNotIn("self-hosted", line)
+                    if "ubuntu-latest" in line and "${{" in line:
+                        self.assertIn("github.repository == 'lavasecurity/lavasec-android-internal'", line)
+                        self.assertIn("head.repo.full_name == github.repository", line)
+                        self.assertIn("user.login != 'dependabot[bot]'", line)
+                    elif "ubuntu-latest" in line:
+                        self.assertEqual("codeql.yml", path.name)
+                        self.assertIn("github.repository == 'lavasecurity/lavasec-android'", source)
+                    else:
+                        self.assertIn("ubicloud-standard-", line)
+        self.assertIn("Require a trusted internal branch", self.read(WORKFLOW))
 
     def test_builds_use_the_fixed_toolchain_and_clean_checkout(self) -> None:
-        source = self.read(WORKFLOW).split("\n  minified-startup:", 1)[0]
+        source = _job(self.read(WORKFLOW), "build")
         self.assertEqual(
             1,
             source.count(
@@ -155,7 +137,7 @@ class AndroidWorkflowContractTest(unittest.TestCase):
         source = _executable_source(self.read(WORKFLOW))
         self.assertIn(":app:bundlePlayRelease :app:assemblePlayRelease", source)
         startup = source.split("\n  minified-startup:", 1)[1]
-        for required in ("needs: build", "runs-on: ubicloud-standard-4",
+        for required in ("needs: [changes, build]", "\'ubicloud-standard-4\' || \'ubuntu-latest\'",
                          "persist-credentials: false", "java-version: '21'",
                          "system-images;android-34;google_apis;x86_64",
                          'test -c /dev/kvm', 'sha256sum --check app-release.apk.sha256',
@@ -168,23 +150,20 @@ class AndroidWorkflowContractTest(unittest.TestCase):
         self.assertIn("application-debuggable", source)
         self.assertIn("--ks-key-alias androiddebugkey", source)
 
-    def test_each_runner_executes_the_complete_verification_gate(self) -> None:
+    def test_tiers_preserve_complete_verification_coverage(self) -> None:
         source = self.read(WORKFLOW)
-        commands = (
-            "python3 -m unittest discover -s ci -p 'test_*.py'",
-            "scripts/verify-android-foundation",
-        )
-        for command in commands:
-            with self.subTest(command=command):
-                self.assertEqual(1, source.count(command))
-        invocations = re.findall(r"(?m)^\s*(\./gradlew[^\n]*)$", _executable_source(source))
-        self.assertEqual(1, len(invocations))
-        arguments = shlex.split(invocations[0], comments=True)
-        for task in ("--no-daemon", "--stacktrace", "testDebugUnitTest", "lintDebug",
-                     ":vpn:assembleDebugAndroidTest", ":app:assemblePlayDebugAndroidTest",
-                     ":app:assemblePlayDebug", ":app:bundlePlayRelease"):
-            self.assertIn(task, arguments)
-        self.assertIn("-PlavaDebugKeystore=$HOME/.android/debug.keystore", arguments)
+        repo, unit, compile, build = (_job(source, n) for n in ("repo-checks", "unit-tests", "app-compile", "build"))
+        for command in ("python3 -m unittest discover -s ci -p 'test_*.py'", "scripts/verify-android-foundation"):
+            self.assertIn(command, repo)
+            self.assertEqual(1, source.count(command))
+        for task in ("testDebugUnitTest", ":app:testPlayDebugUnitTest", ":app:testFossDebugUnitTest"):
+            self.assertIn(task, unit)
+        for task in ("lintDebug", ":app:lintPlayDebug", ":app:lintFossDebug", ":app:assemblePlayDebug", ":app:assembleFossDebug", ":vpn:assembleDebugAndroidTest", ":app:assemblePlayDebugAndroidTest"):
+            self.assertIn(task, compile)
+        for task in (":app:bundlePlayRelease", ":app:assemblePlayRelease", ":app:bundleFossRelease", ":app:assembleFossRelease"):
+            self.assertIn(task, build)
+        self.assertIn("-PlavaDebugKeystore=$HOME/.android/debug.keystore", build)
+        self.assertIn("needs: [changes, repo-checks, lava-ui, unit-tests, app-compile]", source)
 
     def test_rn_tests_and_native_build_precede_packaged_asset_checks(self) -> None:
         source = self.read(WORKFLOW)
@@ -214,24 +193,25 @@ class AndroidWorkflowContractTest(unittest.TestCase):
 
     def test_full_build_retains_required_checks_in_separate_ordered_steps(self) -> None:
         source = _executable_source(self.read(WORKFLOW))
-        contracts = source.split("- name: Verify source contracts", 1)[1].split("- name: Verify and build", 1)[0]
-        checks = ("python3 -m unittest discover -s ci -p 'test_*.py'", "scripts/verify-android-foundation")
-        for check in checks:
-            self.assertIn(check, contracts)
-        self.assertLess(contracts.index(checks[0]), contracts.index(checks[1]))
-        self.assertNotIn("gradlew", contracts)
-        native = source.split("- name: Verify and build", 1)[1].split("- name: Verify packaged runtime assets", 1)[0]
-        self.assertIn("cd android", native)
-        self.assertIn("./gradlew", native)
-        ordered = ("npm test", *checks, "./gradlew", "python3 ci/verify_android_bundle.py", "- name: Upload debug APK", "- name: Upload unsigned release AAB")
-        for before, after in zip(ordered, ordered[1:]):
-            self.assertLess(source.index(before), source.index(after))
+        repo, ui, build = (_job(source, n) for n in ("repo-checks", "lava-ui", "build"))
+        self.assertNotIn("./gradlew", repo)
+        self.assertIn("python3 -m unittest discover -s ci -p 'test_*.py'", repo)
+        self.assertIn("npm test", ui)
+        self.assertIn("npm run bundle:android", ui)
+        self.assertLess(build.index("./gradlew"), build.index("python3 ci/verify_android_bundle.py"))
+        self.assertLess(build.index("python3 ci/verify_android_bundle.py"), build.index("- name: Upload debug APK"))
+        for name in ("repo-checks", "lava-ui", "unit-tests", "app-compile", "build"):
+            job = _job(source, name)
+            self.assertIn("!cancelled()", job)
+            self.assertIn("needs.changes.result != 'success'", job)
+        for name in ("repo-checks", "lava-ui", "unit-tests", "app-compile"):
+            self.assertIn("needs." + name.replace("-", "-") + ".result != 'success'", build)
 
     def test_instrumentation_executes_both_supported_api_boundaries_without_secrets(self) -> None:
         source = self.read(ROOT / ".github/workflows/android-device.yml")
         for required in (
             "api: [28, 36]",
-            "runs-on: ubicloud-standard-4",
+            "\'ubicloud-standard-4\' || \'ubuntu-latest\'",
             "boot_deadline=$((SECONDS + 300))",
             "shell getprop sys.boot_completed",
             "if: ${{ always() }}",
@@ -395,7 +375,7 @@ class AndroidWorkflowContractTest(unittest.TestCase):
 
     def test_device_job_budgets_disk_for_emulator_and_gradle(self) -> None:
         source = self.read(ROOT / ".github/workflows/android-device.yml")
-        self.assertIn("runs-on: ubicloud-standard-4", source)
+        self.assertIn("\'ubicloud-standard-4\' || \'ubuntu-latest\'", source)
         cleanup = source.index("- name: Reserve hosted-runner disk space for Android")
         self.assertLess(cleanup, source.index("- name: Set up Android SDK"))
         self.assertIn("rm -rf ThirdParty/wireguard-core/target", source)
@@ -410,9 +390,9 @@ class AndroidWorkflowContractTest(unittest.TestCase):
         matrix, gate = rest.split("  emulator-evidence:", 1)
         self.assertIn("  candidate-build:", candidate)
         for job in (candidate, matrix):
-            self.assertIn("contains(fromJSON('[\"lavasecurity/lavasec-android-internal\",\"lavasecurity/lavasec-android\"]'), github.repository)", job)
+            self.assertIn("ubuntu-latest", job)
             self.assertIn("github.event.pull_request.head.repo.full_name == github.repository", job)
-            self.assertIn("runs-on: ubicloud-standard-4", job)
+            self.assertIn("\'ubicloud-standard-4\' || \'ubuntu-latest\'", job)
         self.assertEqual(1, len(re.findall(r"(?m)^\s*android/gradlew\b", source)))
         for task in (":app:assemblePlayDebug", ":app:assemblePlayDebugAndroidTest", ":vpn:assembleDebugAndroidTest"):
             self.assertIn(task, candidate)
@@ -493,7 +473,7 @@ class AndroidWorkflowContractTest(unittest.TestCase):
     def test_apk_and_unsigned_bundle_retention_is_cost_bounded(self) -> None:
         source = self.read(WORKFLOW)
         self.assertEqual(
-            5,
+            6,
             source.count(
                 "uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2"
             ),
@@ -501,7 +481,7 @@ class AndroidWorkflowContractTest(unittest.TestCase):
         # CI artifacts are ephemeral: a multi-day window accrues GitHub Actions
         # artifact-storage charges for every PR build. Match the exact value (not a
         # numeric prefix) so 10/11/19 cannot slip past the one-day bound.
-        self.assertEqual(["1"] * 5, _retention_days(source))
+        self.assertEqual(["1"] * 6, _retention_days(source))
         self.assertEqual(1, source.count("android-verification-diagnostics"))
         diagnostics = source.split("- name: Retain failed unit test and lint diagnostics", 1)[1].split("- name:", 1)[0]
         self.assertIn("if: ${{ failure() }}", diagnostics)
@@ -1589,11 +1569,14 @@ class EmulatorJourneyScriptContractTest(unittest.TestCase):
                     self.assertEqual([], list((self.root / "evidence-28").rglob("canary-peer-ready.json")))
 
     def test_privileged_peer_launch_requires_exact_owned_disposable_linux_ci_scope(self):
-        for authorized in (False, True):
-            with self.subTest(authorized=authorized):
+        for repository, actions, authorized in (("lavasecurity/lavasec-android-internal", True, True),
+                                                ("lavasecurity/lavasec-android", True, True),
+                                                ("untrusted/lavasec-android", True, False),
+                                                ("lavasecurity/lavasec-android", False, False)):
+            with self.subTest(repository=repository, actions=actions, authorized=authorized):
                 before = len(self.events()) if self.commands.exists() else 0
-                result = self.run_script(ANDROID_CANARY_PEER_ALLOW_SUDO="1", GITHUB_ACTIONS="true" if authorized else "false",
-                                         GITHUB_REPOSITORY="lavasecurity/lavasec-android-internal")
+                result = self.run_script(ANDROID_CANARY_PEER_ALLOW_SUDO="1", GITHUB_ACTIONS="true" if actions else "false",
+                                         GITHUB_REPOSITORY=repository)
                 events = self.events()[before:]
                 launches = [event["args"] for event in events if event["tool"] == "sudo"]
                 if authorized:

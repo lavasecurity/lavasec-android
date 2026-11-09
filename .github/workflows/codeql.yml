@@ -1,0 +1,58 @@
+name: CodeQL
+
+# Public advisory analysis, matching iOS: source pushes + weekly + manual, never a PR gate.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'android/**'
+      - 'ThirdParty/**'
+      - '.github/workflows/codeql.yml'
+  schedule:
+    - cron: '27 4 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: CodeQL (Java and Kotlin)
+    if: ${{ github.repository == 'lavasecurity/lavasec-android' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2
+        with:
+          packages: 'platform-tools'
+      - name: Install Android SDK 36
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+      - uses: github/codeql-action/init@5895b2c9be147bc7f1c75ce72c5cb577febb1907 # v4
+        with:
+          languages: java-kotlin
+          build-mode: manual
+      - name: Compile both editions for Kotlin extraction
+        working-directory: android
+        # Do not reuse compiled classes: CodeQL must observe an actual Kotlin build.
+        run: ./gradlew --no-daemon --no-build-cache --rerun-tasks :app:compilePlayDebugKotlin :app:compileFossDebugKotlin
+      - uses: github/codeql-action/analyze@5895b2c9be147bc7f1c75ce72c5cb577febb1907 # v4
+        with:
+          category: '/language:java-kotlin'

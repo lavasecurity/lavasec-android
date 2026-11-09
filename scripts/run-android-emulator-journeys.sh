@@ -142,10 +142,11 @@ start_canary_peer() {
     --observations "$evidence/canary-udp-peer-observations-${results_dir##*.}.jsonl"
     --owner-uid "$(id -u)" --owner-gid "$(id -g)")
   if [[ "${ANDROID_CANARY_PEER_ALLOW_SUDO:-0}" == 1 ]]; then
-    # Only the existing disposable owned-repository Linux CI host may authorize
+    # Only a disposable canonical-repository Linux CI host may authorize
     # this one privileged loopback bind. The helper drops uid/gid immediately.
     if [[ "$(uname -s)" != Linux || "${GITHUB_ACTIONS:-}" != true ||
-          "${GITHUB_REPOSITORY:-}" != lavasecurity/lavasec-android-internal ]]; then
+          ( "${GITHUB_REPOSITORY:-}" != lavasecurity/lavasec-android-internal &&
+            "${GITHUB_REPOSITORY:-}" != lavasecurity/lavasec-android ) ]]; then
       echo "Refusing privileged canary peer outside the disposable owned Linux CI host." >&2
       return 1
     fi

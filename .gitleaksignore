@@ -1,0 +1,5 @@
+# Exact findings in the reviewed public source root. These are public test/client inputs.
+# Synthetic resolver.test / 192.0.2.53 TLS key; never a production identity.
+949117060f2869e92384c14fc7a9efe410b4978c:ThirdParty/doq-core/tests/fixtures/resolver.key:private-key:1
+# Public publishable client key; grants only the public client role.
+949117060f2869e92384c14fc7a9efe410b4978c:android/service-config.properties:generic-api-key:5
