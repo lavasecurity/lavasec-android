@@ -195,6 +195,8 @@ class AndroidWorkflowContractTest(unittest.TestCase):
         source = _executable_source(self.read(WORKFLOW))
         repo, ui, build = (_job(source, n) for n in ("repo-checks", "lava-ui", "build"))
         self.assertNotIn("./gradlew", repo)
+        self.assertIn("needs.changes.outputs.full_build != 'false'", build)
+        self.assertNotIn("needs.changes.outputs.full_build == 'true'", source)
         self.assertIn("needs.changes.outputs.docs_only == 'true'", repo)
         for contract in ("ci.test_android_ci_scope", "ci.test_android_workflow.AndroidWorkflowContractTest", "ci.test_android_react_native_contract"):
             self.assertIn(contract, repo)
