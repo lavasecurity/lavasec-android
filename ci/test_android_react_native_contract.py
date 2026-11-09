@@ -403,10 +403,9 @@ class AndroidReactNativeContractTest(unittest.TestCase):
         self.assertIn("implementation(libs.react.android)", app_build)
         self.assertIn("implementation(libs.hermes.android)", app_build)
         workflow = self.read(ROOT / ".github" / "workflows" / "android.yml")
-        # Node/npm must be on PATH for the Gradle bundle task, but the workflow
-        # must not run a second install/bundle: Gradle owns it now, and the
-        # standalone step could not produce the lock/source stamps the task
-        # consumes, so it would duplicate the whole install + bundle.
+        # Gradle owns the bundle consumed by native packaging. The independent
+        # Linux UI tier also bundles to validate JS-only changes, but its output
+        # must never substitute for Gradle's source/lock-bound bundle.
         self.assertIn(
             "uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0",
             workflow,
@@ -415,7 +414,12 @@ class AndroidReactNativeContractTest(unittest.TestCase):
         self.assertNotIn("Install and bundle React Native JS", workflow)
         self.assertIn("Verify React Native types and behavior", workflow)
         self.assertNotIn("npm ci --ignore-scripts --no-audit --no-fund", workflow)
-        self.assertNotIn("npm run bundle:android", workflow)
+        ui = workflow.split("\n  lava-ui:\n", 1)[1].split("\n  unit-tests:\n", 1)[0]
+        packaging = workflow.split("\n  build:\n", 1)[1].split("\n  minified-startup:\n", 1)[0]
+        self.assertIn("npm run bundle:android", ui)
+        self.assertIn("needs.changes.outputs.docs_only != 'true'", ui)
+        self.assertNotIn("npm run bundle:android", packaging)
+        self.assertIn("./gradlew", packaging)
 
     def test_gradle_bundle_task_is_wired_into_the_build_graph(self) -> None:
         app_build = self.read(ROOT / "android" / "app" / "build.gradle.kts")
