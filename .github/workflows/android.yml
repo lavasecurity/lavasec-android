@@ -77,10 +77,9 @@ jobs:
           clean: true
           fetch-depth: 0
           persist-credentials: false
-      - name: Check CI scope fixtures and whitespace
-        run: |
-          python3 -m unittest ci.test_android_ci_scope -v
-          git diff --check
+      - name: Check documentation and workflow contracts
+        if: ${{ needs.changes.outputs.docs_only == 'true' }}
+        run: python3 -m unittest ci.test_android_ci_scope ci.test_android_workflow.AndroidWorkflowContractTest ci.test_android_react_native_contract -v
       - name: Set up JDK 21
         if: ${{ needs.changes.outputs.docs_only != 'true' }}
         uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0

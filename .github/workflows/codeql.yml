@@ -41,7 +41,7 @@ jobs:
         with:
           packages: 'platform-tools'
       - name: Install Android SDK 36
-        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0" "ndk;27.2.12479018" "cmake;3.30.5"
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
@@ -52,7 +52,7 @@ jobs:
       - name: Compile both editions for Kotlin extraction
         working-directory: android
         # Do not reuse compiled classes: CodeQL must observe an actual Kotlin build.
-        run: ./gradlew --no-daemon --no-build-cache --rerun-tasks :app:compilePlayDebugKotlin :app:compileFossDebugKotlin
+        run: ./gradlew --no-daemon --no-build-cache --rerun-tasks :app:compilePlayDebugKotlin :app:compileFossDebugKotlin :app:compilePlayDebugJavaWithJavac :app:compileFossDebugJavaWithJavac
       - uses: github/codeql-action/analyze@5895b2c9be147bc7f1c75ce72c5cb577febb1907 # v4
         with:
           category: '/language:java-kotlin'
