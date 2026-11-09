@@ -11,61 +11,66 @@ on:
   push:
     branches: [main]
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled, ready_for_review, converted_to_draft]
 
 permissions:
   contents: read
 
 concurrency:
-  group: wireguard-core-android-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  group: wireguard-core-android-${{ github.event_name == 'push' && github.run_id || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   scope:
-    name: Select engine scope
-    runs-on: ubicloud-standard-2
+    name: Detect change scope
+    if: ${{ github.event.pull_request.draft != true }}
+    runs-on: ${{ (github.repository == 'lavasecurity/lavasec-android-internal' && (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.user.login != 'dependabot[bot]'))) && 'ubicloud-standard-2' || 'ubuntu-latest' }}
+    timeout-minutes: 5
     outputs:
-      changed: ${{ steps.scope.outputs.changed }}
+      docs_only: ${{ steps.scope.outputs.docs_only }}
+      native_required: ${{ steps.scope.outputs.native_required }}
+      engine_required: ${{ steps.scope.outputs.engine_required }}
+      full_build: ${{ steps.scope.outputs.full_build }}
+      qualification_required: ${{ steps.scope.outputs.qualification_required }}
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - name: Check out source
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Detect engine changes
+      - name: Classify the complete event diff
         id: scope
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE: ${{ github.event_name == 'push' && github.event.before || github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event_name == 'push' && github.sha || github.event.pull_request.head.sha }}
+          FORCE_FULL: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'full-build') }}
         run: |
           set -euo pipefail
-          if [ "${{ github.event_name }}" != "pull_request" ]; then
-            echo "changed=true" >> "${GITHUB_OUTPUT}"
-            echo "non-PR run → build the engine"
-            exit 0
+          classifier=ci/android_ci_scope.py
+          if [ "$EVENT" = pull_request ]; then
+            classifier="$RUNNER_TEMP/android-ci-scope.py"
+            # A PR cannot rewrite its own scheduling policy. Bootstrap or missing base runs fully.
+            if ! git show "$BASE:ci/android_ci_scope.py" > "$classifier"; then
+              printf 'docs_only=false\nnative_required=true\nengine_required=true\nfull_build=true\nqualification_required=true\n' >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
           fi
-          # The full checkout already contains the event's exact base commit. A
-          # second fetch has no credential after persist-credentials=false.
-          base="${{ github.event.pull_request.base.sha }}"
-          changed_files="$(git diff --name-only "$base"...HEAD)"
-          changed=false
-          # Consume the diff completely before searching. grep -q in a pipe can
-          # SIGPIPE git on a large change and falsely skip the engine under pipefail.
-          if grep -qE \
-              '^(ThirdParty/(wireguard-core|doq-core)/|scripts/(build-wireguard-core-android|build-doq-core-android|prepare-wireguard-core-android)\.sh$|\.github/workflows/wireguard-core-android\.yml$)' <<< "$changed_files"; then
-            changed=true
-          fi
-          echo "changed=${changed}" >> "${GITHUB_OUTPUT}"
-          [ "$changed" = true ] && echo "engine touched → build" || echo "engine untouched → no-op (green)"
+          force=()
+          [ "$FORCE_FULL" != true ] || force+=(--force-full)
+          python3 "$classifier" --event "$EVENT" --base "$BASE" --head "$HEAD" \
+            --repository "$GITHUB_REPOSITORY" "${force[@]}"
 
   build:
     name: Build Android ABIs + host ABI tests
     needs: scope
-    # Fail closed on a skipped dependency, and never run on a fork PR (arbitrary cargo
-    # on owned hardware).
-    if: >-
-      ${{ !cancelled()
-          && contains(fromJSON('["lavasecurity/lavasec-android-internal","lavasecurity/lavasec-android"]'), github.repository)
-          && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false)
-          && needs.scope.outputs.changed == 'true' }}
-    runs-on: ubicloud-standard-4
+    if: ${{ !cancelled() && github.event.pull_request.draft != true && needs.scope.outputs.engine_required != 'false' && (github.repository != 'lavasecurity/lavasec-android-internal' || github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.user.login != 'dependabot[bot]')) }}
+    runs-on: ${{ (github.repository == 'lavasecurity/lavasec-android-internal' && (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.user.login != 'dependabot[bot]'))) && 'ubicloud-standard-4' || 'ubuntu-latest' }}
     timeout-minutes: 40
     steps:
+      - name: Require successful input classification
+        if: ${{ needs.scope.result != 'success' }}
+        run: exit 1
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           persist-credentials: false

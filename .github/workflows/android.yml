@@ -5,37 +5,96 @@ on:
   push:
     branches: [main]
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled, ready_for_review, converted_to_draft]
 
+# Required contexts always report. Classify inside jobs instead of paths-ignore or skip-ci.
 permissions:
   contents: read
 
 concurrency:
-  group: android-ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  group: android-ci-${{ github.event_name == 'push' && github.run_id || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build:
-    name: Android build
-    runs-on: ubicloud-standard-4
-    # The expanded source suite took 35 minutes on run 37899458333, leaving
-    # release packaging unfinished at the 60-minute job limit. Keep every gate
-    # and allow packaging, artifact retention and cleanup to finish as well.
-    timeout-minutes: 90
+  changes:
+    name: Detect change scope
+    if: ${{ github.event.pull_request.draft != true }}
+    runs-on: ${{ (github.repository == 'lavasecurity/lavasec-android-internal' && (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.user.login != 'dependabot[bot]'))) && 'ubicloud-standard-2' || 'ubuntu-latest' }}
+    timeout-minutes: 5
+    outputs:
+      docs_only: ${{ steps.scope.outputs.docs_only }}
+      native_required: ${{ steps.scope.outputs.native_required }}
+      engine_required: ${{ steps.scope.outputs.engine_required }}
+      full_build: ${{ steps.scope.outputs.full_build }}
+      qualification_required: ${{ steps.scope.outputs.qualification_required }}
     steps:
+      - name: Check out source
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Classify the complete event diff
+        id: scope
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE: ${{ github.event_name == 'push' && github.event.before || github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event_name == 'push' && github.sha || github.event.pull_request.head.sha }}
+          FORCE_FULL: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'full-build') }}
+        run: |
+          set -euo pipefail
+          classifier=ci/android_ci_scope.py
+          if [ "$EVENT" = pull_request ]; then
+            classifier="$RUNNER_TEMP/android-ci-scope.py"
+            # A PR cannot rewrite its own scheduling policy. Bootstrap or missing base runs fully.
+            if ! git show "$BASE:ci/android_ci_scope.py" > "$classifier"; then
+              printf 'docs_only=false\nnative_required=true\nengine_required=true\nfull_build=true\nqualification_required=true\n' >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+          force=()
+          [ "$FORCE_FULL" != true ] || force+=(--force-full)
+          python3 "$classifier" --event "$EVENT" --base "$BASE" --head "$HEAD" \
+            --repository "$GITHUB_REPOSITORY" "${force[@]}"
+
+  repo-checks:
+    name: Repo Checks
+    needs: changes
+    if: ${{ !cancelled() && github.event.pull_request.draft != true }}
+    runs-on: ${{ (github.repository == 'lavasecurity/lavasec-android-internal' && (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.user.login != 'dependabot[bot]'))) && 'ubicloud-standard-2' || 'ubuntu-latest' }}
+    timeout-minutes: 40
+    steps:
+      - name: Require successful input classification
+        if: ${{ needs.changes.result != 'success' }}
+        run: exit 1
+      - name: Require a trusted internal branch
+        if: ${{ github.repository == 'lavasecurity/lavasec-android-internal' && github.event_name == 'pull_request' && (github.event.pull_request.head.repo.full_name != github.repository || github.event.pull_request.user.login == 'dependabot[bot]') }}
+        run: |
+          echo '::error::Internal validation requires a reviewed branch in this repository.'
+          exit 1
       - name: Check out source
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           clean: true
           fetch-depth: 0
           persist-credentials: false
-
+      - name: Check documentation and workflow contracts
+        if: ${{ needs.changes.outputs.docs_only == 'true' }}
+        run: python3 -m unittest ci.test_android_ci_scope ci.test_android_workflow.AndroidWorkflowContractTest ci.test_android_react_native_contract -v
       - name: Set up JDK 21
+        if: ${{ needs.changes.outputs.docs_only != 'true' }}
         uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
         with:
           distribution: temurin
           java-version: '21'
-
+      - name: Set up Node.js
+        if: ${{ needs.changes.outputs.docs_only != 'true' }}
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: android/react-native/package-lock.json
       - name: Set up Android SDK
+        if: ${{ needs.changes.outputs.docs_only != 'true' }}
         uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2
         with:
           # v3.2.2 defaults to `tools platform-tools`, but `tools` was removed from the SDK
@@ -43,32 +102,14 @@ jobs:
           # could start. Install only platform-tools here; the workflow installs the platforms and
           # build-tools it needs explicitly below.
           packages: 'platform-tools'
-
-      - name: Install Android SDK 36
-        run: >-
-          sdkmanager "platforms;android-36" "build-tools;36.0.0"
-          "ndk;27.2.12479018" "cmake;3.30.5"
-
-      - name: Install the stable non-production debug keystore
-        # A committed, non-secret debug keystore makes successive debug APKs update-compatible
-        # across ephemeral runners (the auto-generated per-runner keystore is not). Debug-only:
-        # release signing lineage is untouched and no release/secret credential is involved.
-        run: |
-          mkdir -p "$HOME/.android"
-          base64 -d ci/lavasec-debug.keystore.b64 > "$HOME/.android/debug.keystore"
-          chmod 600 "$HOME/.android/debug.keystore"
-
+      - name: Install source-fixture SDK
+        if: ${{ needs.changes.outputs.docs_only != 'true' }}
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
       - name: Set up Gradle dependency cache
+        if: ${{ needs.changes.outputs.docs_only != 'true' }}
         uses: gradle/actions/setup-gradle@748248ddd2a24f49513d8f472f81c3a07d4d50e1 # v4.4.4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
-        with:
-          node-version: '22'
-          cache: npm
-          cache-dependency-path: android/react-native/package-lock.json
-
       - name: Verify the generated filter catalog against its canonical commit
+        if: ${{ needs.changes.outputs.docs_only != 'true' }}
         env:
           CATALOG_BASE: ${{ github.event_name == 'push' && github.event.before || github.event.pull_request.base.sha }}
           CATALOG_HEAD: ${{ github.event_name == 'push' && github.sha || github.event.pull_request.head.sha }}
@@ -80,27 +121,8 @@ jobs:
           else
             node scripts/sync-filter-catalog.mjs android/app/src/main/assets/catalog/blocklist-catalog.json --check
           fi
-
-      - name: Build the WireGuard engine into jniLibs
-        # Owned runs only: a fork PR must not execute PR-authored build scripts, and the
-        # engine's own workflow already proves the cross-compile. `github.repository` is the
-        # BASE repo on a pull_request, so the fork test must compare the head repo explicitly.
-        if: >-
-          ${{ contains(fromJSON('["lavasecurity/lavasec-android-internal","lavasecurity/lavasec-android"]'), github.repository)
-              && (github.event_name != 'pull_request'
-                  || github.event.pull_request.head.repo.full_name == github.repository) }}
-        run: bash scripts/prepare-wireguard-core-android.sh
-
-      - name: Verify React Native types and behavior
-        working-directory: android/react-native
-        run: |
-          npm ci --include=dev --ignore-scripts --no-audit --no-fund
-          node scripts/apply-native-screens-retirement-fix.mjs
-          node scripts/apply-core-removal-notification-fix.mjs
-          node --test scripts/tests/native-screens-retirement-fix.test.mjs scripts/tests/core-removal-notification-fix.test.mjs
-          npm test
-
       - name: Verify source contracts
+        if: ${{ needs.changes.outputs.docs_only != 'true' }}
         run: |
           python3 - <<'PY_DISCOVERY'
           import sys
@@ -116,18 +138,271 @@ jobs:
           node --test scripts/test-sync-filter-catalog.mjs
           python3 -m unittest discover -s ci -p 'test_*.py' -v
           scripts/verify-android-foundation
+      - name: Report documentation scope
+        if: ${{ needs.changes.outputs.docs_only == 'true' }}
+        run: echo 'Documentation-only change; required checks report without native builds.' >> "$GITHUB_STEP_SUMMARY"
+
+  lava-ui:
+    name: Lava UI types, contracts, and Android bundle
+    needs: changes
+    if: ${{ !cancelled() && github.event.pull_request.draft != true }}
+    runs-on: ${{ (github.repository == 'lavasecurity/lavasec-android-internal' && (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.user.login != 'dependabot[bot]'))) && 'ubicloud-standard-2' || 'ubuntu-latest' }}
+    timeout-minutes: 15
+    steps:
+      - name: Require successful input classification
+        if: ${{ needs.changes.result != 'success' }}
+        run: exit 1
+      - name: Check out source
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          clean: true
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set up Node.js
+        if: ${{ needs.changes.outputs.docs_only != 'true' }}
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: android/react-native/package-lock.json
+      - name: Verify React Native types and behavior
+        if: ${{ needs.changes.outputs.docs_only != 'true' }}
+        working-directory: android/react-native
+        run: |
+          npm ci --include=dev --ignore-scripts --no-audit --no-fund
+          node scripts/apply-native-screens-retirement-fix.mjs
+          node scripts/apply-core-removal-notification-fix.mjs
+          node --test scripts/tests/native-screens-retirement-fix.test.mjs scripts/tests/core-removal-notification-fix.test.mjs
+          npm test
+      - name: Bundle the shipping Android entry point
+        if: ${{ needs.changes.outputs.docs_only != 'true' }}
+        working-directory: android/react-native
+        run: npm run bundle:android
+      - name: Report documentation scope
+        if: ${{ needs.changes.outputs.docs_only == 'true' }}
+        run: echo 'Documentation-only change; required checks report without native builds.' >> "$GITHUB_STEP_SUMMARY"
+
+  unit-tests:
+    name: Android Unit Tests
+    needs: [changes, repo-checks]
+    if: ${{ !cancelled() && github.event.pull_request.draft != true }}
+    runs-on: ${{ (github.repository == 'lavasecurity/lavasec-android-internal' && (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.user.login != 'dependabot[bot]'))) && 'ubicloud-standard-4' || 'ubuntu-latest' }}
+    timeout-minutes: 35
+    steps:
+      - name: Require successful input classification
+        if: ${{ needs.changes.result != 'success' }}
+        run: exit 1
+      - name: Require repository checks
+        if: ${{ needs.repo-checks.result != 'success' }}
+        run: exit 1
+      - name: Check out source
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          clean: true
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set up JDK 21
+        if: ${{ needs.changes.outputs.docs_only != 'true' }}
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Set up Android SDK
+        if: ${{ needs.changes.outputs.docs_only != 'true' }}
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2
+        with:
+          # v3.2.2 defaults to `tools platform-tools`, but `tools` was removed from the SDK
+          # repository, so the action failed with "Failed to find package 'tools'" before the build
+          # could start. Install only platform-tools here; the workflow installs the platforms and
+          # build-tools it needs explicitly below.
+          packages: 'platform-tools'
+      - name: Set up Node.js
+        if: ${{ needs.changes.outputs.docs_only != 'true' }}
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: android/react-native/package-lock.json
+      - name: Set up Gradle dependency cache
+        if: ${{ needs.changes.outputs.docs_only != 'true' }}
+        uses: gradle/actions/setup-gradle@748248ddd2a24f49513d8f472f81c3a07d4d50e1 # v4.4.4
+      - name: Install Android SDK 36
+        if: ${{ needs.changes.outputs.docs_only != 'true' }}
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+      - name: Run core and both edition unit tests
+        if: ${{ needs.changes.outputs.docs_only != 'true' }}
+        working-directory: android
+        run: ./gradlew --no-daemon --max-workers=2 --stacktrace testDebugUnitTest :app:testPlayDebugUnitTest :app:testFossDebugUnitTest
+      - name: Retain failed unit test and lint diagnostics
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: android-unit-test-diagnostics
+          path: |
+            android/*/build/test-results/**
+            android/*/build/reports/tests/**
+            android/*/build/reports/lint-results-*.html
+            android/*/build/reports/lint-results-*.xml
+          if-no-files-found: warn
+          retention-days: 1
+      - name: Report documentation scope
+        if: ${{ needs.changes.outputs.docs_only == 'true' }}
+        run: echo 'Documentation-only change; required checks report without native builds.' >> "$GITHUB_STEP_SUMMARY"
+
+  app-compile:
+    name: App compile (Debug, no release signing)
+    needs: [changes, repo-checks, lava-ui]
+    if: ${{ !cancelled() && github.event.pull_request.draft != true && github.repository == 'lavasecurity/lavasec-android-internal' && (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.user.login != 'dependabot[bot]')) }}
+    runs-on: ${{ (needs.changes.outputs.docs_only == 'true' || needs.changes.outputs.native_required == 'false') && 'ubicloud-standard-2' || 'ubicloud-standard-4' }}
+    timeout-minutes: 45
+    steps:
+      - name: Require successful input classification
+        if: ${{ needs.changes.result != 'success' }}
+        run: exit 1
+      - name: Require repository and UI checks
+        if: ${{ needs.repo-checks.result != 'success' || needs.lava-ui.result != 'success' }}
+        run: exit 1
+      - name: Check out source
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          clean: true
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set up JDK 21
+        if: ${{ needs.changes.outputs.docs_only != 'true' && needs.changes.outputs.native_required != 'false' }}
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Set up Android SDK
+        if: ${{ needs.changes.outputs.docs_only != 'true' && needs.changes.outputs.native_required != 'false' }}
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2
+        with:
+          # v3.2.2 defaults to `tools platform-tools`, but `tools` was removed from the SDK
+          # repository, so the action failed with "Failed to find package 'tools'" before the build
+          # could start. Install only platform-tools here; the workflow installs the platforms and
+          # build-tools it needs explicitly below.
+          packages: 'platform-tools'
+      - name: Install Android SDK 36
+        if: ${{ needs.changes.outputs.docs_only != 'true' && needs.changes.outputs.native_required != 'false' }}
+        run: >-
+          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+          "ndk;27.2.12479018" "cmake;3.30.5"
+      - name: Install the stable non-production debug keystore
+        if: ${{ needs.changes.outputs.docs_only != 'true' && needs.changes.outputs.native_required != 'false' }}
+        # A committed, non-secret debug keystore makes successive debug APKs update-compatible
+        # across ephemeral runners (the auto-generated per-runner keystore is not). Debug-only:
+        # release signing lineage is untouched and no release/secret credential is involved.
+        run: |
+          mkdir -p "$HOME/.android"
+          base64 -d ci/lavasec-debug.keystore.b64 > "$HOME/.android/debug.keystore"
+          chmod 600 "$HOME/.android/debug.keystore"
+      - name: Set up Gradle dependency cache
+        if: ${{ needs.changes.outputs.docs_only != 'true' && needs.changes.outputs.native_required != 'false' }}
+        uses: gradle/actions/setup-gradle@748248ddd2a24f49513d8f472f81c3a07d4d50e1 # v4.4.4
+      - name: Set up Node.js
+        if: ${{ needs.changes.outputs.docs_only != 'true' && needs.changes.outputs.native_required != 'false' }}
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: android/react-native/package-lock.json
+      - name: Build the WireGuard engine into jniLibs
+        if: ${{ needs.changes.outputs.docs_only != 'true' && needs.changes.outputs.native_required != 'false' }}
+        # Owned runs only: a fork PR must not execute PR-authored build scripts, and the
+        # engine's own workflow already proves the cross-compile. `github.repository` is the
+        # BASE repo on a pull_request, so the fork test must compare the head repo explicitly.
+        run: bash scripts/prepare-wireguard-core-android.sh
+      - name: Compile and lint both Debug editions
+        if: ${{ needs.changes.outputs.docs_only != 'true' && needs.changes.outputs.native_required != 'false' }}
+        working-directory: android
+        run: ./gradlew --no-daemon --max-workers=2 --stacktrace "-PlavaDebugKeystore=$HOME/.android/debug.keystore" lintDebug :app:lintPlayDebug :app:lintFossDebug :app:assemblePlayDebug :app:assembleFossDebug :vpn:assembleDebugAndroidTest :app:assemblePlayDebugAndroidTest
+      - name: Report native build scope
+        if: ${{ needs.changes.outputs.docs_only == 'true' || needs.changes.outputs.native_required == 'false' }}
+        run: echo 'Native inputs unchanged; repository and UI validation passed.' >> "$GITHUB_STEP_SUMMARY"
+
+  build:
+    # Only an explicit false skips packaging; missing outputs never earn a green no-op.
+    name: Android build
+    needs: [changes, repo-checks, lava-ui, unit-tests, app-compile]
+    if: ${{ !cancelled() && github.event.pull_request.draft != true }}
+    runs-on: ${{ (github.repository == 'lavasecurity/lavasec-android-internal' && (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.user.login != 'dependabot[bot]'))) && 'ubicloud-standard-4' || 'ubuntu-latest' }}
+    timeout-minutes: 90
+    steps:
+      - name: Require all prerequisite tiers
+        if: ${{ needs.changes.result != 'success' || needs.repo-checks.result != 'success' || needs.lava-ui.result != 'success' || needs.unit-tests.result != 'success' || (github.repository == 'lavasecurity/lavasec-android-internal' && needs.app-compile.result != 'success') }}
+        run: exit 1
+      - name: Report native build scope
+        if: ${{ needs.changes.outputs.full_build == 'false' }}
+        run: echo 'Required source, UI and unit tiers passed; this diff needs no full Release packaging.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Check out source
+        if: ${{ needs.changes.outputs.full_build != 'false' }}
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          clean: true
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up JDK 21
+        if: ${{ needs.changes.outputs.full_build != 'false' }}
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Android SDK
+        if: ${{ needs.changes.outputs.full_build != 'false' }}
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2
+        with:
+          # v3.2.2 defaults to `tools platform-tools`, but `tools` was removed from the SDK
+          # repository, so the action failed with "Failed to find package 'tools'" before the build
+          # could start. Install only platform-tools here; the workflow installs the platforms and
+          # build-tools it needs explicitly below.
+          packages: 'platform-tools'
+
+      - name: Install Android SDK 36
+        if: ${{ needs.changes.outputs.full_build != 'false' }}
+        run: >-
+          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+          "ndk;27.2.12479018" "cmake;3.30.5"
+
+      - name: Install the stable non-production debug keystore
+        if: ${{ needs.changes.outputs.full_build != 'false' }}
+        # A committed, non-secret debug keystore makes successive debug APKs update-compatible
+        # across ephemeral runners (the auto-generated per-runner keystore is not). Debug-only:
+        # release signing lineage is untouched and no release/secret credential is involved.
+        run: |
+          mkdir -p "$HOME/.android"
+          base64 -d ci/lavasec-debug.keystore.b64 > "$HOME/.android/debug.keystore"
+          chmod 600 "$HOME/.android/debug.keystore"
+
+      - name: Set up Gradle dependency cache
+        if: ${{ needs.changes.outputs.full_build != 'false' }}
+        uses: gradle/actions/setup-gradle@748248ddd2a24f49513d8f472f81c3a07d4d50e1 # v4.4.4
+
+      - name: Set up Node.js
+        if: ${{ needs.changes.outputs.full_build != 'false' }}
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: android/react-native/package-lock.json
+
+      - name: Build the WireGuard engine into jniLibs
+        if: ${{ needs.changes.outputs.full_build != 'false' }}
+        # Public/fork builds use isolated hosted runners without production credentials.
+        # Build the checked-out engines before packaging either app edition.
+        run: bash scripts/prepare-wireguard-core-android.sh
 
       - name: Verify and build
+        if: ${{ needs.changes.outputs.full_build != 'false' }}
         run: |
           set -euo pipefail
           cd android
-          ./gradlew --no-daemon --stacktrace "-PlavaDebugKeystore=$HOME/.android/debug.keystore" testDebugUnitTest lintDebug :vpn:assembleDebugAndroidTest :app:assemblePlayDebugAndroidTest :app:testPlayDebugUnitTest :app:testFossDebugUnitTest :app:lintPlayDebug :app:lintFossDebug :app:assemblePlayDebug :app:assembleFossDebug :app:bundlePlayRelease :app:assemblePlayRelease :app:bundleFossRelease :app:assembleFossRelease :app:dependencies --configuration fossReleaseRuntimeClasspath | tee "$RUNNER_TEMP/foss-dependencies.txt"
+          ./gradlew --no-daemon --stacktrace "-PlavaDebugKeystore=$HOME/.android/debug.keystore" lintDebug :vpn:assembleDebugAndroidTest :app:assemblePlayDebugAndroidTest :app:lintPlayDebug :app:lintFossDebug :app:assemblePlayDebug :app:assembleFossDebug :app:bundlePlayRelease :app:assemblePlayRelease :app:bundleFossRelease :app:assembleFossRelease :app:dependencies --configuration fossReleaseRuntimeClasspath | tee "$RUNNER_TEMP/foss-dependencies.txt"
 
       - name: Verify packaged runtime assets
-        if: >-
-          ${{ contains(fromJSON('["lavasecurity/lavasec-android-internal","lavasecurity/lavasec-android"]'), github.repository)
-              && (github.event_name != 'pull_request'
-                  || github.event.pull_request.head.repo.full_name == github.repository) }}
+        if: ${{ needs.changes.outputs.full_build != 'false' }}
         run: |
           set -euo pipefail
           for edition in play foss; do
@@ -140,10 +415,7 @@ jobs:
           done
 
       - name: Audit FOSS resolved dependencies and packaged integrations
-        if: >-
-          ${{ contains(fromJSON('["lavasecurity/lavasec-android-internal","lavasecurity/lavasec-android"]'), github.repository)
-              && (github.event_name != 'pull_request'
-                  || github.event.pull_request.head.repo.full_name == github.repository) }}
+        if: ${{ needs.changes.outputs.full_build != 'false' }}
         run: |
           set -euo pipefail
           bundletool="$RUNNER_TEMP/bundletool-all-1.18.3.jar"
@@ -158,6 +430,7 @@ jobs:
           cp "$RUNNER_TEMP/foss-dependencies.txt" android/app/build/outputs/bundle/fossRelease/foss-dependencies.txt
 
       - name: Retain effective public build configuration
+        if: ${{ needs.changes.outputs.full_build != 'false' }}
         run: |
           python3 ci/android_public_config_evidence.py --root . --variants playDebug playRelease fossDebug fossRelease \
             --output "$RUNNER_TEMP/android-public-configuration.json"
@@ -180,6 +453,7 @@ jobs:
           retention-days: 1
 
       - name: Upload debug APK
+        if: ${{ needs.changes.outputs.full_build != 'false' }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: lavasec-android-debug-apk
@@ -193,6 +467,7 @@ jobs:
           retention-days: 1
 
       - name: Upload unsigned release AAB
+        if: ${{ needs.changes.outputs.full_build != 'false' }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: lavasec-android-release-unsigned-aab
@@ -207,6 +482,7 @@ jobs:
           retention-days: 1
 
       - name: Sign the optimized startup candidate with the public test signer
+        if: ${{ needs.changes.outputs.full_build != 'false' }}
         run: |
           set -euo pipefail
           candidate="$RUNNER_TEMP/android-minified-startup"
@@ -228,6 +504,7 @@ jobs:
           (cd "$candidate" && sha256sum app-release.apk > app-release.apk.sha256)
 
       - name: Retain the optimized startup candidate
+        if: ${{ needs.changes.outputs.full_build != 'false' }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: android-minified-startup
@@ -235,10 +512,12 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
+
   minified-startup:
     name: Minified Android startup API 34
-    needs: build
-    runs-on: ubicloud-standard-4
+    needs: [changes, build]
+    if: ${{ !cancelled() && github.event.pull_request.draft != true && needs.build.result == 'success' && needs.changes.outputs.full_build != 'false' }}
+    runs-on: ${{ (github.repository == 'lavasecurity/lavasec-android-internal' && (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.user.login != 'dependabot[bot]'))) && 'ubicloud-standard-4' || 'ubuntu-latest' }}
     timeout-minutes: 25
     steps:
       - name: Check out the exact source
