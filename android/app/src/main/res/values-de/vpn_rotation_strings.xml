@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vpn_rotation_awaiting_restart">Deine VPN-Verbindung verwendet noch die Konfiguration, mit der sie gestartet wurde. Schalte den Schutz aus und wieder ein, um die gerade gespeicherte Konfiguration zu verwenden.</string>
+    <string name="vpn_rotation_running_removed">Deine VPN-Verbindung verwendet noch die entfernte Konfiguration, bis der Schutz beendet wird. Schalte den Schutz aus oder importiere eine andere Konfiguration.</string>
+</resources>

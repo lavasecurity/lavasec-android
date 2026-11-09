@@ -1,0 +1,17 @@
+<resources>
+    <string name="portable_backup_export_title">Verschlüsselte lokale Sicherung exportieren</string>
+    <string name="portable_backup_import_title">Verschlüsselte lokale Sicherung importieren</string>
+    <string name="portable_backup_password">Sicherungspasswort</string>
+    <string name="portable_backup_password_confirm">Passwort bestätigen</string>
+    <string name="portable_backup_password_invalid">Verwende mindestens 8 Zeichen, eine Ziffer und ein Sonderzeichen. Beide Passwörter müssen übereinstimmen.</string>
+    <string name="portable_backup_import_password">Gib das Passwort ein, das beim Export dieser Datei verwendet wurde. Ein Konto oder eine Internetverbindung ist nicht erforderlich.</string>
+    <string name="portable_backup_export_summary">Enthält verschlüsselte Filter, Regeln, Quell-URLs, DNS-Endpunkte, Aufbewahrungseinstellungen und freigeschaltete Lava Guards. Endpunkt-URLs können Netzwerk-Zugangsdaten enthalten. Konto-Token, Käufe, private Schlüssel und Aktivitätsverlauf sind nicht enthalten. Bewahre das Passwort sicher auf: Lava kann es nicht wiederherstellen. Play und FOSS teilen Daten nicht automatisch. Die Installation von FOSS kündigt kein Play-Abonnement.</string>
+    <string name="portable_backup_restore_summary">Prüfe die Einstellungen in dieser Datei. Du kannst die verschlüsselte Datei offline für später speichern. Zum Anwenden müssen möglicherweise Quellen heruntergeladen werden. Es gelten die Funktionsgrenzen dieser Edition. Der Schutz auf diesem Gerät bleibt unverändert. Konten, Käufe, private Schlüssel und Verlauf werden nicht übertragen.</string>
+    <string name="portable_backup_restore_now">Jetzt wiederherstellen</string>
+    <string name="portable_backup_save_for_later">Für später speichern</string>
+    <string name="portable_backup_pending_discard_title">Ausstehendes Backup verwerfen?</string>
+    <string name="portable_backup_pending_discard_message">Den gespeicherten verschlüsselten Import von diesem Gerät löschen. Deine aktuellen Einstellungen und die ursprüngliche Backup-Datei bleiben unverändert.</string>
+    <string name="portable_backup_pending_replace_title">Ausstehendes Backup ersetzen?</string>
+    <string name="portable_backup_pending_replace_message">Den auf diesem Gerät gespeicherten verschlüsselten Import durch diese Datei ersetzen. Deine aktuellen Einstellungen bleiben unverändert.</string>
+    <string name="portable_backup_import_password_required">Gib das Backup-Passwort ein.</string>
+</resources>

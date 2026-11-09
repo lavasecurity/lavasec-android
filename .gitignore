@@ -1,0 +1,72 @@
+# ---- Android / Gradle ----
+*.iml
+.gradle/
+/local.properties
+/.idea/
+.DS_Store
+**/.DS_Store
+/build/
+**/build/
+/captures
+.externalNativeBuild
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.dex
+local.properties
+
+# ---- Kotlin ----
+.kotlin/
+*.hprof
+
+# ---- Python CI contract tests ----
+__pycache__/
+*.py[cod]
+
+# ---- Signing / secrets (NEVER commit) ----
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.pem
+keystore.properties
+google-services.json
+secrets.properties
+*.local.properties
+gha-creds*.json
+
+# ---- Editors ----
+*.swp
+*~
+
+# ---- Local worktrees ----
+/.github-worktrees/
+*.log
+
+# CI-built WireGuard engine (scripts/build-wireguard-core-android.sh)
+ThirdParty/wireguard-core/target/
+android/vpn/src/main/jniLibs/
+
+# ---- React Native (android/react-native) ----
+android/react-native/node_modules/
+android/react-native/.bundle/
+android/app/src/main/assets/index.android.bundle
+
+# Metro-generated navigation image resources (sources are locked npm packages).
+android/app/src/main/res/drawable-*/node_modules_*.png
+android/app/src/main/res/raw/keep.xml
+android/.idea/
+
+# Managed emulator artifacts and candidate evidence are retained by CI, never committed.
+/device-evidence/
+
+# A node_modules symlink (e.g. a worktree link) is not matched by the directory form above.
+android/react-native/node_modules
+
+# Local Fastlane dependencies and downloaded delivery receipts.
+/.bundle/
+/vendor/bundle/
+/fastlane/output/
+/fastlane/report.xml
+/fastlane/.env

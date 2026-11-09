@@ -1,0 +1,9 @@
+self-hosted-runner:
+  labels:
+    - ubicloud-standard-2
+    - ubicloud-standard-4
+paths:
+  .github/workflows/tag-release.yml:
+    # GitHub supports queue:max; actionlint 1.7.12 has not added the key yet.
+    ignore:
+      - 'unexpected key "queue" for "concurrency" section'

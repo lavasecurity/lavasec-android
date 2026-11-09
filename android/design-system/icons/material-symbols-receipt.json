@@ -1,0 +1,13 @@
+{
+  "sourceRevision": "49d4db35df873165d6bd6ba09b063c7dafbac2f4",
+  "sourceSha256": "32e4011709e055596eb8d2dd0f7cb547b47c1d40ac9ecb8fad54f7f7eac202e7",
+  "fontTools": "4.60.1",
+  "weight": 350,
+  "grade": 0,
+  "opticalSize": 24,
+  "files": {
+    "MaterialSymbolsRounded350.ttf": "2c347e4a65fc0add15ac7f218b13fa6be0cb2a701c503d8f0241c390d0de3220",
+    "MaterialSymbolsRounded350Filled.ttf": "f035f4d00806a8f4bc56e653ddc50650c9b2ee1228b1e4d4f66d5d3d438b659c"
+  },
+  "customGlyphsSha256": "0e343aab37be8ccb530b32f06a642ad72867db9912bcbbd43dd5d99b2730669c"
+}

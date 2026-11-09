@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "snapshots": [
+    {
+      "asset_path": "catalog/blocklist-catalog.previous.json",
+      "blob": "d5b44dad805ee43e28dd19419b1340d557776aaf",
+      "sha256": "88e15e8fc80092830d58da54fe01897327b24dd689fc45090f6734e3ae9155b0",
+      "onboarding_recommended_source_ids": null
+    }
+  ]
+}

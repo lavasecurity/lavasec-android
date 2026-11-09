@@ -1,0 +1,11 @@
+# The committed engine artifacts under build/ are binary — no line-ending normalization,
+# no textconv. Their byte-identity is enforced by scripts/check-wireguard-core-drift.sh,
+# which is also the compensating control for build/'s exclusion from the textual
+# QA-enablement scan (scripts/check-public-qa-enablement.mjs).
+#
+# Deliberately OUTSIDE build/. Living inside it made this file unverifiable: it is
+# hand-maintained, so the rebuild preserved it byte-for-byte and it matched in both drift
+# manifests; it sat in the scan-excluded tree, so nothing read it; and its own `* binary`
+# rule matched itself, so even an ordinary `git diff` of it was opaque. A file that governs
+# how the artifacts are stored should not be one of the things the artifact gate cannot see.
+build/** binary

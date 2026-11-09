@@ -1,0 +1,27 @@
+# Review template. This is deliberately disabled until a real public source tag,
+# clean reproducible build and accepted upstream/F-Droid signing policy exist.
+Categories:
+  - Security
+License: AGPL-3.0-only
+WebSite: https://lavasecurity.app
+SourceCode: https://github.com/lavasecurity/lavasec-android
+IssueTracker: https://github.com/lavasecurity/lavasec-android/issues
+RepoType: git
+Repo: https://github.com/lavasecurity/lavasec-android.git
+
+Builds:
+  - versionName: 2.2.3
+    versionCode: 202039999
+    disable: Await reviewed public tag, F-Droid toolchain/dependency audit and signing qualification
+    commit: v2.2.3
+    subdir: android
+    gradle:
+      - foss
+    # Native source preparation must be adapted to F-Droid-approved buildserver
+    # packages before enabling this recipe; do not bypass source/binary scanning.
+    prebuild: bash ../scripts/prepare-wireguard-core-android.sh
+
+AutoUpdateMode: None
+UpdateCheckMode: None
+CurrentVersion: 2.2.3
+CurrentVersionCode: 202039999

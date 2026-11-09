@@ -1,0 +1,49 @@
+{
+  "name": "@lavasec/android-react-native",
+  "version": "0.0.0",
+  "private": true,
+  "license": "AGPL-3.0-only",
+  "engines": {
+    "node": "^22.13.0 || ^24.3.0 || >= 26.0.0"
+  },
+  "scripts": {
+    "postinstall": "node scripts/apply-native-screens-retirement-fix.mjs && node scripts/apply-core-removal-notification-fix.mjs",
+    "typecheck": "tsc --noEmit",
+    "bundle:android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output ../app/src/main/assets/index.android.bundle --assets-dest ../app/src/main/res",
+    "canonical:check": "node scripts/check-canonical-source.mjs",
+    "canonical:provenance": "node scripts/canonical-provenance.mjs",
+    "test": "npm run typecheck && npm run canonical:check && npm run licenses:check && node --test scripts/tests/metro-assets.test.mjs && jest --runInBand",
+    "licenses:check": "node scripts/react-native-notices.mjs --check"
+  },
+  "dependencies": {
+    "@react-navigation/bottom-tabs": "7.18.18",
+    "@react-navigation/native": "7.3.18",
+    "@react-navigation/native-stack": "7.18.10",
+    "@tanstack/react-query": "5.102.8",
+    "react": "19.2.3",
+    "react-native": "0.87.1",
+    "react-native-safe-area-context": "5.9.1",
+    "react-native-screens": "4.28.0",
+    "react-native-svg": "15.15.5"
+  },
+  "devDependencies": {
+    "@babel/core": "7.29.0",
+    "@react-native-community/cli": "20.2.0",
+    "@react-native-community/cli-platform-android": "20.2.0",
+    "@react-native/babel-preset": "0.87.1",
+    "@react-native/jest-preset": "0.87.1",
+    "@react-native/metro-config": "0.87.1",
+    "@react-native/typescript-config": "0.87.1",
+    "@testing-library/react-native": "13.3.3",
+    "@types/jest": "29.5.14",
+    "@types/react": "19.2.18",
+    "jest": "29.7.0",
+    "react-test-renderer": "19.2.3",
+    "typescript": "5.9.3"
+  },
+  "overrides": {
+    "@react-navigation/core": "7.21.13",
+    "@react-navigation/elements": "2.9.40",
+    "@react-navigation/routers": "7.6.4"
+  }
+}

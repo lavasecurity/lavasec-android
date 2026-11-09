@@ -1,0 +1,44 @@
+# Production engine packaging for the Android chained upstream.
+#
+# Packaging contract (mirrors the iOS `lavasec-ios-internal` ThirdParty/wireguard-core):
+# the ENGINE source is vendored (`boringtun/` — the exact crates.io 0.7.1 tarball
+# contents, provenance hash in README.md) and consumed as a path dependency;
+# transitive deps are pinned by Cargo.lock's sha256 checksums; the toolchain is
+# pinned in rust-toolchain.toml. Unlike iOS (whose Xcode build cannot run cargo, so
+# it commits an xcframework + byte-drift gate), the Android artifact is produced by
+# CI (`scripts/build-wireguard-core-android.sh`) and packaged into `:vpn`'s
+# jniLibs — Gradle never runs cargo, so release builds stay toolchain-free.
+[package]
+name = "lavasec-wireguard-core"
+version = "0.1.0"
+edition = "2021"
+publish = false
+license = "BSD-3-Clause"
+
+[lib]
+name = "lavasec_wireguard_core"
+# cdylib = `liblavasec_wireguard_core.so` per Android ABI (what jniLibs ships).
+# staticlib = an archive form for hosts that prefer static linking.
+# rlib = lets in-crate integration tests link and exercise the same C-ABI symbols.
+crate-type = ["cdylib", "staticlib", "rlib"]
+
+[dependencies]
+# The vendored in-tree source is canonical (crypto core only is consumed: Tunn
+# handshake + encapsulate/decapsulate + timers — never the feature-gated device/
+# tun-interface layer, and default-features stays empty).
+boringtun = { path = "boringtun" }
+# The Android JNI surface (src/jni.rs). Pure-Rust binding to the JVM; the module
+# compiles on every target, but only the Kotlin :vpn module loads it (iOS uses its
+# own vendored copy of the engine without this module).
+jni = "0.21"
+
+[dev-dependencies]
+boringtun = { path = "boringtun" }
+
+[profile.release]
+opt-level = 3
+lto = true
+panic = "abort"
+strip = "debuginfo"
+# One codegen unit: with lto=true this removes unit-partitioning nondeterminism.
+codegen-units = 1

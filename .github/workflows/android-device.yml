@@ -1,0 +1,332 @@
+name: Android device tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-device-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  candidate-build:
+    if: >-
+      contains(fromJSON('["lavasecurity/lavasec-android-internal","lavasecurity/lavasec-android"]'), github.repository) &&
+      (github.event_name != 'pull_request' ||
+       github.event.pull_request.head.repo.full_name == github.repository)
+    name: Build one Android emulator candidate
+    runs-on: ubicloud-standard-4
+    timeout-minutes: 45
+    steps:
+      - name: Check out source
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          clean: true
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Reserve hosted-runner disk space for Android
+        run: |
+          set -euo pipefail
+          sudo rm -rf /usr/share/dotnet /usr/local/.ghcup /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h "$GITHUB_WORKSPACE"
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2
+        with:
+          packages: 'platform-tools'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: android/react-native/package-lock.json
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@748248ddd2a24f49513d8f472f81c3a07d4d50e1 # v4.4.4
+
+      - name: Install the same stable preview signer as Android CI
+        run: |
+          mkdir -p "$HOME/.android"
+          base64 -d ci/lavasec-debug.keystore.b64 > "$HOME/.android/debug.keystore"
+          chmod 600 "$HOME/.android/debug.keystore"
+
+      - name: Prepare candidate build inputs
+        run: |
+          set -euo pipefail
+          sdkmanager "platforms;android-36" "build-tools;36.0.0" \
+            "ndk;27.2.12479018" "cmake;3.30.5"
+          npm --prefix android/react-native ci --include=dev --ignore-scripts --no-audit --no-fund
+          node android/react-native/scripts/apply-native-screens-retirement-fix.mjs
+          node android/react-native/scripts/apply-core-removal-notification-fix.mjs
+          bash scripts/prepare-wireguard-core-android.sh
+          rm -rf ThirdParty/wireguard-core/target
+
+      - name: Build the controlled host DoQ peer once
+        working-directory: ThirdParty/doq-core
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.cargo/bin:$PATH"
+          # This crate pins Rust 1.94.0; the native preparation already installed it.
+          # Prove the exact optimized host fixture config before handing one peer to both APIs.
+          # Keep the existing debug/negative Rust gate and the real Android exchange mandatory.
+          umask 077
+          peer_proof="$RUNNER_TEMP/android-doq-peer-release-proof.txt"
+          cargo test --locked --release --lib transport_tests::android_host_peer_configuration_round_trips_exact_android_query -- --exact \
+            | tee "$peer_proof"
+          grep -Fx 'test transport_tests::android_host_peer_configuration_round_trips_exact_android_query ... ok' "$peer_proof"
+          grep -E '^test result: ok\. 1 passed; 0 failed; 0 ignored; 0 measured; [0-9]+ filtered out;' "$peer_proof"
+          # The Rust test harness unwinds; also execute the shipping abort/LTO profile.
+          cargo run --locked --release --example crypto-release-regression | tee -a "$peer_proof"
+          cargo build --locked --release --example android-doq-peer
+
+      - name: Build and identify the single candidate APK bundle
+        env:
+          ANDROID_USER_HOME: ${{ runner.temp }}/android-user
+        run: |
+          set -euo pipefail
+          android/gradlew -p android --no-daemon --max-workers=2 --stacktrace \
+            "-PlavaDebugKeystore=$HOME/.android/debug.keystore" \
+            :vpn:assembleDebugAndroidTest :app:assemblePlayDebugAndroidTest :app:assemblePlayDebug
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "::error::The candidate build changed source; a clean committed candidate is required."
+            git status --short
+            exit 1
+          fi
+          candidate="$RUNNER_TEMP/android-emulator-candidate"
+          mkdir -p "$candidate"
+          cp android/app/build/outputs/apk/play/debug/app-play-debug.apk "$candidate/app-debug.apk"
+          cp android/app/build/outputs/apk/androidTest/play/debug/app-play-debug-androidTest.apk "$candidate/app-debug-androidTest.apk"
+          cp android/vpn/build/outputs/apk/androidTest/debug/vpn-debug-androidTest.apk "$candidate/vpn-debug-androidTest.apk"
+          cp ThirdParty/doq-core/target/release/examples/android-doq-peer "$candidate/android-doq-peer"
+          cp "$RUNNER_TEMP/android-doq-peer-release-proof.txt" "$candidate/android-doq-peer-release-proof.txt"
+          cp ThirdParty/doq-core/tests/fixtures/resolver.crt "$candidate/resolver.crt"
+          cp ThirdParty/doq-core/tests/fixtures/resolver.key "$candidate/resolver.key"
+          git rev-parse HEAD > "$candidate/source-sha.txt"
+          python3 ci/android_public_config_evidence.py --root . --variants playDebug \
+            --output "$candidate/android-public-configuration.json"
+
+      - name: Share the candidate with both emulator APIs
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: android-emulator-candidate
+          path: ${{ runner.temp }}/android-emulator-candidate/
+          if-no-files-found: error
+          retention-days: 1
+
+  instrumentation:
+    needs: candidate-build
+    if: >-
+      contains(fromJSON('["lavasecurity/lavasec-android-internal","lavasecurity/lavasec-android"]'), github.repository) &&
+      (github.event_name != 'pull_request' ||
+       github.event.pull_request.head.repo.full_name == github.repository)
+    name: Android instrumentation API ${{ matrix.api }}
+    # Use Ubicloud only and require KVM before starting an emulator.
+    runs-on: ubicloud-standard-4
+    timeout-minutes: ${{ matrix.api == 28 && 95 || 70 }}
+    strategy:
+      fail-fast: false
+      matrix:
+        api: [28, 36]
+    steps:
+      - name: Check out source
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+
+      - name: Require hardware virtualization on Ubicloud
+        run: |
+          if [[ ! -c /dev/kvm ]]; then
+            echo "::error::This Ubicloud runner does not expose /dev/kvm. Emulator tests require KVM; GitHub-hosted fallback is disabled."
+            exit 1
+          fi
+
+      - name: Reserve hosted-runner disk space for Android
+        run: |
+          set -euo pipefail
+          # This job uses an ephemeral Ubuntu host and none of these preinstalled toolchains.
+          sudo rm -rf /usr/share/dotnet /usr/local/.ghcup /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h "$GITHUB_WORKSPACE"
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2
+        with:
+          packages: 'platform-tools'
+
+      - name: Download the single candidate APK bundle
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: android-emulator-candidate
+          path: ${{ runner.temp }}/android-emulator-candidate
+
+      - name: Install the emulator SDK and create the AVD
+        env:
+          API_LEVEL: ${{ matrix.api }}
+          ANDROID_USER_HOME: ${{ runner.temp }}/android-user
+          ANDROID_AVD_HOME: ${{ runner.temp }}/android-user/avd
+        run: |
+          set -euo pipefail
+          sdkmanager "build-tools;36.0.0" "emulator" \
+            "system-images;android-${API_LEVEL};google_apis;x86_64"
+          test -c /dev/kvm
+          sudo chmod 666 /dev/kvm
+          # Recent command-line tools and the emulator can disagree about the
+          # default user directory. Register and launch from the same explicit home.
+          mkdir -p "$ANDROID_AVD_HOME"
+          echo no | avdmanager create avd --force --name lavasec \
+            --package "system-images;android-${API_LEVEL};google_apis;x86_64" \
+            --path "$ANDROID_AVD_HOME/lavasec.avd"
+          test -s "$ANDROID_AVD_HOME/lavasec.ini"
+          # These tests need only app/test APKs and small storage fixtures. The
+          # default 6 GB userdata image consumes the hosted runner's build budget.
+          avd_config="$ANDROID_AVD_HOME/lavasec.avd/config.ini"
+          sed -i '/^disk\.dataPartition\.size[[:space:]]*=/d' "$avd_config"
+          printf '\ndisk.dataPartition.size=2G\n' >> "$avd_config"
+          "$ANDROID_SDK_ROOT/emulator/emulator" -list-avds | grep -Fx lavasec
+
+      - name: Execute app and VPN instrumentation on the emulator
+        env:
+          ANDROID_SERIAL: emulator-5554
+          ANDROID_USER_HOME: ${{ runner.temp }}/android-user
+          ANDROID_AVD_HOME: ${{ runner.temp }}/android-user/avd
+          ANDROID_PREBUILT_APK_DIR: ${{ runner.temp }}/android-emulator-candidate
+          # Only this disposable Linux host authorizes the fixture's UDP53 bind;
+          # the receiver immediately drops back to the job's unprivileged uid/gid.
+          ANDROID_CANARY_PEER_ALLOW_SUDO: '1'
+        run: |
+          set -euo pipefail
+          evidence="$GITHUB_WORKSPACE/device-evidence"
+          mkdir -p "$evidence"
+          df -h "$GITHUB_WORKSPACE" | tee "$evidence/disk-before-boot.txt"
+          "$ANDROID_SDK_ROOT/emulator/emulator" -avd lavasec -no-window \
+            -no-audio -no-boot-anim -no-snapshot -no-metrics -gpu swiftshader_indirect \
+            -memory 3072 -cores 2 \
+            -accel on >"$evidence/emulator.log" 2>&1 &
+          emulator_pid=$!
+          adb_with_timeout() {
+            local duration="$1"
+            shift
+            # SIGTERM alone cannot bound an unresponsive adb child.
+            timeout --kill-after=5s "$duration" adb "$@"
+          }
+          collect_navigation_removal_trace() {
+            # The shared filter keeps LAST256 public scalar rows per boundary.
+            # The runner's immutable pre-recovery snapshot is a separate file.
+            adb_with_timeout 15s logcat -d -v raw ReactNativeJS:I '*:S' \
+              | python3 ci/android_navigation_trace.py --output "$evidence/navigation-removal-trace.log" || true
+          }
+          collect_emulator_diagnostics() {
+            collect_navigation_removal_trace
+            adb_with_timeout 15s logcat -d -v threadtime AndroidRuntime:E '*:S' >"$evidence/android-runtime-crashes.log" 2>&1 || true
+            adb_with_timeout 15s logcat -d -v raw LavaForegroundEntry:W '*:S' >"$evidence/shared-foreground-entry-refusals.log" 2>&1 || true
+            # Colon-bearing RN tags require a valid global error-priority filter.
+            adb_with_timeout 15s logcat -d -v threadtime \
+              '*:E' \
+              | python3 ci/android_native_mount_trace.py --output "$evidence/native-mount-trace.json" || true
+            adb_with_timeout 15s pull /sdcard/Android/data/com.lavasec.app.debug/files/launcher-evidence "$evidence/launcher" >"$evidence/launcher-pull.log" 2>&1 || true
+            kill "$emulator_pid" 2>/dev/null || true
+          }
+          trap collect_emulator_diagnostics EXIT
+          if ! adb_with_timeout 20s start-server 2>&1 | tee "$evidence/adb-start-server.log"; then
+            echo "::error::Android adb server failed to start within its deadline."
+            exit 1
+          fi
+          boot_deadline=$((SECONDS + 300))
+          while true; do
+            if ! kill -0 "$emulator_pid" 2>/dev/null; then
+              cat "$evidence/emulator.log"
+              tail -80 "$evidence/boot-query.log" 2>/dev/null || true
+              echo "::error::Android emulator exited before boot completed."
+              exit 1
+            fi
+            if (( SECONDS >= boot_deadline )); then
+              cat "$evidence/emulator.log"
+              tail -80 "$evidence/boot-query.log" 2>/dev/null || true
+              echo "::error::Android emulator did not boot within 300 seconds."
+              exit 1
+            fi
+            # Both a successful adb exit and the exact property are required.
+            if boot_property="$(adb_with_timeout 5s shell getprop sys.boot_completed 2>>"$evidence/boot-query.log")"; then
+              if [[ "$(printf '%s' "$boot_property" | tr -d '\r')" == 1 ]] && (( SECONDS < boot_deadline )); then break; fi
+            else
+              query_status=$?
+              printf 'adb boot query failed (exit %s)\n' "$query_status" >>"$evidence/boot-query.log"
+            fi
+            sleep 2
+          done
+          echo "Android emulator boot verified before its deadline."
+          if ! adb_with_timeout 15s shell input keyevent 82 2>&1 | tee "$evidence/adb-device-setup.log"; then
+            echo "::error::Android emulator unlock failed or timed out."
+            exit 1
+          fi
+          for setting in window_animation_scale transition_animation_scale animator_duration_scale; do
+            if ! adb_with_timeout 15s shell settings put global "$setting" 0 2>&1 | tee -a "$evidence/adb-device-setup.log"; then
+              echo "::error::Android emulator setting ${setting} failed or timed out."
+              exit 1
+            fi
+          done
+          # First-run UI goes first; process-death phases use separate runner processes.
+          # Both APIs execute the raw app/VPN instrumentation from the shared bundle.
+          echo "Android emulator setup complete; starting the prebuilt app journeys."
+          # API28 run 39629429620 passed 105 receipts and reached case58/89
+          # before its 60m total expired; the passing matrix alone took 982s.
+          # Allow 75m within a 95m job envelope for this expanded suite.
+          # API36 run 39614177436 reached case63/85 with no test failure before
+          # its 40m total expired. Allow 50m within a 70m job envelope;
+          # individual assertions, failures and cases stay intact.
+          if [[ "${{ matrix.api }}" == "28" ]]; then
+            ANDROID_JOURNEY_BUDGET_SECONDS=4500 timeout --kill-after=10s 75m bash scripts/run-android-emulator-journeys.sh
+          else
+            ANDROID_JOURNEY_BUDGET_SECONDS=3000 timeout --kill-after=10s 50m bash scripts/run-android-emulator-journeys.sh
+          fi
+
+      - name: Retain instrumentation results and emulator diagnostics
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: android-device-api-${{ matrix.api }}
+          path: |
+            android/*/build/outputs/androidTest-results/connected/**
+            android/*/build/reports/androidTests/connected/**
+            device-evidence/**
+          if-no-files-found: warn
+          retention-days: 1
+
+  emulator-evidence:
+    name: Verify the same candidate across API 28 and 36
+    needs: instrumentation
+    runs-on: ubicloud-standard-2
+    timeout-minutes: 5
+    steps:
+      - name: Check out evidence verifier
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+      - name: Download both emulator records
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          pattern: android-device-api-*
+          path: emulator-records
+      - name: Require executed journeys and matching source APK and signer
+        run: |
+          mapfile -t records < <(find emulator-records -name emulator-evidence.json -type f)
+          test "${#records[@]}" = 2
+          python3 ci/android_emulator_evidence.py verify "${records[@]}"

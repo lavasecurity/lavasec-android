@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Lava's existing smile mark, scaled into the adaptive icon's safe area. -->
+    <group
+        android:scaleX="0.0703125"
+        android:scaleY="0.0703125"
+        android:translateX="18"
+        android:translateY="18">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M251,412.5 A31.5,31.5 0,1 1,314,412.5 A31.5,31.5 0,1 1,251,412.5 M712,412.5 A31.5,31.5 0,1 1,775,412.5 A31.5,31.5 0,1 1,712,412.5" />
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M294,565 C441,591 589,591 735,565"
+            android:strokeColor="#FFFFFFFF"
+            android:strokeLineCap="round"
+            android:strokeWidth="44" />
+    </group>
+</vector>

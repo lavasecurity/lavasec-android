@@ -1,0 +1,7 @@
+[
+  {"domain":"not a domain","action":"BLOCK","reason":"INVALID_DOMAIN"},
+  {"domain":"danger.example.com","action":"BLOCK","reason":"THREAT_GUARDRAIL"},
+  {"domain":"trusted.ads.example.com","action":"ALLOW","reason":"LOCAL_ALLOWLIST"},
+  {"domain":"cdn.ads.example.com","action":"BLOCK","reason":"BLOCKLIST"},
+  {"domain":"apple.com","action":"ALLOW","reason":"DEFAULT_ALLOW"}
+]

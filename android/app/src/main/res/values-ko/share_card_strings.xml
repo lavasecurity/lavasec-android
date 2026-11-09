@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Exact recipient-facing copy from frozen iOS 3bd86116; counts describe payload contents. -->
+<resources>
+    <string name="share_card_title">공유된 필터</string>
+    <string name="share_card_instruction">스캔해서 가져오기 — 또는 Lava 먼저 받기</string>
+    <string name="share_card_setup">처음이신가요? 설치하고 설정을 마친 뒤 다시 스캔하세요.</string>
+    <string name="share_card_provenance">다른 사람이 공유했어요. Lava가 검토하지 않았어요.</string>
+    <string name="share_card_blocklist_one">차단 목록 %1$s개</string>
+    <string name="share_card_blocklist_many">차단 목록 %1$s개</string>
+    <string name="share_card_blocked_one">차단 도메인 %1$s개</string>
+    <string name="share_card_blocked_many">차단 도메인 %1$s개</string>
+    <string name="share_card_custom_one">맞춤 차단 목록 %1$s개</string>
+    <string name="share_card_custom_many">맞춤 차단 목록 %1$s개</string>
+    <string name="share_card_allowed_one">허용 예외 %1$s개</string>
+    <string name="share_card_allowed_many">허용 예외 %1$s개</string>
+</resources>

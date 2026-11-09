@@ -1,0 +1,58 @@
+[
+  {"name":"ascii lowercase","input":"Example.COM","normalized":"example.com","error":null},
+  {"name":"trim and dots","input":"  .Example.COM...\n","normalized":"example.com","error":null},
+  {"name":"precomposed IDNA","input":"Bücher.Example","normalized":"xn--bcher-kva.example","error":null},
+  {"name":"decomposed IDNA","input":"Bu\u0308cher.Example","normalized":"xn--bcher-kva.example","error":null},
+  {"name":"double diaeresis IDNA","input":"Bü\u0308cher.Example","normalized":"xn--bcher-kva287a.example","error":null},
+  {"name":"sharp s remains non-transitional","input":"faß.de","normalized":"xn--fa-hia.de","error":null},
+  {"name":"sharp s in longer label remains non-transitional","input":"straße.de","normalized":"xn--strae-oqa.de","error":null},
+  {"name":"Greek final sigma remains distinct","input":"ς.gr","normalized":"xn--3xa.gr","error":null},
+  {"name":"accented Greek label uses NFC punycode","input":"βόλος.com","normalized":"xn--nxasmm1c.com","error":null},
+  {"name":"symbol label matches URL host conversion","input":"☕.example","normalized":"xn--53h.example","error":null},
+  {"name":"Unicode 14 melting face remains valid on API 28","input":"🫠.example","normalized":"xn--129h.example","error":null},
+  {"name":"Unicode 14 holding back tears remains valid on API 28","input":"🥹.example","normalized":"xn--ss9h.example","error":null},
+  {"name":"ideographic full stop maps to dot","input":"www。Example.com","normalized":"www.example.com","error":null},
+  {"name":"fullwidth compatibility character maps before lowercase","input":"Ａ.example","normalized":"a.example","error":null},
+  {"name":"circled digit compatibility maps to ASCII","input":"①.example","normalized":"1.example","error":null},
+  {"name":"middle dot context O is accepted like Foundation","input":"a·b.com","normalized":"xn--ab-0ea.com","error":null},
+  {"name":"Greek lower numeral context O is accepted like Foundation","input":"a͵b.gr","normalized":"xn--ab-63b.gr","error":null},
+  {"name":"Katakana middle dot context O is accepted like Foundation","input":"・.example","normalized":"xn--vek.example","error":null},
+  {"name":"soft hyphen uses UTS46 ignored mapping","input":"soft\u00adhyphen.com","normalized":"softhyphen.com","error":null},
+  {"name":"Mongolian todo soft hyphen remains encoded","input":"a\u1806b.example","normalized":"xn--ab-h0o.example","error":null},
+  {"name":"Mongolian vowel separator is ignored","input":"a\u180eb.example","normalized":"ab.example","error":null},
+  {"name":"function application is ignored","input":"a\u2061b.example","normalized":"ab.example","error":null},
+  {"name":"invisible times is ignored","input":"a\u2062b.example","normalized":"ab.example","error":null},
+  {"name":"invisible separator is ignored","input":"a\u2063b.example","normalized":"ab.example","error":null},
+  {"name":"invisible plus is ignored","input":"a\u2064b.example","normalized":"ab.example","error":null},
+  {"name":"fullwidth full stop maps to dot","input":"example．com","normalized":"example.com","error":null},
+  {"name":"halfwidth ideographic full stop maps to dot","input":"example｡com","normalized":"example.com","error":null},
+  {"name":"Arabic bidi label canonicalizes","input":"مثال.إختبار","normalized":"xn--mgbh0fb.xn--kgbechtv","error":null},
+  {"name":"Foundation trimming includes next line","input":"\u0085Example.COM\u0085","normalized":"example.com","error":null},
+  {"name":"Foundation trimming includes no-break space","input":"\u00a0Example.COM\u00a0","normalized":"example.com","error":null},
+  {"name":"Foundation trimming includes ideographic space","input":"\u3000Example.COM\u3000","normalized":"example.com","error":null},
+  {"name":"zero-width trim precedes leading-dot removal","input":"\u200b.Example.COM\u200b","normalized":"example.com","error":null},
+  {"name":"empty","input":"   ","normalized":null,"error":"EMPTY"},
+  {"name":"one label","input":"localhost","normalized":null,"error":"NEEDS_AT_LEAST_TWO_LABELS"},
+  {"name":"dotted numeric address","input":"999.999.999.999","normalized":null,"error":"IP_ADDRESS_NOT_ALLOWED"},
+  {"name":"IPv6 address","input":"2001:4860:4860::8888","normalized":null,"error":"IP_ADDRESS_NOT_ALLOWED"},
+  {"name":"second leading dot remains","input":"..example.com","normalized":null,"error":"INVALID_LABEL"},
+  {"name":"empty middle label","input":"www..example.com","normalized":null,"error":"INVALID_LABEL"},
+  {"name":"leading hyphen","input":"-bad.example.com","normalized":null,"error":"INVALID_LABEL"},
+  {"name":"trailing hyphen","input":"bad-.example.com","normalized":null,"error":"INVALID_LABEL"},
+  {"name":"non alphanumeric","input":"bad_name.example.com","normalized":null,"error":"INVALID_LABEL"}
+  ,{"name":"leading combining mark is invalid IDNA","input":"̈a.example","normalized":null,"error":"INVALID_LABEL"}
+  ,{"name":"joiner is invalid IDNA","input":"a‍b.example","normalized":null,"error":"INVALID_LABEL"}
+  ,{"name":"mixed bidi Hebrew then Latin rejects","input":"אa.example","normalized":null,"error":"INVALID_LABEL"}
+  ,{"name":"mixed bidi Latin then Hebrew rejects","input":"aא.example","normalized":null,"error":"INVALID_LABEL"}
+  ,{"name":"genuinely unassigned scalar rejects","input":"a\u0378b.example","normalized":null,"error":"INVALID_LABEL"}
+  ,{"name":"Unicode 17 Arabic age sentinel rejects on pinned Unicode 16","input":"\u088f.example","normalized":null,"error":"INVALID_LABEL"}
+  ,{"name":"Unicode 17 Telugu age sentinel rejects on pinned Unicode 16","input":"\u0c5c.example","normalized":null,"error":"INVALID_LABEL"}
+  ,{"name":"Unicode 17 supplementary age sentinel 10940 rejects","input":"\ud802\udd40.example","normalized":null,"error":"INVALID_LABEL"}
+  ,{"name":"Unicode 17 supplementary age sentinel 11DB0 rejects","input":"\ud807\uddb0.example","normalized":null,"error":"INVALID_LABEL"}
+  ,{"name":"Unicode 17 supplementary age sentinel 16EA0 rejects","input":"\ud81b\udea0.example","normalized":null,"error":"INVALID_LABEL"}
+  ,{"name":"Unicode 17 supplementary age sentinel 1E6C0 rejects","input":"\ud839\udec0.example","normalized":null,"error":"INVALID_LABEL"}
+  ,{"name":"file separator is not Foundation trim whitespace","input":"\u001cExample.COM\u001c","normalized":null,"error":"INVALID_LABEL"}
+  ,{"name":"group separator is not Foundation trim whitespace","input":"\u001dExample.COM\u001d","normalized":null,"error":"INVALID_LABEL"}
+  ,{"name":"record separator is not Foundation trim whitespace","input":"\u001eExample.COM\u001e","normalized":null,"error":"INVALID_LABEL"}
+  ,{"name":"unit separator is not Foundation trim whitespace","input":"\u001fExample.COM\u001f","normalized":null,"error":"INVALID_LABEL"}
+]

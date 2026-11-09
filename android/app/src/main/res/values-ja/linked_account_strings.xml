@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Native AccountSheet copy from the frozen iOS 8fbe6ada catalog. -->
+<resources>
+    <string name="linked_account_title">アカウント</string>
+    <string name="linked_account_sign_out">すべてのアカウントからサインアウト</string>
+    <string name="linked_account_delete">Lavaアカウントを削除</string>
+    <string name="linked_account_confirm_title">Lava アカウントを削除しますか？</string>
+    <string name="linked_account_confirm_body">サインイン中のLavaアカウントとその暗号化バックアップをLavaのサーバーから削除します。保護の設定はこのデバイスに残ります。</string>
+    <string name="linked_account_confirm_delete">削除</string>
+    <string name="linked_account_close">閉じる</string>
+    <string name="linked_account_cancel">キャンセル</string>
+    <string name="linked_account_failure">再試行</string>
+    <string name="linked_account_provider">%1$s アカウント</string>
+</resources>

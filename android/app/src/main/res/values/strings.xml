@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="share_local_activity">Share local Activity export</string>
+    <string name="send_feedback">Send LavaSec feedback</string>
+    <string name="app_name">Lava Security</string>
+    <string name="connectivity_problem_notification_channel_name">Connectivity problems</string>
+    <!-- Ambient protection notification (iOS Live Activity equivalent): a silent ongoing
+         status channel with lock-screen-hidden content. The channel contract (LOW
+         importance, ongoing non-dismissible, VISIBILITY_PRIVATE, no badge) is enforced
+         in ProtectionAmbientNotificationFactory. -->
+    <string name="protection_status_notification_channel_name">Protection status</string>
+    <!-- Pinned iOS widget titles (LavaSecKit widget.state.*) for on/paused, plus the
+         Guard vocabulary for the transient/fallback statuses. -->
+    <string name="protection_ambient_status_on">Lava Security is on</string>
+    <string name="protection_ambient_status_paused">Lava Security is paused</string>
+    <string name="protection_ambient_status_starting">Starting protection…</string>
+    <string name="protection_ambient_status_stopping">Stopping protection…</string>
+    <string name="protection_ambient_status_reconnect_needed">Reconnect needed</string>
+    <string name="protection_ambient_status_device_fallback">Device DNS fallback is active</string>
+    <string name="protection_ambient_status_encrypted_fallback">Encrypted DNS fallback is active</string>
+    <string name="protection_ambient_filter_line">Filter: %1$s</string>
+    <string name="protection_ambient_resolver_line">Resolver: %1$s</string>
+    <string name="protection_ambient_provider_device">Device DNS</string>
+    <string name="protection_ambient_provider_device_fallback">Device DNS with encrypted fallback</string>
+    <string name="protection_ambient_provider_mullvad">Mullvad</string>
+    <string name="protection_ambient_open_action">Open Lava</string>
+
+    <string name="backup_setup_title">Save your recovery phrase</string>
+    <string name="backup_setup_confirm_hint">Type the phrase to confirm</string>
+    <string name="backup_setup_saved_ack">I\'ve written down my recovery phrase</string>
+    <string name="backup_setup_no_recovery_ack">I understand Lava can\'t recover it for me if I lose it</string>
+    <string name="backup_setup_confirm_both">Confirm both acknowledgments to continue.</string>
+    <string name="backup_setup_phrase_mismatch">The phrase doesn\'t match. Check the spelling and order.</string>
+    <string name="backup_save">Save</string>
+    <string name="backup_restore_title">Enter your recovery phrase</string>
+    <string name="backup_restore_hint">Recovery phrase</string>
+    <string name="backup_restore">Restore</string>
+    <string name="backup_restore_review_title">Restore this backup?</string>
+    <string name="backup_restore_resolver_confirm">Apply the backed-up DNS resolver selection</string>
+    <string name="backup_restore_confirm_resolver">Confirm the DNS resolver change to continue.</string>
+
+    <string name="backup_failure_upload_failed">Encrypted locally, but upload failed: try again.</string>
+    <string name="backup_failure_deletion_not_saved">Backup deletion could not be saved safely. Try again.</string>
+    <string name="backup_failure_local_cleanup_incomplete">Online backup deleted. Local backup cleanup could not finish. Try turning off backup again.</string>
+    <string name="backup_failure_remote_delete_offline">Couldn\'t delete the backup stored for your account — you may be offline or signed out. The backup was left in place; try again when you\'re back online.</string>
+    <string name="backup_failure_deletion_pending">Backup deletion is pending. Sign in to the original account and try turning off backup again.</string>
+    <string name="backup_failure_state_unavailable">Backup state is unavailable. Unlock your device and try again.</string>
+
+    <string name="vpn_restriction_device_ineligible">This device doesn\'t have enough memory for chaining.</string>
+    <string name="vpn_restriction_device_state_unreadable">Lava can\'t check this device right now. Unlock it and try again.</string>
+
+    <string name="vpn_configuration_title">VPN configuration</string>
+    <string name="vpn_configuration_name">Configuration name</string>
+    <string name="vpn_configuration_content">WireGuard configuration</string>
+    <string name="vpn_configuration_keep_content">Leave blank to keep the saved configuration.</string>
+    <string name="vpn_configuration_import">Import configuration file</string>
+    <string name="vpn_configuration_required">Enter or import a WireGuard configuration.</string>
+    <string name="vpn_configuration_invalid">This WireGuard configuration is not valid.</string>
+    <string name="vpn_configuration_import_failed">The configuration file could not be read.</string>
+    <string name="vpn_configuration_import_too_large">This file is larger than 64 KB — far too big for a WireGuard config. Wrong file?</string>
+    <string name="vpn_configuration_import_not_text">That file isn\'t text, so it isn\'t a WireGuard config.</string>
+    <string name="backup_restore_method_title">Restore from backup</string>
+    <string name="backup_restore_method_device">Use this device\'s key</string>
+    <string name="backup_restore_method_recovery">Recovery phrase</string>
+    <string name="backup_restore_method_passkey">Passkey</string>
+    <string name="backup_passkey_consent_title">Set up a passkey?</string>
+    <string name="backup_passkey_consent_message">Use your screen lock to unlock this backup on another device.</string>
+    <string name="backup_passkey_consent_confirm">Use passkey</string>
+    <string name="backup_passkey_consent_skip">Continue without passkey</string>
+    <string name="backup_restore_review_summary">Filters changed: %1$d. Settings and resolver selection will be replaced.</string>
+    <string name="backup_restore_review_guard_unlocks">Unlocked Lava Guards: %1$d → %2$d</string>
+    <string name="protection_ambient_status_plain_fallback">On · Plain DNS fallback</string>
+</resources>

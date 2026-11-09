@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Native AccountSheet copy from the frozen iOS 8fbe6ada catalog. -->
+<resources>
+    <string name="linked_account_title">帳號</string>
+    <string name="linked_account_sign_out">登出所有帳號</string>
+    <string name="linked_account_delete">刪除你的 Lava 帳號</string>
+    <string name="linked_account_confirm_title">要刪除你的 Lava 帳號嗎？</string>
+    <string name="linked_account_confirm_body">這會從 Lava 伺服器刪除已登入的 Lava 帳號及其加密備份。你的防護設定會留在這台裝置上。</string>
+    <string name="linked_account_confirm_delete">刪除</string>
+    <string name="linked_account_close">關閉</string>
+    <string name="linked_account_cancel">取消</string>
+    <string name="linked_account_failure">再試一次</string>
+    <string name="linked_account_provider">%1$s 帳號</string>
+</resources>

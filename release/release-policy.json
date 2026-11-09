@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "owner": "lavasecurity",
+  "internal": {
+    "repository": "lavasec-android-internal",
+    "tagPattern": "^v(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)-rc([1-9][0-9]*)$",
+    "track": "internal"
+  },
+  "external": {
+    "repository": "lavasec-android",
+    "tagPattern": "^v(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+    "track": "alpha",
+    "dryRunDefault": true
+  },
+  "packageName": "com.lavasec.app",
+  "versionCodeScheme": "major*100000000+minor*1000000+patch*10000+ordinal; rc=1..9998; stable=9999"
+}

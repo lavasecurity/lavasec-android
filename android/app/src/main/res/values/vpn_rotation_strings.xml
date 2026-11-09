@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vpn_rotation_awaiting_restart">Your VPN connection is still running the configuration it started with. Turn protection off and on to switch to the one you just saved.</string>
+    <string name="vpn_rotation_running_removed">Your VPN connection is still running the configuration you removed, and will until protection stops. Turn protection off, or import a configuration to replace it.</string>
+</resources>

@@ -1,0 +1,17 @@
+<resources>
+    <string name="portable_backup_export_title">Exportar copia de seguridad local cifrada</string>
+    <string name="portable_backup_import_title">Importar copia de seguridad local cifrada</string>
+    <string name="portable_backup_password">Contraseña de la copia de seguridad</string>
+    <string name="portable_backup_password_confirm">Confirmar contraseña</string>
+    <string name="portable_backup_password_invalid">Usa al menos 8 caracteres, un número y un símbolo. Ambas contraseñas deben coincidir.</string>
+    <string name="portable_backup_import_password">Introduce la contraseña que se usó al exportar este archivo. No se necesita una cuenta ni conexión a internet.</string>
+    <string name="portable_backup_export_summary">Incluye filtros, reglas, URL de las fuentes, puntos de conexión DNS, preferencias de conservación y Lava Guards desbloqueados, todo ello cifrado. Las URL de los puntos de conexión pueden contener credenciales de red. Se excluyen los tokens de cuenta, las compras, las claves privadas y el historial de actividad. Guarda la contraseña en un lugar seguro: Lava no puede recuperarla. Play y FOSS no comparten datos automáticamente. Instalar FOSS no cancela una suscripción de Play.</string>
+    <string name="portable_backup_restore_summary">Revisa los ajustes de este archivo. Puedes guardar el archivo cifrado para más adelante sin conexión. Aplicarlo puede requerir descargar fuentes y está sujeto a los límites de funciones de esta edición. La protección de este dispositivo no cambiará. No se transfieren cuentas, compras, claves privadas ni historial.</string>
+    <string name="portable_backup_restore_now">Restaurar ahora</string>
+    <string name="portable_backup_save_for_later">Guardar para después</string>
+    <string name="portable_backup_pending_discard_title">¿Descartar la copia pendiente?</string>
+    <string name="portable_backup_pending_discard_message">Eliminar de este dispositivo la importación cifrada guardada. Los ajustes actuales y el archivo de copia original no cambiarán.</string>
+    <string name="portable_backup_pending_replace_title">¿Reemplazar la copia pendiente?</string>
+    <string name="portable_backup_pending_replace_message">Reemplazar la importación cifrada guardada en este dispositivo por este archivo. Los ajustes actuales no cambiarán.</string>
+    <string name="portable_backup_import_password_required">Introduce la contraseña de la copia de seguridad.</string>
+</resources>

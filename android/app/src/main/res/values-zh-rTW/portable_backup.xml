@@ -1,0 +1,17 @@
+<resources>
+    <string name="portable_backup_export_title">匯出加密的本機備份</string>
+    <string name="portable_backup_import_title">匯入加密的本機備份</string>
+    <string name="portable_backup_password">備份密碼</string>
+    <string name="portable_backup_password_confirm">確認密碼</string>
+    <string name="portable_backup_password_invalid">請使用至少8個字元，並包含至少一個數字和一個符號。兩次輸入的密碼必須一致。</string>
+    <string name="portable_backup_import_password">請輸入匯出此檔案時使用的密碼。不需要帳戶或網際網路連線。</string>
+    <string name="portable_backup_export_summary">備份包含經過加密的篩選器、規則、來源URL、DNS端點、保留偏好設定及已解鎖的 Lava Guard。端點URL可能包含網路驗證資訊。不包含帳戶權杖、購買資訊、私密金鑰或活動歷程記錄。請妥善保管密碼，Lava無法找回密碼。Play版與FOSS版不會自動共用資料。安裝FOSS版不會取消Play訂閱。</string>
+    <string name="portable_backup_restore_summary">請檢查此檔案中的設定。離線時也可以儲存加密檔案以供稍後還原。套用設定可能需要下載來源檔案，並受此版本的功能限制。此裝置的保護狀態維持不變。帳號、購買記錄、私密金鑰和歷史記錄不會轉移。</string>
+    <string name="portable_backup_restore_now">立即還原</string>
+    <string name="portable_backup_save_for_later">儲存以供稍後還原</string>
+    <string name="portable_backup_pending_discard_title">捨棄待還原的備份？</string>
+    <string name="portable_backup_pending_discard_message">從此裝置中刪除已儲存的加密匯入檔案。目前設定和原始備份檔案維持不變。</string>
+    <string name="portable_backup_pending_replace_title">取代待還原的備份？</string>
+    <string name="portable_backup_pending_replace_message">以此檔案取代儲存在此裝置上的加密匯入檔案。目前設定維持不變。</string>
+    <string name="portable_backup_import_password_required">請輸入備份密碼。</string>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Native AccountSheet copy from the frozen iOS 8fbe6ada catalog. -->
+<resources>
+    <string name="linked_account_title">Conta</string>
+    <string name="linked_account_sign_out">Sair de todas as contas</string>
+    <string name="linked_account_delete">Excluir sua conta do Lava</string>
+    <string name="linked_account_confirm_title">Excluir a sua conta Lava?</string>
+    <string name="linked_account_confirm_body">Isso exclui a conta Lava conectada e o backup criptografado dela dos servidores do Lava. Suas configurações de proteção ficam neste dispositivo.</string>
+    <string name="linked_account_confirm_delete">Excluir</string>
+    <string name="linked_account_close">Fechar</string>
+    <string name="linked_account_cancel">Cancelar</string>
+    <string name="linked_account_failure">Tentar novamente</string>
+    <string name="linked_account_provider">Conta %1$s</string>
+</resources>

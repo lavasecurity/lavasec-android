@@ -1,0 +1,17 @@
+<resources>
+    <string name="portable_backup_export_title">Export encrypted local backup</string>
+    <string name="portable_backup_import_title">Import encrypted local backup</string>
+    <string name="portable_backup_password">Backup password</string>
+    <string name="portable_backup_password_confirm">Confirm password</string>
+    <string name="portable_backup_password_invalid">Use at least 8 characters, one number and one symbol. Both passwords must match.</string>
+    <string name="portable_backup_import_password">Enter the password used when this file was exported. No account or internet connection is required.</string>
+    <string name="portable_backup_export_summary">Includes encrypted filters, rules, source URLs, DNS endpoints, retention preferences and unlocked Lava Guards. Endpoint URLs may contain network credentials. Account tokens, purchases, private keys and activity history are excluded. Keep the password safe: Lava cannot recover it. Play and FOSS do not share data automatically. Installing FOSS does not cancel a Play subscription.</string>
+    <string name="portable_backup_restore_summary">Review the settings in this file. You can save the encrypted file for later while offline. Applying it may require source downloads and is subject to this edition’s feature limits. Protection on this device stays as it is. Accounts, purchases, private keys and history are not transferred.</string>
+    <string name="portable_backup_restore_now">Restore now</string>
+    <string name="portable_backup_save_for_later">Save for later</string>
+    <string name="portable_backup_pending_discard_title">Discard pending backup?</string>
+    <string name="portable_backup_pending_discard_message">Delete the saved encrypted import from this device. Your current settings and original backup file are unchanged.</string>
+    <string name="portable_backup_pending_replace_title">Replace pending backup?</string>
+    <string name="portable_backup_pending_replace_message">Replace the encrypted import saved on this device with this file. Your current settings are unchanged.</string>
+    <string name="portable_backup_import_password_required">Enter the backup password.</string>
+</resources>

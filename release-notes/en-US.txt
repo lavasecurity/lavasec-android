@@ -1,0 +1,1 @@
+Fixes optimized-build startup crashes caused by missing screen colors and a navigation layout callback. Restores the orange Lava launcher icon. Includes the iOS 2.2 shared flows. Signed account, purchase, passkey and cloud-service journeys remain under qualification. This is an internal testing release.

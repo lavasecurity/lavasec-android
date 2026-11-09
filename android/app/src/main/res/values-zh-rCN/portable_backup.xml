@@ -1,0 +1,17 @@
+<resources>
+    <string name="portable_backup_export_title">导出加密的本地备份</string>
+    <string name="portable_backup_import_title">导入加密的本地备份</string>
+    <string name="portable_backup_password">备份密码</string>
+    <string name="portable_backup_password_confirm">确认密码</string>
+    <string name="portable_backup_password_invalid">请使用至少8个字符，并包含至少一个数字和一个符号。两次输入的密码必须一致。</string>
+    <string name="portable_backup_import_password">请输入导出此文件时使用的密码。无需账户或互联网连接。</string>
+    <string name="portable_backup_export_summary">备份包含经过加密的过滤器、规则、来源URL、DNS端点、保留偏好设置以及已解锁的 Lava Guard。端点URL可能包含网络凭据。不包含账户令牌、购买信息、私钥或活动历史记录。请妥善保管密码，Lava无法找回密码。Play版与FOSS版不会自动共享数据。安装FOSS版不会取消Play订阅。</string>
+    <string name="portable_backup_restore_summary">请检查此文件中的设置。离线时也可以保存加密文件以供稍后恢复。应用配置可能需要下载源文件，并受此版本的功能限制。此设备的保护状态保持不变。账号、购买记录、私钥和历史记录不会转移。</string>
+    <string name="portable_backup_restore_now">立即恢复</string>
+    <string name="portable_backup_save_for_later">保存以供稍后恢复</string>
+    <string name="portable_backup_pending_discard_title">丢弃待恢复的备份？</string>
+    <string name="portable_backup_pending_discard_message">从此设备中删除已保存的加密导入文件。当前设置和原始备份文件保持不变。</string>
+    <string name="portable_backup_pending_replace_title">替换待恢复的备份？</string>
+    <string name="portable_backup_pending_replace_message">用此文件替换保存在此设备上的加密导入文件。当前设置保持不变。</string>
+    <string name="portable_backup_import_password_required">请输入备份密码。</string>
+</resources>

@@ -1,0 +1,158 @@
+name: WireGuard engine (Android)
+
+# Builds ThirdParty/wireguard-core for the four Android ABIs, runs the host-side
+# engine ABI tests, and uploads the `.so`s. Mirrors the iOS
+# `wireguard-core-drift` gate's structure: it ALWAYS completes on a PR (self-skips
+# when no engine/script/workflow file changed) so it can later become a required
+# check without the path-filtered "Expected — waiting" deadlock, and it never runs
+# on fork PRs (it executes cargo on owned hardware).
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wireguard-core-android-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  scope:
+    name: Select engine scope
+    runs-on: ubicloud-standard-2
+    outputs:
+      changed: ${{ steps.scope.outputs.changed }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Detect engine changes
+        id: scope
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo "changed=true" >> "${GITHUB_OUTPUT}"
+            echo "non-PR run → build the engine"
+            exit 0
+          fi
+          # The full checkout already contains the event's exact base commit. A
+          # second fetch has no credential after persist-credentials=false.
+          base="${{ github.event.pull_request.base.sha }}"
+          changed_files="$(git diff --name-only "$base"...HEAD)"
+          changed=false
+          # Consume the diff completely before searching. grep -q in a pipe can
+          # SIGPIPE git on a large change and falsely skip the engine under pipefail.
+          if grep -qE \
+              '^(ThirdParty/(wireguard-core|doq-core)/|scripts/(build-wireguard-core-android|build-doq-core-android|prepare-wireguard-core-android)\.sh$|\.github/workflows/wireguard-core-android\.yml$)' <<< "$changed_files"; then
+            changed=true
+          fi
+          echo "changed=${changed}" >> "${GITHUB_OUTPUT}"
+          [ "$changed" = true ] && echo "engine touched → build" || echo "engine untouched → no-op (green)"
+
+  build:
+    name: Build Android ABIs + host ABI tests
+    needs: scope
+    # Fail closed on a skipped dependency, and never run on a fork PR (arbitrary cargo
+    # on owned hardware).
+    if: >-
+      ${{ !cancelled()
+          && contains(fromJSON('["lavasecurity/lavasec-android-internal","lavasecurity/lavasec-android"]'), github.repository)
+          && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false)
+          && needs.scope.outputs.changed == 'true' }}
+    runs-on: ubicloud-standard-4
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+
+      - name: Set up JDK 21 (for sdkmanager)
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Android SDK + pinned NDK
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2
+        with:
+          # v3.2.2 defaults to `tools platform-tools`, but `tools` was removed from the SDK
+          # repository, so the action failed with "Failed to find package 'tools'". Install only
+          # platform-tools; the NDK is installed explicitly below.
+          packages: 'platform-tools'
+      - name: Install NDK
+        run: |
+          set -euo pipefail
+          sdkmanager "ndk;27.2.12479018"
+          echo "ANDROID_NDK_HOME=${ANDROID_SDK_ROOT}/ndk/27.2.12479018" >> "${GITHUB_ENV}"
+
+      - name: Cache cargo + rustup
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: |
+            ~/.cargo/bin
+            ~/.cargo/registry
+            ~/.cargo/git
+            ThirdParty/wireguard-core/target
+            ThirdParty/doq-core/target
+            ~/.rustup
+          key: wgcore-android-${{ runner.os }}-${{ hashFiles('ThirdParty/wireguard-core/rust-toolchain.toml', 'ThirdParty/wireguard-core/Cargo.lock', 'ThirdParty/doq-core/Cargo.lock') }}
+
+      - name: Provision the pinned Rust toolchain + Android targets
+        run: |
+          set -euo pipefail
+          export PATH="${HOME}/.cargo/bin:${PATH}"
+          echo "${HOME}/.cargo/bin" >> "${GITHUB_PATH}"
+          if ! command -v rustup >/dev/null 2>&1; then
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain none
+          fi
+          cd ThirdParty/wireguard-core
+          rustup show           # installs the rust-toolchain.toml pin
+          rustup target add \
+            aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
+
+      - name: Install cargo-ndk
+        run: |
+          set -euo pipefail
+          export PATH="${HOME}/.cargo/bin:${PATH}"
+          command -v cargo-ndk >/dev/null 2>&1 || cargo install cargo-ndk --locked --version 3.5.4
+
+      - name: Host-side engine ABI tests
+        run: |
+          set -euo pipefail
+          export PATH="${HOME}/.cargo/bin:${PATH}"
+          cd ThirdParty/wireguard-core
+          # Dev profile: the release profile sets panic=abort, which the test harness
+          # cannot use. The ABI logic under test is profile-independent.
+          cargo test
+          cd ../doq-core
+          cargo test --locked
+          cargo run --locked --release --example crypto-release-regression
+
+      - name: Cross-compile the four Android ABIs
+        run: |
+          set -euo pipefail
+          export PATH="${HOME}/.cargo/bin:${PATH}"
+          bash scripts/build-wireguard-core-android.sh
+          bash scripts/build-doq-core-android.sh
+
+      - name: Upload the per-ABI shared libraries
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: lavasec-wireguard-core-android
+          path: android/vpn/src/main/jniLibs/**/liblavasec_wireguard_core.so
+          if-no-files-found: error
+          # Ephemeral CI artifact: the engine is rebuilt on demand by this lane; a long retention
+          # window only accrues GitHub Actions artifact-storage charges.
+          retention-days: 1
+
+      - name: Upload the per-ABI DoQ shared libraries
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: lavasec-doq-core-android
+          path: android/vpn/src/main/jniLibs/**/liblavasec_doq_core.so
+          if-no-files-found: error
+          retention-days: 1

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vpn_rotation_awaiting_restart">VPN 连接仍在使用启动时的配置。请关闭保护后重新开启，以切换到刚保存的配置。</string>
+    <string name="vpn_rotation_running_removed">VPN 连接仍在使用你已删除的配置，直到保护停止。请关闭保护，或导入一个配置来替换它。</string>
+</resources>

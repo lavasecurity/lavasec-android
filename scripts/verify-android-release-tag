@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+"""Exit successfully only for a tag accepted by the fixed channel policy."""
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from ci.release_policy import validate_tag  # noqa: E402
+
+
+def main(argv: list[str]) -> int:
+    if len(argv) != 2:
+        print("usage: verify-android-release-tag <internal|external> <tag>", file=sys.stderr)
+        return 2
+    channel, tag = argv
+    try:
+        accepted = validate_tag(channel, tag)
+    except ValueError as error:
+        print(error, file=sys.stderr)
+        return 2
+    if not accepted:
+        print(f"tag {tag!r} is not valid for {channel}", file=sys.stderr)
+        return 1
+    print(f"accepted {channel} tag {tag}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

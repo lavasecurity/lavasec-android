@@ -1,0 +1,323 @@
+name: Android CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  build:
+    name: Android build
+    runs-on: ubicloud-standard-4
+    # The expanded source suite took 35 minutes on run 37899458333, leaving
+    # release packaging unfinished at the 60-minute job limit. Keep every gate
+    # and allow packaging, artifact retention and cleanup to finish as well.
+    timeout-minutes: 90
+    steps:
+      - name: Check out source
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          clean: true
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2
+        with:
+          # v3.2.2 defaults to `tools platform-tools`, but `tools` was removed from the SDK
+          # repository, so the action failed with "Failed to find package 'tools'" before the build
+          # could start. Install only platform-tools here; the workflow installs the platforms and
+          # build-tools it needs explicitly below.
+          packages: 'platform-tools'
+
+      - name: Install Android SDK 36
+        run: >-
+          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+          "ndk;27.2.12479018" "cmake;3.30.5"
+
+      - name: Install the stable non-production debug keystore
+        # A committed, non-secret debug keystore makes successive debug APKs update-compatible
+        # across ephemeral runners (the auto-generated per-runner keystore is not). Debug-only:
+        # release signing lineage is untouched and no release/secret credential is involved.
+        run: |
+          mkdir -p "$HOME/.android"
+          base64 -d ci/lavasec-debug.keystore.b64 > "$HOME/.android/debug.keystore"
+          chmod 600 "$HOME/.android/debug.keystore"
+
+      - name: Set up Gradle dependency cache
+        uses: gradle/actions/setup-gradle@748248ddd2a24f49513d8f472f81c3a07d4d50e1 # v4.4.4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: android/react-native/package-lock.json
+
+      - name: Verify the generated filter catalog against its canonical commit
+        env:
+          CATALOG_BASE: ${{ github.event_name == 'push' && github.event.before || github.event.pull_request.base.sha }}
+          CATALOG_HEAD: ${{ github.event_name == 'push' && github.sha || github.event.pull_request.head.sha }}
+        run: |
+          # Only catalog adoption depends on upstream availability; unrelated PRs stay local.
+          if [ -n "$CATALOG_BASE" ] && [ -n "$CATALOG_HEAD" ] &&
+             git diff --quiet "$CATALOG_BASE" "$CATALOG_HEAD" -- android/app/src/main/assets/catalog scripts/sync-filter-catalog.mjs scripts/test-sync-filter-catalog.mjs; then
+            echo "Catalog snapshot unchanged"
+          else
+            node scripts/sync-filter-catalog.mjs android/app/src/main/assets/catalog/blocklist-catalog.json --check
+          fi
+
+      - name: Build the WireGuard engine into jniLibs
+        # Owned runs only: a fork PR must not execute PR-authored build scripts, and the
+        # engine's own workflow already proves the cross-compile. `github.repository` is the
+        # BASE repo on a pull_request, so the fork test must compare the head repo explicitly.
+        if: >-
+          ${{ contains(fromJSON('["lavasecurity/lavasec-android-internal","lavasecurity/lavasec-android"]'), github.repository)
+              && (github.event_name != 'pull_request'
+                  || github.event.pull_request.head.repo.full_name == github.repository) }}
+        run: bash scripts/prepare-wireguard-core-android.sh
+
+      - name: Verify React Native types and behavior
+        working-directory: android/react-native
+        run: |
+          npm ci --include=dev --ignore-scripts --no-audit --no-fund
+          node scripts/apply-native-screens-retirement-fix.mjs
+          node scripts/apply-core-removal-notification-fix.mjs
+          node --test scripts/tests/native-screens-retirement-fix.test.mjs scripts/tests/core-removal-notification-fix.test.mjs
+          npm test
+
+      - name: Verify source contracts
+        run: |
+          python3 - <<'PY_DISCOVERY'
+          import sys
+          import unittest
+          loader = unittest.TestLoader()
+          suite = loader.discover("ci", pattern="test_*.py")
+          if loader.errors:
+              for error in loader.errors:
+                  print(error, file=sys.stderr)
+              raise SystemExit(1)
+          print(f"Source discovery: {suite.countTestCases()} cases; no import failures")
+          PY_DISCOVERY
+          node --test scripts/test-sync-filter-catalog.mjs
+          python3 -m unittest discover -s ci -p 'test_*.py' -v
+          scripts/verify-android-foundation
+
+      - name: Verify and build
+        run: |
+          set -euo pipefail
+          cd android
+          ./gradlew --no-daemon --stacktrace "-PlavaDebugKeystore=$HOME/.android/debug.keystore" testDebugUnitTest lintDebug :vpn:assembleDebugAndroidTest :app:assemblePlayDebugAndroidTest :app:testPlayDebugUnitTest :app:testFossDebugUnitTest :app:lintPlayDebug :app:lintFossDebug :app:assemblePlayDebug :app:assembleFossDebug :app:bundlePlayRelease :app:assemblePlayRelease :app:bundleFossRelease :app:assembleFossRelease :app:dependencies --configuration fossReleaseRuntimeClasspath | tee "$RUNNER_TEMP/foss-dependencies.txt"
+
+      - name: Verify packaged runtime assets
+        if: >-
+          ${{ contains(fromJSON('["lavasecurity/lavasec-android-internal","lavasecurity/lavasec-android"]'), github.repository)
+              && (github.event_name != 'pull_request'
+                  || github.event.pull_request.head.repo.full_name == github.repository) }}
+        run: |
+          set -euo pipefail
+          for edition in play foss; do
+            title="${edition^}"
+            python3 ci/verify_android_bundle.py \
+              "android/app/build/outputs/bundle/${edition}Release/app-${edition}-release.aab" \
+              --edition "$edition" \
+              --jni-root "android/app/build/intermediates/stripped_native_libs/${edition}Release/strip${title}ReleaseDebugSymbols/out/lib" \
+              --js-bundle android/app/src/main/assets/index.android.bundle
+          done
+
+      - name: Audit FOSS resolved dependencies and packaged integrations
+        if: >-
+          ${{ contains(fromJSON('["lavasecurity/lavasec-android-internal","lavasecurity/lavasec-android"]'), github.repository)
+              && (github.event_name != 'pull_request'
+                  || github.event.pull_request.head.repo.full_name == github.repository) }}
+        run: |
+          set -euo pipefail
+          bundletool="$RUNNER_TEMP/bundletool-all-1.18.3.jar"
+          curl --fail --location --silent --show-error --output "$bundletool" \
+            https://github.com/google/bundletool/releases/download/1.18.3/bundletool-all-1.18.3.jar
+          printf '%s  %s\n' a099cfa1543f55593bc2ed16a70a7c67fe54b1747bb7301f37fdfd6d91028e29 "$bundletool" | sha256sum --check
+          python3 ci/verify_foss_boundary.py \
+            --bundle android/app/build/outputs/bundle/fossRelease/app-foss-release.aab \
+            --bundletool "$bundletool" \
+            --dependencies "$RUNNER_TEMP/foss-dependencies.txt" \
+            --output android/app/build/outputs/bundle/fossRelease/foss-boundary.json
+          cp "$RUNNER_TEMP/foss-dependencies.txt" android/app/build/outputs/bundle/fossRelease/foss-dependencies.txt
+
+      - name: Retain effective public build configuration
+        run: |
+          python3 ci/android_public_config_evidence.py --root . --variants playDebug playRelease fossDebug fossRelease \
+            --output "$RUNNER_TEMP/android-public-configuration.json"
+          for edition in play foss; do
+            cp "$RUNNER_TEMP/android-public-configuration.json" "android/app/build/outputs/apk/$edition/debug/android-public-configuration.json"
+            cp "$RUNNER_TEMP/android-public-configuration.json" "android/app/build/outputs/bundle/${edition}Release/android-public-configuration.json"
+          done
+
+      - name: Retain failed unit test and lint diagnostics
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: android-verification-diagnostics
+          path: |
+            android/*/build/test-results/**
+            android/*/build/reports/tests/**
+            android/*/build/reports/lint-results-*.html
+            android/*/build/reports/lint-results-*.xml
+          if-no-files-found: warn
+          retention-days: 1
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: lavasec-android-debug-apk
+          path: |
+            android/app/build/outputs/apk/*/debug/*.apk
+            android/app/build/outputs/apk/*/debug/android-public-configuration.json
+          if-no-files-found: error
+          # Ephemeral CI artifact: a PR build only needs to be installable for a day. At ~40 MB
+          # each and many runs per day, a long window is what drove the account's GitHub Actions
+          # artifact-storage overage. Reruns on Ubicloud are cheap, so keep this tight.
+          retention-days: 1
+
+      - name: Upload unsigned release AAB
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: lavasec-android-release-unsigned-aab
+          path: |
+            android/app/build/outputs/bundle/*Release/*.aab
+            android/app/build/outputs/bundle/fossRelease/foss-boundary.json
+            android/app/build/outputs/bundle/fossRelease/foss-dependencies.txt
+            android/app/build/outputs/apk/foss/release/*.apk
+            android/app/build/outputs/bundle/*Release/android-public-configuration.json
+          if-no-files-found: error
+          # Inspection-only bundle (never installed on a device), so retain it for the run only.
+          retention-days: 1
+
+      - name: Sign the optimized startup candidate with the public test signer
+        run: |
+          set -euo pipefail
+          candidate="$RUNNER_TEMP/android-minified-startup"
+          tools="$ANDROID_SDK_ROOT/build-tools/36.0.0"
+          mkdir -p "$candidate"
+          "$tools/zipalign" -f -P 16 4 android/app/build/outputs/apk/play/release/app-play-release-unsigned.apk "$RUNNER_TEMP/aligned-release.apk"
+          "$tools/apksigner" sign --ks "$HOME/.android/debug.keystore" \
+            --ks-key-alias androiddebugkey --ks-pass pass:android --key-pass pass:android \
+            --out "$candidate/app-release.apk" "$RUNNER_TEMP/aligned-release.apk"
+          "$tools/apksigner" verify --print-certs "$candidate/app-release.apk" > "$candidate/signer.txt"
+          "$tools/zipalign" -c -P 16 4 "$candidate/app-release.apk"
+          "$tools/aapt2" dump badging "$candidate/app-release.apk" > "$candidate/badging.txt"
+          grep -F "package: name='com.lavasec.app'" "$candidate/badging.txt"
+          if grep -Fq 'application-debuggable' "$candidate/badging.txt"; then
+            echo "::error::The startup candidate must be the optimized release variant."
+            exit 1
+          fi
+          git rev-parse HEAD > "$candidate/source-sha.txt"
+          (cd "$candidate" && sha256sum app-release.apk > app-release.apk.sha256)
+
+      - name: Retain the optimized startup candidate
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: android-minified-startup
+          path: ${{ runner.temp }}/android-minified-startup/
+          if-no-files-found: error
+          retention-days: 1
+
+  minified-startup:
+    name: Minified Android startup API 34
+    needs: build
+    runs-on: ubicloud-standard-4
+    timeout-minutes: 25
+    steps:
+      - name: Check out the exact source
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          clean: true
+          persist-credentials: false
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2
+        with:
+          packages: 'platform-tools'
+
+      - name: Download the optimized candidate from this run
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: android-minified-startup
+          path: ${{ runner.temp }}/android-minified-startup
+
+      - name: Prepare the Android 14 emulator
+        env:
+          ANDROID_USER_HOME: ${{ runner.temp }}/android-user
+          ANDROID_AVD_HOME: ${{ runner.temp }}/android-user/avd
+        run: |
+          set -euo pipefail
+          test -c /dev/kvm
+          sudo chmod 666 /dev/kvm
+          sdkmanager "build-tools;36.0.0" "emulator" "system-images;android-34;google_apis;x86_64"
+          mkdir -p "$ANDROID_AVD_HOME"
+          echo no | avdmanager create avd --force --name lava-minified \
+            --package "system-images;android-34;google_apis;x86_64" \
+            --path "$ANDROID_AVD_HOME/lava-minified.avd"
+          sed -i '/^disk\.dataPartition\.size[[:space:]]*=/d' "$ANDROID_AVD_HOME/lava-minified.avd/config.ini"
+          printf '\ndisk.dataPartition.size=2G\n' >> "$ANDROID_AVD_HOME/lava-minified.avd/config.ini"
+
+      - name: Launch and interact with the actual minified UI
+        env:
+          ANDROID_SERIAL: emulator-5554
+          ANDROID_USER_HOME: ${{ runner.temp }}/android-user
+          ANDROID_AVD_HOME: ${{ runner.temp }}/android-user/avd
+        run: |
+          set -euo pipefail
+          evidence="$GITHUB_WORKSPACE/device-evidence/minified-startup"
+          mkdir -p "$evidence"
+          candidate="$RUNNER_TEMP/android-minified-startup"
+          test "$(cat "$candidate/source-sha.txt")" = "$(git rev-parse HEAD)"
+          (cd "$candidate" && sha256sum --check app-release.apk.sha256)
+          cp "$candidate/source-sha.txt" "$candidate/app-release.apk.sha256" "$candidate/signer.txt" "$evidence/"
+          "$ANDROID_SDK_ROOT/emulator/emulator" -avd lava-minified -port 5554 -no-window \
+            -no-audio -no-boot-anim -no-snapshot -no-metrics -gpu swiftshader_indirect \
+            -memory 3072 -cores 2 -accel on > "$evidence/emulator.log" 2>&1 &
+          emulator_pid=$!
+          trap 'kill "$emulator_pid" 2>/dev/null || true' EXIT
+          timeout --kill-after=5s 20s adb start-server
+          boot_deadline=$((SECONDS + 300))
+          until [[ "$(timeout --kill-after=5s 10s adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" == 1 ]]; do
+            kill -0 "$emulator_pid"
+            (( SECONDS < boot_deadline ))
+            sleep 2
+          done
+          adb shell input keyevent KEYCODE_WAKEUP
+          adb shell wm dismiss-keyguard
+          adb shell settings put global window_animation_scale 0
+          adb shell settings put global transition_animation_scale 0
+          adb shell settings put global animator_duration_scale 0
+          timeout --kill-after=5s 90s adb install --no-incremental "$candidate/app-release.apk"
+          python3 ci/android_minified_startup.py --evidence "$evidence"
+
+      - name: Retain optimized startup evidence, including failures
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: android-minified-startup-evidence
+          path: device-evidence/minified-startup/
+          if-no-files-found: warn
+          retention-days: 1

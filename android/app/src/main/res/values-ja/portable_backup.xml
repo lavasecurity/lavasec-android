@@ -1,0 +1,17 @@
+<resources>
+    <string name="portable_backup_export_title">暗号化したローカルバックアップを書き出す</string>
+    <string name="portable_backup_import_title">暗号化したローカルバックアップを読み込む</string>
+    <string name="portable_backup_password">バックアップのパスワード</string>
+    <string name="portable_backup_password_confirm">パスワードを確認</string>
+    <string name="portable_backup_password_invalid">8文字以上で、数字と記号をそれぞれ1つ以上含めてください。両方のパスワードが一致する必要があります。</string>
+    <string name="portable_backup_import_password">このファイルの書き出し時に使用したパスワードを入力してください。アカウントやインターネット接続は不要です。</string>
+    <string name="portable_backup_export_summary">フィルター、ルール、取得元のURL、DNSエンドポイント、保存設定、アンロック済みの Lava Guard が暗号化して含まれます。エンドポイントのURLにはネットワークの認証情報が含まれる場合があります。アカウントのトークン、購入情報、秘密鍵、アクティビティ履歴は含まれません。パスワードは安全に保管してください。Lava では復元できません。Play版とFOSS版の間でデータは自動共有されません。FOSS版をインストールしても、Playの定期購入は解約されません。</string>
+    <string name="portable_backup_restore_summary">このファイルの設定を確認してください。暗号化ファイルはオフラインでも後で復元するために保存できます。適用にはソースのダウンロードが必要になる場合があり、このエディションの機能制限が適用されます。この端末の保護状態は変わりません。アカウント、購入情報、秘密鍵、履歴は移行されません。</string>
+    <string name="portable_backup_restore_now">今すぐ復元</string>
+    <string name="portable_backup_save_for_later">後で復元するために保存</string>
+    <string name="portable_backup_pending_discard_title">保留中のバックアップを破棄しますか？</string>
+    <string name="portable_backup_pending_discard_message">保存した暗号化インポートファイルをこの端末から削除します。現在の設定と元のバックアップファイルは変更されません。</string>
+    <string name="portable_backup_pending_replace_title">保留中のバックアップを置き換えますか？</string>
+    <string name="portable_backup_pending_replace_message">この端末に保存した暗号化インポートファイルを、このファイルで置き換えます。現在の設定は変更されません。</string>
+    <string name="portable_backup_import_password_required">バックアップのパスワードを入力してください。</string>
+</resources>

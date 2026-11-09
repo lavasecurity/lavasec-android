@@ -1,0 +1,17 @@
+<resources>
+    <string name="portable_backup_export_title">Exporter une sauvegarde locale chiffrée</string>
+    <string name="portable_backup_import_title">Importer une sauvegarde locale chiffrée</string>
+    <string name="portable_backup_password">Mot de passe de sauvegarde</string>
+    <string name="portable_backup_password_confirm">Confirmer le mot de passe</string>
+    <string name="portable_backup_password_invalid">Utilisez au moins 8 caractères, un chiffre et un symbole. Les deux mots de passe doivent correspondre.</string>
+    <string name="portable_backup_import_password">Saisissez le mot de passe utilisé lors de l’exportation de ce fichier. Aucun compte ni aucune connexion Internet ne sont nécessaires.</string>
+    <string name="portable_backup_export_summary">Comprend les filtres, les règles, les URL des sources, les points de terminaison DNS, les préférences de conservation et les Lava Guards déverrouillés, le tout chiffré. Les URL des points de terminaison peuvent contenir des identifiants réseau. Les jetons de compte, les achats, les clés privées et l’historique d’activité sont exclus. Conservez le mot de passe en lieu sûr : Lava ne peut pas le récupérer. Play et FOSS ne partagent pas automatiquement leurs données. L’installation de FOSS n’annule pas un abonnement Play.</string>
+    <string name="portable_backup_restore_summary">Vérifiez les réglages de ce fichier. Vous pouvez enregistrer le fichier chiffré hors ligne pour plus tard. Leur application peut nécessiter le téléchargement de sources et reste soumise aux limites des fonctionnalités de cette édition. La protection de cet appareil reste inchangée. Les comptes, achats, clés privées et historique ne sont pas transférés.</string>
+    <string name="portable_backup_restore_now">Restaurer maintenant</string>
+    <string name="portable_backup_save_for_later">Enregistrer pour plus tard</string>
+    <string name="portable_backup_pending_discard_title">Supprimer la sauvegarde en attente ?</string>
+    <string name="portable_backup_pending_discard_message">Supprimer de cet appareil l’importation chiffrée enregistrée. Vos réglages actuels et le fichier de sauvegarde d’origine restent inchangés.</string>
+    <string name="portable_backup_pending_replace_title">Remplacer la sauvegarde en attente ?</string>
+    <string name="portable_backup_pending_replace_message">Remplacer l’importation chiffrée enregistrée sur cet appareil par ce fichier. Vos réglages actuels restent inchangés.</string>
+    <string name="portable_backup_import_password_required">Saisissez le mot de passe de la sauvegarde.</string>
+</resources>

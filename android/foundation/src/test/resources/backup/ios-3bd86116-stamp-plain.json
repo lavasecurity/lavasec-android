@@ -1,0 +1,49 @@
+{
+  "allowedDomains" : [
+
+  ],
+  "blockedDomains" : [
+
+  ],
+  "customBlocklists" : [
+
+  ],
+  "customResolverAddress" : "sdns:\/\/AAAAAAAAAAAABzkuOS45Ljk",
+  "customResolverName" : "Stamp plain pair",
+  "customResolverSecondaryAddress" : "sdns:\/\/AAAAAAAAAAAAEjE0OS4xMTIuMTEyLjExMjo1Mw",
+  "enabledBlocklistIDs" : [
+
+  ],
+  "fallbackResolverPresetID" : "quad9-unfiltered-doh",
+  "fallbackToDeviceDNS" : true,
+  "keepDomainDiagnostics" : true,
+  "keepFilteringCounts" : true,
+  "keepLavaGuardProgress" : true,
+  "keepNetworkActivity" : true,
+  "lavaGuardUnlocks" : {
+    "records" : [
+
+    ]
+  },
+  "protectionEnabledHint" : false,
+  "resolverPresetID" : "custom-dns",
+  "savedDNSResolutionSelections" : [
+    {
+      "id" : "custom-dns",
+      "isEnabled" : true,
+      "name" : "Stamp plain pair",
+      "primary" : "sdns:\/\/AAAAAAAAAAAABzkuOS45Ljk",
+      "secondary" : "sdns:\/\/AAAAAAAAAAAAEjE0OS4xMTIuMTEyLjExMjo1Mw"
+    },
+    {
+      "id" : "device-dns",
+      "isEnabled" : true,
+      "name" : "",
+      "primary" : "",
+      "secondary" : ""
+    }
+  ],
+  "schemaVersion" : 2,
+  "usesEncryptedDeviceDNSFallback" : false,
+  "usesExplicitDNSTiers" : true
+}

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="protection_notification_channel_name">LavaSec 防护</string>
+    <string name="protection_notification_title">LavaSec 防护</string>
+    <string name="protection_notification_text">正在筛选 DNS 流量</string>
+</resources>

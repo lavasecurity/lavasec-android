@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="share_local_activity">分享本地活动导出</string>
+    <string name="send_feedback">发送反馈</string>
+    <string name="app_name">Lava Security</string>
+    <string name="connectivity_problem_notification_channel_name">连接问题</string>
+    <string name="protection_status_notification_channel_name">保护状态</string>
+    <string name="protection_ambient_status_on">Lava Security 已开启</string>
+    <string name="protection_ambient_status_paused">Lava Security 已暂停</string>
+    <string name="protection_ambient_status_starting">正在启动保护…</string>
+    <string name="protection_ambient_status_stopping">正在停止保护…</string>
+    <string name="protection_ambient_status_reconnect_needed">需要重新连接</string>
+    <string name="protection_ambient_status_device_fallback">设备 DNS 备用方案已开启</string>
+    <string name="protection_ambient_status_encrypted_fallback">加密 DNS 备用方案已开启</string>
+    <string name="protection_ambient_filter_line">筛选器：%1$s</string>
+    <string name="protection_ambient_resolver_line">解析器：%1$s</string>
+    <string name="protection_ambient_provider_device">设备 DNS</string>
+    <string name="protection_ambient_provider_device_fallback">设备 DNS + 加密回退</string>
+    <string name="protection_ambient_provider_mullvad">Mullvad</string>
+    <string name="protection_ambient_open_action">打开 Lava</string>
+
+    <string name="backup_setup_title">保存你的恢复短语</string>
+    <string name="backup_setup_confirm_hint">输入短语以确认</string>
+    <string name="backup_setup_saved_ack">我已写下恢复短语</string>
+    <string name="backup_setup_no_recovery_ack">我明白如果我丢失了它，Lava 无法帮我恢复</string>
+    <string name="backup_setup_confirm_both">请确认两个选项以继续。</string>
+    <string name="backup_setup_phrase_mismatch">短语不匹配。请检查拼写和顺序。</string>
+    <string name="backup_save">保存</string>
+    <string name="backup_restore_title">输入你的恢复短语</string>
+    <string name="backup_restore_hint">恢复短语</string>
+    <string name="backup_restore">恢复</string>
+    <string name="backup_restore_review_title">恢复此备份？</string>
+    <string name="backup_restore_resolver_confirm">应用已备份的 DNS 选择</string>
+    <string name="backup_restore_confirm_resolver">请确认 DNS 更改以继续。</string>
+
+    <string name="backup_failure_upload_failed">已在本地加密，但上传失败。请重试。</string>
+    <string name="backup_failure_deletion_not_saved">无法安全保存备份删除状态。请重试。</string>
+    <string name="backup_failure_local_cleanup_incomplete">在线备份已删除。本地备份清理未能完成。请再次尝试关闭备份。</string>
+    <string name="backup_failure_remote_delete_offline">无法删除你账户的备份——你可能处于离线或已退出状态。备份已保留；恢复在线后再试。</string>
+    <string name="backup_failure_deletion_pending">备份删除尚未完成。请登录原来的账号，然后再次尝试关闭备份。</string>
+    <string name="backup_failure_state_unavailable">无法获取备份状态。请解锁设备后重试。</string>
+
+    <string name="vpn_restriction_device_ineligible">此设备没有足够的内存进行链式连接。</string>
+    <string name="vpn_restriction_device_state_unreadable">Lava 目前无法检查此设备。请解锁后重试。</string>
+
+    <string name="vpn_configuration_title">VPN 配置</string>
+    <string name="vpn_configuration_name">配置名称</string>
+    <string name="vpn_configuration_content">WireGuard 配置</string>
+    <string name="vpn_configuration_keep_content">留空以保留已保存的配置。</string>
+    <string name="vpn_configuration_import">导入配置文件</string>
+    <string name="vpn_configuration_required">请输入或导入 WireGuard 配置。</string>
+    <string name="vpn_configuration_invalid">此 WireGuard 配置无效。</string>
+    <string name="vpn_configuration_import_failed">无法读取配置文件。</string>
+    <string name="vpn_configuration_import_too_large">这个文件超过 64 KB，对于 WireGuard 配置来说太大了。是否选错了文件？</string>
+    <string name="vpn_configuration_import_not_text">这不是文本文件，因此不是 WireGuard 配置文件。</string>
+    <string name="backup_restore_method_title">从备份恢复</string>
+    <string name="backup_restore_method_device">使用此设备的密钥</string>
+    <string name="backup_restore_method_recovery">恢复短语</string>
+    <string name="backup_restore_method_passkey">通行密钥</string>
+    <string name="backup_passkey_consent_title">设置通行密钥？</string>
+    <string name="backup_passkey_consent_message">使用屏幕锁定在另一台设备上解锁此备份。</string>
+    <string name="backup_passkey_consent_confirm">使用通行密钥</string>
+    <string name="backup_passkey_consent_skip">不使用通行密钥继续</string>
+    <string name="backup_restore_review_summary">更改的过滤器：%1$d。设置和 DNS 选择将被替换。</string>
+    <string name="backup_restore_review_guard_unlocks">已解锁的 Lava Guards：%1$d → %2$d</string>
+    <string name="protection_ambient_status_plain_fallback">已开启 · 明文DNS备用路径</string>
+</resources>

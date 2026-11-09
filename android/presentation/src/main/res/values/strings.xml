@@ -1,0 +1,810 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="product_unavailable_title">Lava is unavailable</string>
+    <string name="product_unavailable_detail">Confirmed local product data is not available yet.</string>
+    <string name="onboarding_lava_title">Meet Lava</string>
+    <string name="onboarding_lava_body">Lava protects DNS requests locally on this device.</string>
+    <string name="onboarding_guard_title">Your local Guard</string>
+    <string name="onboarding_guard_body">Guard uses Android’s VPN interface without sending your traffic through a remote VPN server.</string>
+    <string name="onboarding_features_title">Private by design</string>
+    <string name="onboarding_features_body">Filtering and Activity evidence stay on this device unless you explicitly export them.</string>
+    <string name="onboarding_vpn_title">Allow local VPN configuration</string>
+    <string name="onboarding_vpn_body">Android requires your consent before Lava can create its local DNS tunnel.</string>
+    <string name="onboarding_notifications_title">Protection notifications</string>
+    <string name="onboarding_notifications_body">Choose whether Lava may show protection and connectivity status.</string>
+    <string name="onboarding_level_title">Choose protection</string>
+    <string name="onboarding_level_body">Select the local filter profile that fits you.</string>
+    <string name="onboarding_connection_title">Choose DNS behavior</string>
+    <string name="onboarding_connection_body">Select how Lava resolves requests when your device DNS is unavailable.</string>
+    <string name="onboarding_done_title">Ready to protect</string>
+    <string name="onboarding_done_body">Finish setup to compile and save your exact local configuration.</string>
+    <string name="onboarding_continue">Continue</string>
+    <string name="onboarding_back">Back</string>
+    <string name="onboarding_allow_vpn">Allow VPN configuration</string>
+    <string name="onboarding_choose_notifications">Choose notification access</string>
+    <string name="onboarding_finish">Finish setup</string>
+    <string name="onboarding_saving">Saving local configuration…</string>
+    <string name="onboarding_retry">Try again</string>
+    <string name="onboarding_retrying">Checking your saved setup…</string>
+    <string name="onboarding_level_core">Core</string>
+    <string name="onboarding_level_balanced">Balanced</string>
+    <string name="onboarding_level_extra">Extra</string>
+    <string name="onboarding_resolver_device">Device DNS</string>
+    <string name="resolver_mullvad_name">Mullvad</string>
+    <string name="onboarding_resolver_fallback">Device DNS with encrypted fallback</string>
+    <string name="onboarding_resolver_encrypted">Encrypted DNS only</string>
+    <!-- Slice-02 setup-choice cards. The protection-level consequence summaries
+         and the resolver summaries are pinned iOS copy (OnboardingFlowView.swift
+         `leverSummary` and the OnboardingConnectionPanel disclosure); the
+         current-default disclosures are Android additions. -->
+    <string name="onboarding_level_core_summary">Blocks malicious sites: phishing, scams, and malware.</string>
+    <string name="onboarding_level_balanced_summary">Adds spam, fraud, and abuse coverage. Best for most.</string>
+    <string name="onboarding_level_extra_summary">Adds ads and trackers. May break some sites.</string>
+    <string name="onboarding_level_default_disclosure">Your current default is %1$s.</string>
+    <string name="onboarding_resolver_device_summary">Uses the DNS resolver from the current Wi-Fi or cellular network while Lava still filters locally.</string>
+    <string name="onboarding_resolver_fallback_summary">If your device\'s DNS can\'t be reached, allowed requests briefly use %1$s over an encrypted connection, then switch back automatically. %2$s is an outside provider, used only for recovery.</string>
+    <string name="onboarding_resolver_encrypted_summary">Sends every allowed request to %1$s over an encrypted connection.</string>
+    <string name="onboarding_resolver_default_disclosure">Your current default is %1$s through %2$s.</string>
+    <!-- Post-denial explanations: shown after the system declines the request,
+         with a system-settings route offered for notifications (a second
+         Android 11+ dialog request can fail without asking). -->
+    <string name="onboarding_vpn_denied_body">Android declined the VPN configuration request. Lava needs this consent to create its local DNS tunnel. You can try again.</string>
+    <string name="onboarding_notifications_denied_body">Notification access was declined. Lava cannot show protection alerts. You can enable them later in Android settings.</string>
+    <string name="guard_title">Guard</string>
+    <string name="guard_filters_title">How Lava filters</string>
+    <string name="guard_filters_summary">See how local filtering works</string>
+    <string name="guard_activity_title">What Lava has caught</string>
+    <string name="guard_activity_summary">Review local protection activity</string>
+    <!-- Guard primary-action labels pinned to the iOS protectionButtonTitle
+         vocabulary ("Turn On" / "Turn Off" / "Resume Now" / "Reconnect") plus the
+         Android settings-owned "Open settings" (GuardView.swift). -->
+    <string name="guard_action_turn_on">Turn on</string>
+    <string name="guard_action_turn_off">Turn off</string>
+    <string name="guard_action_resume">Resume</string>
+    <string name="guard_action_reconnect">Reconnect</string>
+    <string name="guard_action_open_settings">Open settings</string>
+    <!-- Slice-02 Guard status composition. iOS anchors: ProtectionStatusPanel
+         (GuardView.swift) product label, the stable "Protection status"
+         accessibility label, and the primary-action accessibility hint. -->
+    <string name="guard_product_label">Lava Security</string>
+    <string name="guard_status_accessibility_label">Protection status</string>
+    <string name="guard_status_accessibility_value">%1$s. %2$s</string>
+    <string name="guard_action_accessibility_hint">Controls Lava\'s local DNS protection.</string>
+    <string name="guard_status_off_title">Protection Off</string>
+    <string name="guard_status_off_subtitle">Local DNS filtering is off</string>
+    <string name="guard_status_starting_title">Starting protection</string>
+    <string name="guard_status_starting_subtitle">Preparing local DNS filtering</string>
+    <string name="guard_status_awaiting_network_title">Waiting for network</string>
+    <string name="guard_status_awaiting_network_subtitle">Protection starts when a network is available</string>
+    <string name="guard_status_network_resume_subtitle">Protection resumes when the network returns</string>
+    <string name="guard_status_reconnecting_title">Reconnecting</string>
+    <string name="guard_status_reconnecting_subtitle">Restoring the local protection session</string>
+    <string name="guard_status_recovering_subtitle">DNS is recovering automatically</string>
+    <string name="guard_status_protected_title">Protected</string>
+    <string name="guard_status_healthy_subtitle">Local DNS filtering is active</string>
+    <string name="guard_status_encrypted_fallback_subtitle">Encrypted DNS fallback is active</string>
+    <string name="guard_status_device_fallback_subtitle">Device DNS fallback is active</string>
+    <string name="guard_status_health_unavailable_subtitle">DNS health is unavailable</string>
+    <string name="guard_status_dns_slow_title">DNS is slow</string>
+    <string name="guard_status_dns_slow_subtitle">DNS lookups are taking longer than expected</string>
+    <string name="guard_status_reconnect_needed_title">Reconnect needed</string>
+    <string name="guard_status_reconnect_needed_subtitle">DNS requires a reconnect</string>
+    <string name="guard_status_reconnect_attention_subtitle">Local protection needs attention</string>
+    <string name="guard_status_paused_title">Paused</string>
+    <string name="guard_status_stopping_title">Stopping protection</string>
+    <string name="guard_status_stopping_subtitle">Closing the local protection session</string>
+    <string name="guard_settings_vpn_title">VPN settings required</string>
+    <string name="guard_settings_vpn_subtitle">Review Android VPN settings to continue</string>
+    <string name="guard_settings_network_title">Network settings required</string>
+    <string name="guard_settings_network_subtitle">Review Android network settings to continue</string>
+    <string name="guard_settings_notifications_title">Notification settings required</string>
+    <string name="guard_settings_notifications_subtitle">Allow protection notifications to continue</string>
+    <string name="guard_message_always_on">Managed by Android Always-on VPN.</string>
+    <string name="guard_message_ownership_unverified">VPN ownership cannot be verified on Android 9.</string>
+    <string name="guard_message_vpn_permission_revoked">Android VPN permission is required to turn protection on</string>
+    <!-- Typed in-flight/permission explanations; a disabled Guard primary action
+         always renders one of these below the action. -->
+    <string name="guard_action_disabled_in_flight">Wait for the current protection change to finish.</string>
+    <string name="guard_action_disabled_reconstruction">Protection controls are being restored.</string>
+    <!-- Temporary-pause controls (iOS GuardView context menu copy, pinned). -->
+    <string name="guard_long_press_pause_hint">Long-press for pause options</string>
+    <string name="guard_pause_duration_5_minutes">For 5 minutes</string>
+    <string name="guard_pause_duration_10_minutes">For 10 minutes</string>
+    <string name="guard_pause_duration_15_minutes">For 15 minutes</string>
+    <string name="guard_pause_resume_due">Protection resume is due</string>
+    <plurals name="guard_pause_resumes_in_minutes">
+        <item quantity="one">Protection resumes in %1$d minute</item>
+        <item quantity="other">Protection resumes in %1$d minutes</item>
+    </plurals>
+    <string name="activity_title">Activity</string>
+    <string name="activity_live_unavailable">Local Activity evidence is unavailable.</string>
+    <string name="activity_live_unavailable_detail">Nothing is shown until confirmed local protection evidence is available.</string>
+    <string name="activity_loading">Loading local activity…</string>
+    <string name="activity_refreshing">Refreshing local activity…</string>
+    <string name="activity_retry">Try again</string>
+    <string name="activity_disabled_title">Activity is unavailable</string>
+    <string name="activity_disabled_detail">Local Activity has been turned off.</string>
+    <string name="activity_failed_title">Activity could not be loaded</string>
+    <string name="activity_refresh_failed_title">Activity could not be refreshed</string>
+    <string name="activity_counts_unavailable_title">Counts are unavailable</string>
+    <string name="activity_counts_unavailable_detail">No local count evidence is available for this date range.</string>
+    <string name="activity_total">%1$s requests processed</string>
+    <string name="activity_allowed">Allowed: %1$s (%2$s)</string>
+    <string name="activity_blocked">Blocked: %1$s (%2$s)</string>
+    <string name="activity_empty">No activity was recorded for these dates.</string>
+    <string name="activity_uptime_title">Local protection uptime</string>
+    <string name="activity_uptime_unavailable">Local protection uptime is unavailable</string>
+    <string name="activity_refresh">Refresh activity</string>
+    <string name="activity_uptime_protected_locally">%1$s protected locally</string>
+    <string name="activity_top_domains_title">Top Domains</string>
+    <string name="activity_top_domains_summary">See the most frequent local domains</string>
+    <string name="activity_domain_history_title">Domain History</string>
+    <string name="activity_domain_history_summary">Search your recent local activity</string>
+    <string name="activity_privacy_detail">Detailed activity stays on this device for 7 days and is sent to us only if you include it in a bug report.</string>
+    <string name="activity_clear_scope_detail">Clearing local Activity removes counts, uptime, and Domain History together.</string>
+    <string name="activity_show">Show Activity</string>
+    <string name="activity_close">Close</string>
+    <string name="activity_reset_dates">Reset Activity dates to today</string>
+    <string name="activity_date_dialog_title">Activity dates</string>
+    <string name="activity_change_dates">Change Activity dates: %1$s</string>
+    <!-- The date-control information hierarchy below the control itself: the current
+         range rides the control, and this line discloses the fixed 24-month window and
+         the device timezone the picker and the date lens honor (copy, not policy). -->
+    <string name="activity_date_scope_detail">Activity dates go back 24 months from today and use your device timezone (%1$s).</string>
+    <string name="activity_date_start">Start</string>
+    <string name="activity_date_end">End</string>
+    <string name="activity_flow_bar_description">Allowed %1$s, blocked %2$s</string>
+    <string name="activity_today">Today</string>
+    <string name="activity_empty_adjust_dates">Adjust the dates to see earlier activity.</string>
+    <string name="activity_top_domains_loading">Loading Top Domains…</string>
+    <string name="activity_top_domains_refreshing">Refreshing Top Domains…</string>
+    <string name="activity_top_domains_failed">Top Domains could not be loaded</string>
+    <string name="activity_top_domains_refresh_failed">Top Domains could not be refreshed</string>
+    <string name="activity_domain_history_loading">Loading Domain History…</string>
+    <string name="activity_domain_history_refreshing">Refreshing Domain History…</string>
+    <string name="activity_domain_history_failed">Domain History could not be loaded</string>
+    <string name="activity_domain_history_refresh_failed">Domain History could not be refreshed</string>
+    <string name="activity_domain_history_provenance_unavailable">Local history evidence is unavailable.</string>
+    <string name="activity_retained_logs_refreshing">Refreshing local history availability…</string>
+    <string name="activity_retained_logs_refresh_failed">Local history availability could not be refreshed</string>
+    <string name="activity_search_domains">Search domains</string>
+    <string name="activity_show_decision">Show domain decision</string>
+    <string name="activity_allowed_decision">Allowed</string>
+    <string name="activity_blocked_decision">Blocked</string>
+    <string name="activity_top_domains_disabled">Turn on Domain History to see your most frequent domains.</string>
+    <string name="activity_history_disabled_title">Local history is off</string>
+    <string name="activity_history_disabled_body">Turn on local history only if you want this searchable list.</string>
+    <string name="activity_allowed_empty">No allowed domains saved yet</string>
+    <string name="activity_blocked_empty">No blocked domains saved yet</string>
+    <string name="activity_search_empty">No domains match this search</string>
+    <string name="activity_retention_footer">Kept on this device for 7 days, and only leaves the device if you export it or attach it to a bug report.</string>
+    <string name="activity_domain_history_clear_scope">Clearing local Activity removes Domain History together with local counts and uptime.</string>
+    <plurals name="activity_domain_times">
+        <item quantity="one">%1$s time</item>
+        <item quantity="other">%1$s times</item>
+    </plurals>
+    <string name="activity_history_reason_default">Default</string>
+    <string name="activity_history_reason_allowlist">Allowlist</string>
+    <string name="activity_history_reason_blocklist">Blocklist</string>
+    <string name="activity_history_reason_threat_guardrail">Threat Guardrail</string>
+    <string name="activity_history_reason_invalid_domain">Invalid domain</string>
+    <string name="activity_history_reason_paused_allow">Allowed on Pause</string>
+    <string name="activity_history_reason_failed_safe">Failed safe</string>
+    <string name="activity_history_row_detail">%1$s · %2$s</string>
+    <string name="activity_refresh_history">Refresh Domain History</string>
+    <string name="activity_loading_more_history">Loading more Domain History</string>
+    <string name="activity_domain_actions">Actions for %1$s</string>
+    <string name="activity_action_copy">Copy</string>
+    <string name="activity_action_block">Block</string>
+    <string name="activity_action_allow">Allow</string>
+    <string name="activity_action_remove">Remove</string>
+    <string name="activity_review_title">Review</string>
+    <string name="activity_review_domain_action">%1$s %2$s</string>
+    <plurals name="activity_review_summary">
+        <item quantity="one">%1$d change will be prepared and saved locally.</item>
+        <item quantity="other">%1$d changes will be prepared and saved locally.</item>
+    </plurals>
+    <string name="activity_review_allow_warning_title">Be extra careful</string>
+    <string name="activity_review_allow_warning_body">Allowed exceptions let a site through even when a blocklist would catch it.</string>
+    <string name="activity_review_blocked_domains">Blocked Domains</string>
+    <string name="activity_review_allowed_exceptions">Allowed Exceptions</string>
+    <string name="activity_review_added">Added</string>
+    <string name="activity_review_removed">Removed</string>
+    <string name="activity_review_apply_failed">The change was not applied. Review it and try again.</string>
+    <string name="activity_review_preparing">Preparing review…</string>
+    <string name="activity_review_applying">Applying changes…</string>
+    <string name="activity_review_confirm">Confirm Changes</string>
+    <string name="activity_review_cancel">Cancel</string>
+    <string name="activity_notice_dismiss">Dismiss</string>
+    <string name="activity_notice_unsaved_title">Unsaved filter edits</string>
+    <string name="activity_notice_unsaved_body">You have unsaved changes to your active filter. Save or discard them in Filters before changing domains here.</string>
+    <string name="activity_notice_invalid_title">Invalid domain</string>
+    <string name="activity_notice_invalid_body">Enter a valid domain.</string>
+    <string name="activity_notice_protected_title">Protected domain</string>
+    <string name="activity_notice_protected_body">This protected domain cannot be allowed.</string>
+    <string name="activity_notice_already_allowed_title">Already allowed</string>
+    <string name="activity_notice_already_allowed_body">This domain is already an allowed exception.</string>
+    <string name="activity_notice_already_blocked_title">Already blocked</string>
+    <string name="activity_notice_already_blocked_body">This domain is already blocked.</string>
+    <string name="activity_notice_allowed_limit_title">Allowed limit reached</string>
+    <string name="activity_notice_allowed_limit_body">Remove an allowed exception before adding another.</string>
+    <string name="activity_notice_blocked_limit_title">Blocked limit reached</string>
+    <string name="activity_notice_blocked_limit_body">Remove a blocked domain before adding another.</string>
+    <string name="activity_notice_rule_missing_title">Rule not present</string>
+    <string name="activity_notice_rule_missing_body">This domain rule is no longer present.</string>
+    <string name="activity_notice_rule_rejected_title">Domain change rejected</string>
+    <string name="activity_notice_rule_rejected_body">This domain rule could not be changed.</string>
+    <string name="activity_notice_authentication_title">Authentication failed</string>
+    <string name="activity_notice_review_rejected_title">Review could not be opened</string>
+    <string name="activity_notice_apply_rejected_title">Changes were not applied</string>
+    <string name="activity_notice_failed_title">Domain change failed</string>
+    <string name="activity_notice_busy_title">Another change is in progress</string>
+    <string name="activity_notice_busy_body">Wait for the current domain change to finish.</string>
+    <string name="activity_notice_unavailable_title">Review unavailable</string>
+    <string name="activity_notice_unavailable_body">The pending review is no longer available.</string>
+    <string name="activity_notice_superseded_title">Review changed</string>
+    <string name="activity_notice_superseded_body">The review changed before it could be applied.</string>
+    <plurals name="activity_uptime_days">
+        <item quantity="one">%1$s day</item>
+        <item quantity="other">%1$s days</item>
+    </plurals>
+    <plurals name="activity_uptime_hours">
+        <item quantity="one">%1$s hour</item>
+        <item quantity="other">%1$s hours</item>
+    </plurals>
+    <plurals name="activity_uptime_minutes">
+        <item quantity="one">%1$s minute</item>
+        <item quantity="other">%1$s minutes</item>
+    </plurals>
+    <string name="filters_title">Filters</string>
+    <string name="filters_your_filters">Your filters</string>
+    <string name="filters_category_security">Security &amp; Threat Intel</string>
+    <string name="filters_category_multi_purpose">Multi-purpose</string>
+    <string name="filters_category_ads_tracking">Ads &amp; Trackers</string>
+    <string name="filters_category_social">Social Media</string>
+    <string name="filters_category_nsfw">Adult Content</string>
+    <string name="filters_category_gambling">Gambling</string>
+    <string name="filters_category_piracy">Piracy &amp; Torrent</string>
+    <string name="filters_category_custom">Your Lists</string>
+    <plurals name="filters_rule_count">
+        <item quantity="one">%1$d rule</item>
+        <item quantity="other">%1$d rules</item>
+    </plurals>
+    <string name="filters_live_unavailable">Live filter data is unavailable.</string>
+    <string name="filters_live_unavailable_detail">No filter controls are available until confirmed configuration is supplied.</string>
+    <!-- Slice-03 overview (FiltersView.swift). Copy pins: "What's filtering?", "Now
+         filtering", "Switch or manage the filters", "When the connection is", "Normal",
+         "Poor", the two connection captions, "Phone"/"Internet", "Filtering happens locally
+         on this phone", "Lava checks domain names on this phone before apps and websites
+         connect.", "Blocks nothing — not protected". The "Got a good filter?" section is
+         deliberately absent until the share/import platform path ships. -->
+    <string name="filters_whats_filtering">What\'s filtering?</string>
+    <string name="filters_now_filtering">Now filtering</string>
+    <string name="filters_your_filters_summary">Switch or manage the filters</string>
+    <string name="filters_connection_lead_in">When the connection is</string>
+    <string name="filters_connection_normal">Normal</string>
+    <string name="filters_connection_poor">Poor</string>
+    <string name="filters_connection_normal_caption">Lava uses a local filter to block your phone\'s access to unwanted sites.</string>
+    <string name="filters_connection_poor_caption">When your phone can\'t reach the internet, Lava blocks sites to stay safe — they load again once your connection is back.</string>
+    <string name="filters_diagram_phone">Phone</string>
+    <string name="filters_diagram_internet">Internet</string>
+    <string name="filters_diagram_blocked_hop">Blocked</string>
+    <string name="filters_local_explanation_title">Filtering happens locally on this phone</string>
+    <string name="filters_local_explanation_detail">Lava checks domain names on this phone before apps and websites connect.</string>
+    <string name="filters_blocks_nothing">Blocks nothing</string>
+    <string name="filters_blocks_nothing_unprotected">Blocks nothing — not protected</string>
+    <string name="filters_not_in_effect">Not the filter in effect</string>
+    <!-- Slice-03 library (FilterLibraryView.swift). Copy pins: "How filters work", the how
+         panel detail, "Add a filter", "Restore default filters", the restore confirmation
+         pair, "You can host up to %d filters. Delete one to add another.", "View & edit",
+         "View", the Apply-vs-View detail, "Locked", "Discard changes?", "Your staged filter
+         deletions won't be applied.", the deletion confirmation pair + "This can't be
+         undone" detail, "Delete filter"/"Delete %d filters", "New filter", "Filter name",
+         "You already have a filter with that name.", "Start from", "Empty filter",
+         "Create", "Rename filter", "Name", "Save", "Edit", "Use this filter", and the
+         library footer. Frozen-filter copy is Android-specific (no Plus tier exists here). -->
+    <string name="filters_library_how_title">How filters work</string>
+    <string name="filters_library_how_detail">Each filter is its own set of blocklists. Apply one to make it the filter in effect — your others stay saved.</string>
+    <string name="filters_add_filter">Add a filter</string>
+    <string name="filters_restore_defaults">Restore default filters</string>
+    <string name="filters_restore_defaults_confirm_title">Restore default filters?</string>
+    <string name="filters_restore_defaults_confirm_detail">This replaces your filters with the three defaults — Core, Balanced, and Extra — with Balanced in effect.</string>
+    <string name="filters_restore">Restore</string>
+    <string name="filters_max_filters_detail">You can host up to %1$d filters. Delete one to add another.</string>
+    <string name="filters_use_this_filter">Use this filter</string>
+    <string name="filters_view">View</string>
+    <string name="filters_view_and_edit">View &amp; edit</string>
+    <string name="filters_apply_view_detail">Apply makes this the filter in effect. View &amp; edit opens it to read or edit without switching.</string>
+    <string name="filters_frozen_detail">This filter is locked and can only be viewed. It cannot be applied or edited.</string>
+    <string name="filters_locked">Locked</string>
+    <string name="filters_edit">Edit</string>
+    <string name="filters_close_edit_mode">Close edit mode</string>
+    <string name="filters_confirm_deletions">Confirm deletions</string>
+    <string name="filters_discard_title">Discard changes?</string>
+    <string name="filters_discard_staged_deletions_detail">Your staged filter deletions won\'t be applied.</string>
+    <string name="filters_discard">Discard</string>
+    <string name="filters_delete_filter_confirm_title">Delete this filter?</string>
+    <string name="filters_delete_filters_confirm_title">Delete these filters?</string>
+    <string name="filters_delete_undo_title">This can\'t be undone</string>
+    <string name="filters_delete_undo_detail">Removing a filter deletes its lists and settings. The filter in effect is never deleted.</string>
+    <plurals name="filters_delete_count">
+        <item quantity="one">Delete filter</item>
+        <item quantity="other">Delete %1$d filters</item>
+    </plurals>
+    <string name="filters_new_filter_title">New filter</string>
+    <string name="filters_filter_name">Filter name</string>
+    <string name="filters_duplicate_name">You already have a filter with that name.</string>
+    <string name="filters_name_required">Enter a name for this filter.</string>
+    <string name="filters_invalid_name">Use letters, numbers, spaces, and accents only.</string>
+    <string name="filters_invalid_emoji">Choose one emoji.</string>
+    <string name="filters_start_from">Start from</string>
+    <string name="filters_empty_filter_option">Empty filter</string>
+    <string name="filters_create">Create</string>
+    <string name="filters_rename_filter">Rename filter</string>
+    <string name="filters_name">Name</string>
+    <string name="filters_save">Save</string>
+    <string name="filters_undo_delete">Undo delete</string>
+    <string name="filters_delete">Delete</string>
+    <string name="filters_library_mutation_failed_title">Couldn\'t save</string>
+    <string name="filters_library_mutation_failed_create">Couldn\'t add this filter. Please try again.</string>
+    <string name="filters_library_mutation_failed_commit">Your previous filter is still active.</string>
+    <string name="filters_delete_active_rejected">The filter in effect cannot be deleted. Apply a different filter first.</string>
+    <string name="filters_delete_last_rejected">The last remaining filter cannot be deleted.</string>
+    <!-- Slice-03 switch copy (FilterLibraryView.swift applyFilter). -->
+    <string name="filters_apply">Apply</string>
+    <string name="filters_applying">Applying filter…</string>
+    <string name="filters_switch_failed_title">Filter couldn\'t switch</string>
+    <string name="filters_switch_failed_detail">Couldn\'t switch to %1$s. Open Lava to check your filter settings.</string>
+    <string name="filters_switch_frozen_detail">This filter is locked and cannot be applied.</string>
+    <!-- Slice-03 detail ("My list", FilterMyListView.swift + FilterDomainSheets.swift).
+         Copy pins: "Lava blocks these", "Lava lets these through", "rules in effect",
+         "rules", "No blocklists enabled", "Add a curated blocklist to start blocking known
+         domains", "No allowed exceptions", "Add only domains you trust", "Block a domain",
+         "Add an exception", "Add Blocked Domain", "Add Allowed Exception", "Before you
+         allow a site", the allow-warning detail, "Add Domain", "Add Exception", "Domain",
+         the usage counters, "Domain cannot be added", "Invalid domain", "Already allowed",
+         "Already blocked", "Allowed exception limit reached", "Blocked domain limit
+         reached", "Remove". Freshness/rule counts per source are absent because the Android
+         artifact carries only the active compile's totals — the honest catalog note below. -->
+    <string name="filters_detail_blocks_title">Lava blocks these</string>
+    <string name="filters_detail_allows_title">Lava lets these through</string>
+    <string name="filters_rules_in_effect">rules in effect</string>
+    <string name="filters_catalog_pinned_note">Sources come from the signed local catalog.</string>
+    <string name="filters_no_blocklists">No blocklists enabled</string>
+    <string name="filters_no_blocklists_detail">Add a curated blocklist to start blocking known domains</string>
+    <string name="filters_no_allowed">No allowed exceptions</string>
+    <string name="filters_no_allowed_edit_detail">Add only domains you trust</string>
+    <string name="filters_block_domain">Block a domain</string>
+    <string name="filters_add_exception">Add an exception</string>
+    <string name="filters_add_blocked_domain_title">Add Blocked Domain</string>
+    <string name="filters_add_allowed_exception_title">Add Allowed Exception</string>
+    <string name="filters_allow_warning_title">Before you allow a site</string>
+    <string name="filters_allow_warning_detail">A site you allow here always gets through, even if a blocklist would block it. Only add sites you fully trust.</string>
+    <string name="filters_add_domain">Add Domain</string>
+    <string name="filters_add_exception_action">Add Exception</string>
+    <string name="filters_domain_label">Domain</string>
+    <string name="filters_blocked_usage">%1$d/%2$d blocked domains used</string>
+    <string name="filters_blocked_usage_limit">%1$d/%2$d blocked domains used - Remove entries to continue</string>
+    <string name="filters_allowed_usage">%1$d/%2$d exceptions used</string>
+    <string name="filters_allowed_usage_limit">%1$d/%2$d exceptions used - Remove entries to continue</string>
+    <string name="filters_domain_reject_title">Domain cannot be added</string>
+    <string name="filters_invalid_domain">Invalid domain</string>
+    <string name="filters_protected_suffix">This protected domain cannot be allowed.</string>
+    <string name="filters_already_allowed">Already allowed</string>
+    <string name="filters_already_blocked">Already blocked</string>
+    <string name="filters_already_allowed_detail">This domain is already an allowed exception.</string>
+    <string name="filters_already_blocked_detail">This domain is already blocked.</string>
+    <string name="filters_allowed_limit_title">Allowed exception limit reached</string>
+    <string name="filters_blocked_limit_title">Blocked domain limit reached</string>
+    <string name="filters_allowed_limit_detail">Remove an allowed exception before adding another.</string>
+    <string name="filters_blocked_limit_detail">Remove a blocked domain before adding another.</string>
+    <string name="filters_remove">Remove</string>
+    <string name="filters_add">Add</string>
+    <string name="filters_discard_draft_detail">Your draft changes will be removed. The current saved filter will stay active.</string>
+    <!-- Slice-03 review + preparation (FilterReviewFlowView.swift + FilterPreparationScreen).
+         Copy pins: "Review", "Review cannot continue", "Blocklists", "Blocked Domains",
+         "Allowed Exceptions", "Be extra careful", the allow-warning detail, "Added",
+         "Removed", "Confirm Changes", "Building the filter", "Success", "Filters updated.",
+         "We couldn't update your filter", "Your previous filter is still active.", "Try
+         Again", "Back to Edit", "Keep Current Filter". -->
+    <string name="filters_review_title">Review</string>
+    <plurals name="filters_review_summary">
+        <item quantity="one">%1$d change will be prepared and saved locally.</item>
+        <item quantity="other">%1$d changes will be prepared and saved locally.</item>
+    </plurals>
+    <string name="filters_review_cannot_continue">Review cannot continue</string>
+    <string name="filters_review_no_changes">There are no changes to review.</string>
+    <string name="filters_review_filter_gone">The filter you were editing is no longer available.</string>
+    <string name="filters_review_blocklists">Blocklists</string>
+    <string name="filters_review_blocked_domains">Blocked Domains</string>
+    <string name="filters_review_allowed_exceptions">Allowed Exceptions</string>
+    <string name="filters_review_warning_title">Be extra careful</string>
+    <string name="filters_review_warning_detail">Allowed exceptions let a site through even when a blocklist would catch it.</string>
+    <string name="filters_review_added">Added</string>
+    <string name="filters_review_removed">Removed</string>
+    <string name="filters_review_confirm">Confirm Changes</string>
+    <string name="filters_review_unavailable_title">Review unavailable</string>
+    <string name="filters_review_unavailable_detail">The pending review is no longer available.</string>
+    <string name="filters_prepare_idle">Nothing is being prepared.</string>
+    <string name="filters_preparing_building">Building the filter</string>
+    <string name="filters_prepare_success_title">Success</string>
+    <string name="filters_prepare_success_detail">Filters updated.</string>
+    <string name="filters_prepare_failed_title">We couldn\'t update your filter</string>
+    <string name="filters_prepare_failed_detail">The filter change could not be committed.</string>
+    <string name="filters_prepare_failed_previous_active">Your previous filter is still active.</string>
+    <string name="filters_retry">Try Again</string>
+    <string name="filters_back_to_edit">Back to Edit</string>
+    <string name="filters_keep_current">Keep Current Filter</string>
+    <string name="settings_title">Settings</string>
+    <!-- Slice-01 iOS information architecture (SettingsView.swift): group labels pin
+         the iOS copy "Your Lava" and "Protection choices"; About is retired in favor
+         of the version/build footer below the groups. -->
+    <string name="settings_your_lava_title">Your Lava</string>
+    <string name="settings_protection_choices_title">Protection choices</string>
+    <string name="settings_support_title">Support</string>
+    <string name="settings_keep_counts">Keep local counts and uptime</string>
+    <string name="settings_keep_history">Keep local Domain History</string>
+    <string name="settings_keep_network_activity">Keep local Network Activity</string>
+    <string name="settings_export_activity">Export local Activity</string>
+    <string name="settings_share_export">Share completed export</string>
+    <string name="settings_clear_activity">Clear local Activity</string>
+    <string name="settings_clear_diagnostics">Clear local diagnostics</string>
+    <string name="settings_clear_activity_confirm_title">Clear local Activity?</string>
+    <string name="settings_clear_activity_confirm_detail">This permanently removes local counts, uptime, and Domain History from this device.</string>
+    <string name="settings_clear_diagnostics_confirm_title">Clear local diagnostics?</string>
+    <string name="settings_clear_diagnostics_confirm_detail">This permanently removes the current local operational diagnostic sample.</string>
+    <string name="settings_confirm">Confirm</string>
+    <string name="settings_cancel">Cancel</string>
+    <!-- Slice-04 trust rows (SettingsView.swift). Account & Backup, Upgrade, and
+         Customization fill the Your Lava group with the pinned iOS row copy; the
+         Account/Upgrade routes ship honest unavailable states until the Android
+         backend account/entitlement contracts exist. -->
+    <string name="settings_account_backup_title">Account &amp; Backup</string>
+    <string name="settings_account_backup_summary">Account setup pending</string>
+    <string name="settings_upgrade_title">Upgrade</string>
+    <string name="settings_upgrade_summary">Plus isn\'t on Android yet</string>
+    <string name="settings_customization_title">Customization</string>
+    <string name="settings_customization_summary">Make Lava Security yours</string>
+    <string name="settings_privacy_data_title">Privacy &amp; Data</string>
+    <string name="settings_privacy_data_summary_all_on">All local logs on</string>
+    <string name="settings_privacy_data_summary_all_off">All local logs off</string>
+    <string name="settings_privacy_data_summary_some">Some local logs on</string>
+    <string name="settings_security_title">Security</string>
+    <string name="settings_security_summary_on">App lock on</string>
+    <string name="settings_security_summary_off">App lock off</string>
+    <string name="settings_security_summary_unavailable">App lock unavailable</string>
+    <string name="settings_bug_report_title">Bug report</string>
+    <string name="settings_bug_report_summary">Write a report and explicitly choose any local evidence to include</string>
+    <string name="version_format">Version %1$s</string>
+    <string name="version_build_format">Version %1$s (%2$s)</string>
+    <string name="help_title">Help</string>
+    <string name="help_external_summary">Open Lava Help in your browser</string>
+    <!-- Account & Backup route (AccountBackupSettingsView.swift anchor). The honest
+         unavailable state: no Android account/backup contract exists yet, so no
+         sign-in UI is rendered and the iOS "works without an account" copy stays. -->
+    <string name="account_unavailable_title">Account setup pending</string>
+    <string name="account_unavailable_body">Account and encrypted backup aren\'t available on Android yet. Lava keeps everything on this device.</string>
+    <string name="account_works_without_account">Lava works without an account. Sign in only to back up your settings online — encrypted, so only you can restore them on a new phone.</string>
+    <!-- Upgrade route (UpgradeSettingsView.swift anchor). Honest unavailable state:
+         no signed entitlement contract exists on Android; no purchase UI is faked. -->
+    <string name="upgrade_unavailable_title">Lava Security Plus isn\'t available on Android yet</string>
+    <string name="upgrade_unavailable_body">Purchases and paid plans aren\'t available on Android yet. Lava protection stays free here.</string>
+    <!-- Customization route (CustomizationSettingsView.swift anchor). The guardian
+         preview reuses the exact Guard mascot state enum; notification choices
+         expose the real Android channel status. -->
+    <string name="customization_intro_title">Make Lava yours</string>
+    <string name="customization_intro_detail">Pick how Lava looks and feels. None of these change how it protects you, so try anything.</string>
+    <string name="customization_guardian_section">Lava Guard</string>
+    <string name="customization_guardian_look_title">Lava Guard look</string>
+    <string name="customization_guardian_look_detail">The same shield guardian from Guard — one look, drawn right here on your device.</string>
+    <string name="customization_appearance_section">Appearance</string>
+    <string name="customization_reduce_motion_title">Reduce motion</string>
+    <string name="customization_reduce_motion_detail">Off follows your Android motion settings.</string>
+    <string name="customization_haptics_title">App haptics</string>
+    <string name="customization_haptics_detail">Confirmation feedback for actions in Lava.</string>
+    <string name="customization_notifications_section">Notifications</string>
+    <string name="customization_notifications_allowed">Notifications are allowed</string>
+    <string name="customization_notifications_blocked">Notifications are turned off in Android settings</string>
+    <string name="customization_notifications_unknown">Notification status is unavailable</string>
+    <string name="customization_notifications_blocked_detail">Lava can\'t show protection alerts until notifications are allowed. You can change this in Android settings.</string>
+    <!-- The ambient notification channel contract, disclosed on the Customization
+         surface (channel itself defined in ProtectionAmbientNotificationFactory). -->
+    <string name="customization_notifications_ambient_detail">The Protection status notification shows current protection and DNS fallback status. It stays silent, hides its text on the lock screen, and disappears when protection is off.</string>
+    <string name="customization_open_settings">Open Settings</string>
+    <!-- Privacy & data route (PrivacySecuritySettingsView.swift anchor): the Slice-04
+         home for the retention switches and local export/clear actions, with the
+         pinned iOS retention disclosure. -->
+    <string name="privacy_data_retention_detail">Domain history and network activity are kept for 7 days; counts and Lava Guard progress last longer. Keep or clear each below.</string>
+    <string name="privacy_data_retention_section">Keep local logs</string>
+    <string name="privacy_data_export_section">Export local logs</string>
+    <string name="privacy_data_clear_section">Clear</string>
+    <!-- Security route (SecurityController.swift anchor): Android Keystore-backed
+         app unlock with the honest unavailable/recovery states. -->
+    <string name="security_intro_title">Lock Lava with a passcode</string>
+    <string name="security_intro_detail">Add a passcode so only you can change Lava. Pick which screens ask for it below.</string>
+    <string name="security_local_note">Unlock happens on this device. A local unlock key is kept safe on this phone. Lava never sees it.</string>
+    <string name="security_set_passcode">Set Passcode</string>
+    <string name="security_passcode_on_title">Passcode on</string>
+    <string name="security_lock_timeout_title">Lock timeout</string>
+    <string name="security_lock_timeout_immediately">Immediately</string>
+    <string name="security_lock_timeout_1_minute">After 1 minute</string>
+    <string name="security_lock_timeout_5_minutes">After 5 minutes</string>
+    <string name="security_protected_surfaces_title">Protected screens</string>
+    <string name="security_protected_surfaces_detail">Require your passcode to access the selected screens.</string>
+    <string name="security_change_passcode">Change passcode</string>
+    <string name="security_new_passcode">New passcode</string>
+    <string name="security_remove_passcode">Turn off Security passcode</string>
+    <string name="security_remove_confirm_title">Turn off Security passcode?</string>
+    <string name="security_remove_confirm_detail">App unlock will be turned off. Protected screens will open without a passcode.</string>
+    <string name="security_remove_confirm_action">Turn off</string>
+    <string name="security_passcode_mismatch">Passcodes don\'t match</string>
+    <string name="security_wrong_passcode">Wrong passcode</string>
+    <string name="security_enter_passcode">Enter Passcode</string>
+    <string name="security_confirm_passcode">Confirm Passcode</string>
+    <string name="security_unavailable_title">App Unlock is unavailable</string>
+    <string name="security_unavailable_detail">This device\'s secure storage could not be opened, so Lava can\'t set a passcode here. Everything else works.</string>
+    <string name="security_recovery_failure_title">The saved passcode verifier could not be read.</string>
+    <string name="security_recovery_failure_detail">App unlock can\'t verify the saved passcode anymore. Reset it and set a new passcode.</string>
+    <string name="security_recovery_reset">Set a new passcode</string>
+    <string name="security_recovery_return">Reset passcode and return</string>
+    <string name="security_operation_failed">Lava couldn\'t complete that security change. Please try again.</string>
+    <string name="security_locked_title">Lava Locked</string>
+    <string name="security_unlock_hint">Enter your passcode to keep going.</string>
+    <string name="security_unlock_action">Unlock Lava</string>
+    <!-- Bug Report route (BugReportSettingsView.swift anchor): topic → description →
+         attachment inventory → explicit diagnostics consent → submit, with the
+         pinned iOS step copy and Android redaction disclosure. -->
+    <string name="bug_report_topic_website_access">I can\'t visit a website</string>
+    <string name="bug_report_topic_vpn_or_filter">VPN or filter doesn\'t work</string>
+    <string name="bug_report_topic_feature">A Lava feature doesn\'t work</string>
+    <string name="bug_report_topic_translation">Translation is not quite right</string>
+    <string name="bug_report_topic_suggestion">I have a suggestion</string>
+    <string name="bug_report_topic_other">Something else</string>
+    <string name="bug_report_no_silent_telemetry">No silent telemetry</string>
+    <string name="bug_report_no_silent_telemetry_detail">Lava only sends feedback after you review it and tap Submit</string>
+    <string name="bug_report_choose_topic">Choose a topic</string>
+    <string name="bug_report_details_section">Tell us more</string>
+    <string name="bug_report_details">Details</string>
+    <string name="bug_report_details_placeholder">What were you trying to do? What did Lava do instead?</string>
+    <string name="bug_report_attachments_section">Attachments</string>
+    <string name="bug_report_attachments_inventory_title">What this report contains</string>
+    <string name="bug_report_attachments_report_body">Report body</string>
+    <string name="bug_report_attachments_redacted">Your text</string>
+    <string name="bug_report_attachments_app_device">App &amp; device info</string>
+    <string name="bug_report_attachments_always">Always included</string>
+    <string name="bug_report_attachments_diagnostics">Diagnostics</string>
+    <string name="bug_report_attachments_export">Local Activity export</string>
+    <string name="bug_report_attachments_included">Included</string>
+    <string name="bug_report_attachments_not_included">Not included</string>
+    <string name="bug_report_attachments_diagnostics_toggle">Include optional diagnostic</string>
+    <string name="bug_report_attachments_export_toggle">Attach the completed local Activity export</string>
+    <string name="bug_report_attachments_redaction_note">The site, description, and contact email you enter are sent as shown. Automatic diagnostics never include browsing history, private keys, or account credentials.</string>
+    <string name="bug_report_attachments_redacted_preview">Shown as it will be sent</string>
+    <string name="bug_report_consent_section">Review and submit</string>
+    <string name="bug_report_consent_detail">Optional diagnostics include the app and Android versions, VPN status, network availability, and compiled filter rule count shown above.</string>
+    <string name="bug_report_consent_toggle">I understand and consent to sending this report.</string>
+    <string name="bug_report_submit">Submit</string>
+    <string name="bug_report_submitting">Submitting</string>
+    <string name="bug_report_submitted_title">Thank you, Lava will look into this</string>
+    <string name="bug_report_submitted_detail">Your report was received.</string>
+    <string name="bug_report_done">Done</string>
+    <string name="bug_report_failed_title">Could not send feedback</string>
+    <string name="bug_report_failed_detail">The report could not be prepared. Go back to review your draft and try again.</string>
+    <string name="bug_report_discard_title">Discard feedback?</string>
+    <string name="bug_report_discard_detail">Your feedback draft will be removed.</string>
+    <string name="bug_report_discard_action">Discard</string>
+    <string name="bug_report_review">Review</string>
+    <string name="settings_legal_title">Legal Notices</string>
+    <string name="settings_legal_summary">Credits and licenses</string>
+    <string name="legal_third_party_title">Third-party notices</string>
+    <string name="legal_affiliation_disclaimer">Third-party names identify services or data sources. Lava Security is not affiliated with, endorsed by, sponsored by, or reviewed by these providers or projects.</string>
+    <string name="legal_links_title">Lava Security</string>
+    <string name="legal_privacy_title">Privacy Policy</string>
+    <string name="legal_open_browser">Open in your browser</string>
+    <string name="legal_resolvers_title">DNS Resolvers</string>
+    <string name="legal_blocklists_title">Blocklist Licenses</string>
+    <string name="legal_runtime_title">Runtime Libraries</string>
+    <string name="legal_other_marks_title">Other Marks</string>
+    <string name="legal_other_marks_body">All other trademarks and service marks are property of their respective owners.</string>
+    <string name="legal_metadata_source">Source: %1$s</string>
+    <string name="legal_metadata_license">License: %1$s</string>
+    <string name="legal_metadata_license_url">License: %1$s — %2$s</string>
+    <string name="settings_advanced_title">Advanced</string>
+    <string name="settings_dns_resolver_title">DNS Resolver</string>
+    <string name="settings_dns_resolver_summary">Controls Lava\'s local DNS protection.</string>
+    <!-- iOS copy anchors: "How websites get found" and its description, and the
+         "Fallback to alternative DNS" detail, all pinned from
+         LavaSecApp/DNSResolverSettingsView.swift. -->
+    <string name="settings_resolver_intro_title">How websites get found</string>
+    <string name="settings_resolver_intro_detail">DNS is how your phone finds a website\'s address. Our default is safe for almost everyone, so we recommend keeping it.</string>
+    <string name="settings_resolver_fallback_detail">If the primary DNS resolver stops responding, Lava sends allowed requests to a backup resolver, then switches back automatically.</string>
+    <string name="settings_resolver_applying">Applying DNS Resolver…</string>
+    <string name="settings_resolver_switch_failed">The DNS resolver switch could not be applied. Your current resolver stays in effect.</string>
+    <string name="settings_resolver_unavailable">The current DNS resolver plan is unavailable.</string>
+    <!-- Slice 05: grouped DNS Resolver rows. Section labels, toggles, the
+         transport explanation, health messaging, and the Recommended badge are
+         pinned iOS copy (DNSResolverSettingsView.swift / the resolver health
+         gateway); the unavailability reasons are honest Android statements. -->
+    <string name="settings_resolver_device_toggle">Use Device DNS setting</string>
+    <string name="settings_resolver_device_unencrypted_note">Device DNS lookups are not encrypted.</string>
+    <string name="settings_resolver_fallback_alternative_toggle">Fall back to alternative DNS</string>
+    <string name="settings_resolver_fallback_device_toggle">Fall back to device DNS</string>
+    <string name="settings_resolver_fallback_device_unavailable">Falling back to device DNS from an encrypted provider isn\'t available on Android yet.</string>
+    <string name="settings_resolver_providers_title">DNS Providers</string>
+    <string name="settings_resolver_providers_footer">A provider answers your phone\'s "where is this website?" questions. Any of these are trustworthy.</string>
+    <string name="settings_resolver_transport_title">DNS Transport</string>
+    <string name="settings_resolver_transport_explanation">IP uses standard DNS. DNS over HTTPS (DoH), TLS (DoT), and QUIC (DoQ) encrypt allowed lookups to the resolver.</string>
+    <string name="settings_resolver_recommended_badge">Recommended</string>
+    <string name="settings_resolver_unavailable_reason_mullvad_doh_only">This build serves only Mullvad DNS over HTTPS as an encrypted resolver.</string>
+    <string name="settings_resolver_unavailable_reason_plain_endpoints">This build can\'t address a fixed DNS address. It uses your network\'s DNS instead.</string>
+    <string name="settings_resolver_unavailable_reason_dot">DNS over TLS isn\'t available on Android yet.</string>
+    <string name="settings_resolver_unavailable_reason_doq">DNS over QUIC isn\'t available on Android yet.</string>
+    <string name="settings_resolver_unavailable_reason_custom">Save a custom resolver endpoint before selecting it.</string>
+    <string name="settings_resolver_health_title">Network &amp; Resolver Health</string>
+    <string name="settings_resolver_health_recovering_detail">A DNS check failed. Lava is retrying.</string>
+    <string name="settings_resolver_health_device_fallback_detail">Filtering is on using your device\'s DNS because the chosen DNS provider is unavailable</string>
+    <string name="settings_resolver_health_encrypted_fallback_detail">Filtering is on using the encrypted DNS backup because your DNS provider is briefly unavailable</string>
+    <string name="settings_resolver_health_slow_detail">Your DNS provider is responding slowly. Reconnect or switch providers.</string>
+    <string name="settings_resolver_health_unreachable_detail">Lava can\'t reach your DNS provider. Check your connection and reconnect.</string>
+    <string name="settings_resolver_summary_provider_transport">%1$s (%2$s)</string>
+    <string name="settings_nerd_stats_title">Nerd Stats</string>
+    <string name="settings_nerd_stats_summary">Version and tunnel health</string>
+    <!-- iOS copy anchors: Settings → Advanced rows "Network Activity" with the
+         "Local network activity on/off" summary (SettingsView.swift), and the log view
+         copy pinned from DiagnosticsNetworkActivity.swift / NetworkActivityLog.swift. -->
+    <string name="settings_network_activity_title">Network Activity</string>
+    <string name="settings_network_activity_on">Local network activity on</string>
+    <string name="settings_network_activity_off">Local network activity off</string>
+    <string name="network_activity_stays_local">Stays on this device</string>
+    <string name="network_activity_privacy_detail">A local log of connection and protection events on this device. It\'s sent to us only if you attach it to a bug report.</string>
+    <string name="network_activity_retention">Kept on this device for 7 days.</string>
+    <string name="network_activity_retention_count">Up to %1$s entries are kept.</string>
+    <string name="network_activity_empty">No network activity yet</string>
+    <string name="network_activity_disabled_detail">Saved network activity entries will be cleared and new network activity entries will not be saved.</string>
+    <string name="network_activity_clear_title">Clear local network activity?</string>
+    <string name="network_activity_clear_detail">This removes saved network activity entries from this device. Filtering counts and domain history are unchanged.</string>
+    <string name="network_activity_clear_action">Clear Activity</string>
+    <string name="network_activity_loading">Loading Network Activity…</string>
+    <string name="network_activity_refreshing">Refreshing Network Activity…</string>
+    <string name="network_activity_failed">Network Activity could not be loaded</string>
+    <string name="network_activity_refresh_failed">Network Activity could not be refreshed</string>
+    <string name="network_activity_refresh">Refresh Network Activity</string>
+    <string name="network_activity_loading_more">Loading more Network Activity</string>
+    <string name="network_activity_theme_network_change">Network Change</string>
+    <string name="network_activity_theme_protection">Protection</string>
+    <string name="network_activity_theme_user_action">User Action</string>
+    <string name="network_activity_theme_smoke_test">Smoke Test</string>
+    <string name="network_activity_theme_device_dns">Device DNS</string>
+    <string name="network_activity_theme_reconnect">Reconnect</string>
+    <string name="network_activity_event_network_changed">Network changed: %1$s to %2$s</string>
+    <string name="network_activity_event_network_path_available">Network changed: %1$s path available</string>
+    <string name="network_activity_event_network_path_lost">Network changed: %1$s path lost</string>
+    <string name="network_activity_event_connected">Connected</string>
+    <string name="network_activity_user_action_turn_on">User action: Turned protection on</string>
+    <string name="network_activity_user_action_turn_off">User action: Turned protection off</string>
+    <string name="network_activity_user_action_reconnect">User action: Reconnected protection</string>
+    <string name="network_activity_user_action_change_resolver">User action: Changed DNS resolver</string>
+    <string name="network_activity_user_action_toggle_fallback">User action: Changed Device DNS fallback</string>
+    <string name="network_activity_user_action_change_filters">User action: Changed filters</string>
+    <string name="network_activity_user_action_clear_activity">User action: Cleared local activity</string>
+    <string name="network_activity_event_smoke_succeeded">DNS smoke probe succeeded: %1$s (%2$s)</string>
+    <string name="network_activity_event_smoke_failed">DNS smoke probe failed: %1$s</string>
+    <string name="network_activity_event_device_fallback_activated">Device DNS fallback activated: %1$s</string>
+    <string name="network_activity_event_encrypted_fallback_activated">Encrypted fallback activated: %1$s</string>
+    <string name="network_activity_event_device_fallback_recovered">Device DNS fallback recovered</string>
+    <string name="network_activity_event_reconnect_needed">Reconnect needed: %1$s</string>
+    <string name="network_activity_event_recovered">Connectivity recovered: %1$s</string>
+    <string name="network_activity_event_settings_reapply_failed">Network settings refresh failed: %1$s</string>
+    <string name="network_activity_reason_query_fallback">query fallback</string>
+    <string name="network_activity_reason_fallback_check">fallback check</string>
+    <string name="network_activity_reason_rejected_response">rejected response</string>
+    <string name="network_activity_reason_runtime_unavailable">runtime unavailable</string>
+    <string name="network_activity_reason_device_dns_recapture">device DNS recapture</string>
+    <string name="network_activity_reason_primary_resolver">primary resolver</string>
+    <string name="network_activity_reason_device_dns_fallback">device DNS fallback</string>
+    <string name="network_activity_reason_encrypted_resolver">encrypted resolver</string>
+    <string name="network_activity_reason_platform_rejected">platform rejected</string>
+    <string name="network_activity_reason_stale_session">stale session</string>
+    <string name="network_activity_reason_unspecified">unknown cause</string>
+    <string name="network_activity_failure_timeout">timeout</string>
+    <string name="network_activity_failure_protect_failed">protect failed</string>
+    <string name="network_activity_failure_bind_failed">bind failed</string>
+    <string name="network_activity_failure_socket_failed">socket failed</string>
+    <string name="network_activity_failure_send_failed">send failed</string>
+    <string name="network_activity_failure_receive_failed">receive failed</string>
+    <string name="network_activity_failure_mismatch_limit">response mismatch limit</string>
+    <string name="network_activity_failure_invalid_response">invalid response</string>
+    <string name="network_activity_failure_oversized_response">oversized response</string>
+    <string name="network_activity_failure_http_status">HTTP status</string>
+    <string name="network_activity_failure_http_content_type">HTTP content type</string>
+    <string name="network_activity_failure_tls_failed">TLS failed</string>
+    <string name="network_activity_failure_backed_off">backed off</string>
+    <string name="network_activity_failure_cancelled">cancelled</string>
+    <string name="network_activity_failure_stale_epoch">stale epoch</string>
+    <string name="network_activity_failure_overloaded">overloaded</string>
+    <string name="network_activity_resolver_cloudflare">Cloudflare</string>
+    <string name="network_activity_resolver_quad9">Quad9</string>
+    <string name="network_activity_resolver_hagezi">Hagezi Root</string>
+    <string name="network_activity_resolver_google">Google Public DNS</string>
+    <string name="network_activity_resolver_encrypted_other">Encrypted resolver</string>
+    <string name="network_activity_resolver_unknown">configured resolver</string>
+    <string name="network_activity_transport_device_udp">Device UDP</string>
+    <string name="network_activity_transport_device_tcp">Device TCP</string>
+    <string name="network_activity_transport_doh">DNS over HTTPS</string>
+    <string name="network_activity_transport_doq">DNS over QUIC</string>
+    <string name="network_activity_transport_dot">DNS over TLS</string>
+    <string name="network_activity_state_line">Lava: %1$s, %2$s, %3$s</string>
+    <string name="network_activity_connectivity_healthy">Healthy</string>
+    <string name="network_activity_connectivity_device_fallback">Device DNS fallback</string>
+    <string name="network_activity_connectivity_encrypted_fallback">Encrypted fallback</string>
+    <string name="network_activity_connectivity_recovering">Recovering</string>
+    <string name="network_activity_connectivity_dns_slow">DNS slow</string>
+    <string name="network_activity_connectivity_network_lost">Network Lost</string>
+    <string name="network_activity_fallback_active">Device fallback active</string>
+    <string name="network_activity_fallback_idle">Device fallback idle</string>
+    <string name="network_activity_fallback_off">Device fallback off</string>
+    <string name="nerd_stats_app_title">App</string>
+    <string name="nerd_stats_version">Version</string>
+    <string name="nerd_stats_build">Build</string>
+    <string name="nerd_stats_platform">Platform</string>
+    <string name="nerd_stats_android_platform">Android %1$s</string>
+    <string name="nerd_stats_tunnel_title">Tunnel Health</string>
+    <string name="nerd_stats_tunnel_footer">Local counts of how Lava reaches the internet — no site names. Tracks when requests worked, failed, retried, or briefly used your phone’s settings.</string>
+    <string name="nerd_stats_network">Network</string>
+    <string name="nerd_stats_network_path">Network path</string>
+    <string name="nerd_stats_connected">Connected</string>
+    <string name="nerd_stats_failures">Upstream failures</string>
+    <string name="nerd_stats_rejections">Rejected responses</string>
+    <string name="nerd_stats_last_response">DNS response (current window)</string>
+    <string name="nerd_stats_active_fallback">Active fallback</string>
+    <string name="nerd_stats_reconnect_needed">Reconnect Needed</string>
+    <string name="nerd_stats_sampled">Sampled</string>
+    <string name="nerd_stats_yes">Yes</string>
+    <string name="nerd_stats_no">No</string>
+    <string name="nerd_stats_off">Off</string>
+    <string name="nerd_stats_transport_wifi">Wi-Fi</string>
+    <string name="nerd_stats_transport_cellular">Cellular</string>
+    <string name="nerd_stats_transport_wired">Wired</string>
+    <string name="nerd_stats_transport_vpn">VPN</string>
+    <string name="nerd_stats_transport_other">Other</string>
+    <string name="nerd_stats_transport_unknown">Unknown</string>
+    <string name="nerd_stats_path_validated">Validated</string>
+    <string name="nerd_stats_path_captive_portal">Captive portal</string>
+    <string name="nerd_stats_path_unvalidated">Unvalidated</string>
+    <string name="nerd_stats_path_lost">Lost</string>
+    <string name="nerd_stats_path_unknown">Unknown</string>
+    <string name="nerd_stats_latency_ms">%1$s ms</string>
+    <string name="nerd_stats_none_yet">None yet</string>
+    <string name="nerd_stats_not_sampled">Not sampled yet</string>
+    <!-- Diagnostics privacy disclosure (local-only retention, the single explicit
+         feedback inclusion path, and the clear-action scope). -->
+    <string name="nerd_stats_privacy_title">Stays on this device</string>
+    <string name="nerd_stats_privacy_detail">This local sample stays on this device and is included only in feedback you explicitly submit. Clear it anytime in Settings → Privacy &amp; Data.</string>
+    <string name="guardian_accessibility_label">Lava shield guardian</string>
+    <string name="navigate_back">Back</string>
+    <string name="network_activity_resolver_wireguard">WireGuard DNS</string>
+    <string name="network_activity_transport_wireguard">UDP inside WireGuard</string>
+    <string name="bug_report_affected_site">Affected website or domain</string>
+    <string name="bug_report_contact_email">Contact email (optional)</string>
+    <string name="bug_report_send_failed">Delivery could not be confirmed. Your draft is kept; retry to confirm the same report.</string>
+    <string name="bug_report_rate_limited">Please wait a moment and try again.</string>
+    <string name="security_surface_protection_control">Turn on/off Lava</string>
+    <string name="security_surface_protection_pause">Pause Lava</string>
+    <string name="security_surface_app_settings">Update App Settings</string>
+    <string name="security_surface_app_unlock">App Unlock</string>
+    <string name="onboarding_resolver_plain">Plain DNS</string>
+    <string name="network_activity_connectivity_plain_fallback">Plain DNS fallback</string>
+    <string name="network_activity_event_plain_fallback_activated">Plain DNS fallback activated: %1$s</string>
+    <string name="settings_resolver_health_plain_fallback_detail">The configured plain DNS provider is resolving queries while the primary recovers.</string>
+    <string name="guard_status_plain_fallback_subtitle">Using the configured plain DNS fallback.</string>
+    <string name="network_activity_transport_plain_udp">UDP</string>
+    <string name="network_activity_transport_plain_tcp">TCP</string>
+
+    <string name="legal_protection_limits_title">Protection limits</string>
+    <string name="legal_protection_terms_title">Protection limits &amp; terms</string>
+    <string name="legal_protection_limits_summary">Lava cannot block every harmful site. An accessible site is not verified safe. Keep using normal precautions, even when protection is on.</string>
+    <string name="guard_status_internet_unverified_title">Internet unverified</string>
+    <string name="guard_status_internet_unverified_subtitle">Local filtering is active. Internet access on this network has not been verified.</string>
+    <string name="guard_status_rechecking_title">Checking protection</string>
+    <string name="guard_status_rechecking_subtitle">Lava is checking protection after waking.</string>
+</resources>

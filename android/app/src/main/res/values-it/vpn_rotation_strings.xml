@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vpn_rotation_awaiting_restart">La connessione VPN usa ancora la configurazione con cui è stata avviata. Disattiva e riattiva la protezione per usare quella appena salvata.</string>
+    <string name="vpn_rotation_running_removed">La connessione VPN usa ancora la configurazione rimossa e continuerà a farlo fino all’arresto della protezione. Disattiva la protezione o importa una configurazione per sostituirla.</string>
+</resources>

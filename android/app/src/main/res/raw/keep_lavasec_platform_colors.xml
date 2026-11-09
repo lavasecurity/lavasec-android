@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- React Native PlatformColor resolves these names from JavaScript at runtime.
+     They have no static R.color reference, so release resource shrinking must
+     retain the complete palette, including its night-mode alternatives. -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@color/lava_rn_*" />

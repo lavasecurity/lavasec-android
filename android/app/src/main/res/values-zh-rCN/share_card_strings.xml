@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Exact recipient-facing copy from frozen iOS 3bd86116; counts describe payload contents. -->
+<resources>
+    <string name="share_card_title">共享筛选器</string>
+    <string name="share_card_instruction">扫码导入——或先获取 Lava</string>
+    <string name="share_card_setup">初次使用？先安装、完成设置，然后再扫一次。</string>
+    <string name="share_card_provenance">由他人共享。内容未经 Lava 审核。</string>
+    <string name="share_card_blocklist_one">%1$s 个拦截列表</string>
+    <string name="share_card_blocklist_many">%1$s 个拦截列表</string>
+    <string name="share_card_blocked_one">%1$s 个已拦截的域名</string>
+    <string name="share_card_blocked_many">%1$s 个已拦截的域名</string>
+    <string name="share_card_custom_one">%1$s 个自定义拦截列表</string>
+    <string name="share_card_custom_many">%1$s 个自定义拦截列表</string>
+    <string name="share_card_allowed_one">%1$s 个允许的例外</string>
+    <string name="share_card_allowed_many">%1$s 个允许的例外</string>
+</resources>

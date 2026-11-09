@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vpn_rotation_awaiting_restart">Votre connexion VPN utilise toujours la configuration avec laquelle elle a démarré. Désactivez puis réactivez la protection pour utiliser celle que vous venez d’enregistrer.</string>
+    <string name="vpn_rotation_running_removed">Votre connexion VPN utilise toujours la configuration que vous avez supprimée, jusqu’à l’arrêt de la protection. Désactivez la protection ou importez une configuration pour la remplacer.</string>
+</resources>

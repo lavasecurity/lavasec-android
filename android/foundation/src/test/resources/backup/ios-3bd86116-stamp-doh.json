@@ -1,0 +1,49 @@
+{
+  "allowedDomains" : [
+
+  ],
+  "blockedDomains" : [
+
+  ],
+  "customBlocklists" : [
+
+  ],
+  "customResolverAddress" : "sdns:\/\/AgAAAAAAAAAABzEuMS4xLjEAEmNsb3VkZmxhcmUtZG5zLmNvbQovZG5zLXF1ZXJ5hzEuMC4wLjEUMjYwNjo0NzAwOjQ3MDA6OjExMTE",
+  "customResolverName" : "Stamp doh pair",
+  "customResolverSecondaryAddress" : "sdns:\/\/AgAAAAAAAAAABzguOC44LjgACmRucy5nb29nbGUKL2Rucy1xdWVyeYc4LjguNC40FDIwMDE6NDg2MDo0ODYwOjo4ODg4",
+  "enabledBlocklistIDs" : [
+
+  ],
+  "fallbackResolverPresetID" : "quad9-unfiltered-doh",
+  "fallbackToDeviceDNS" : true,
+  "keepDomainDiagnostics" : true,
+  "keepFilteringCounts" : true,
+  "keepLavaGuardProgress" : true,
+  "keepNetworkActivity" : true,
+  "lavaGuardUnlocks" : {
+    "records" : [
+
+    ]
+  },
+  "protectionEnabledHint" : false,
+  "resolverPresetID" : "custom-dns",
+  "savedDNSResolutionSelections" : [
+    {
+      "id" : "custom-dns",
+      "isEnabled" : true,
+      "name" : "Stamp doh pair",
+      "primary" : "sdns:\/\/AgAAAAAAAAAABzEuMS4xLjEAEmNsb3VkZmxhcmUtZG5zLmNvbQovZG5zLXF1ZXJ5hzEuMC4wLjEUMjYwNjo0NzAwOjQ3MDA6OjExMTE",
+      "secondary" : "sdns:\/\/AgAAAAAAAAAABzguOC44LjgACmRucy5nb29nbGUKL2Rucy1xdWVyeYc4LjguNC40FDIwMDE6NDg2MDo0ODYwOjo4ODg4"
+    },
+    {
+      "id" : "device-dns",
+      "isEnabled" : true,
+      "name" : "",
+      "primary" : "",
+      "secondary" : ""
+    }
+  ],
+  "schemaVersion" : 2,
+  "usesEncryptedDeviceDNSFallback" : false,
+  "usesExplicitDNSTiers" : true
+}

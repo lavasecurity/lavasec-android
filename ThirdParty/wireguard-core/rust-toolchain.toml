@@ -1,0 +1,13 @@
+# Pinned so the CI-built `.so`s are reproducible: the same toolchain rebuilds the
+# same bytes (see scripts/build-wireguard-core-android.sh and the determinism levers
+# it applies). Bumping this is a deliberate re-baseline. 1.94.0 matches the iOS pin.
+[toolchain]
+channel = "1.94.0"
+# The four Android ABIs jniLibs ships (`:vpn` `abiFilters`). The host target is the
+# toolchain default and needs no listing; `cargo test` runs on it in CI.
+targets = [
+    "aarch64-linux-android",
+    "armv7-linux-androideabi",
+    "x86_64-linux-android",
+    "i686-linux-android",
+]

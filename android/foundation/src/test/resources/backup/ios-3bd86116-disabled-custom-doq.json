@@ -1,0 +1,46 @@
+{
+  "allowedDomains" : [
+
+  ],
+  "blockedDomains" : [
+
+  ],
+  "customBlocklists" : [
+
+  ],
+  "enabledBlocklistIDs" : [
+
+  ],
+  "fallbackResolverPresetID" : "quad9-unfiltered-doh",
+  "fallbackToDeviceDNS" : false,
+  "keepDomainDiagnostics" : true,
+  "keepFilteringCounts" : true,
+  "keepLavaGuardProgress" : true,
+  "keepNetworkActivity" : true,
+  "lavaGuardUnlocks" : {
+    "records" : [
+
+    ]
+  },
+  "protectionEnabledHint" : false,
+  "resolverPresetID" : "quad9-unfiltered-dot",
+  "savedDNSResolutionSelections" : [
+    {
+      "id" : "custom-dns",
+      "isEnabled" : false,
+      "name" : "Home QUIC",
+      "primary" : "quic:\/\/resolver.test:8853",
+      "secondary" : "quic:\/\/secondary.test:8853"
+    },
+    {
+      "id" : "quad9-unfiltered-dot",
+      "isEnabled" : true,
+      "name" : "Retained Quad9",
+      "primary" : "",
+      "secondary" : ""
+    }
+  ],
+  "schemaVersion" : 3,
+  "usesEncryptedDeviceDNSFallback" : false,
+  "usesExplicitDNSTiers" : true
+}

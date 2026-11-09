@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="protection_notification_channel_name">Protection LavaSec</string>
+    <string name="protection_notification_title">Protection LavaSec</string>
+    <string name="protection_notification_text">Filtrage du trafic DNS</string>
+</resources>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="share_local_activity">Lokalen Aktivitätsexport teilen</string>
+    <string name="send_feedback">Feedback senden</string>
+    <string name="app_name">Lava Security</string>
+    <string name="connectivity_problem_notification_channel_name">Verbindungsmeldungen</string>
+    <string name="protection_status_notification_channel_name">Schutzstatus</string>
+    <string name="protection_ambient_status_on">Lava Security ist aktiviert</string>
+    <string name="protection_ambient_status_paused">Lava Security ist pausiert</string>
+    <string name="protection_ambient_status_starting">Schutz wird gestartet …</string>
+    <string name="protection_ambient_status_stopping">Schutz wird gestoppt …</string>
+    <string name="protection_ambient_status_reconnect_needed">Neu verbinden nötig</string>
+    <string name="protection_ambient_status_device_fallback">Geräte-DNS-Fallback ist aktiv</string>
+    <string name="protection_ambient_status_encrypted_fallback">Verschlüsselter DNS-Fallback ist aktiv</string>
+    <string name="protection_ambient_filter_line">Filter: %1$s</string>
+    <string name="protection_ambient_resolver_line">Resolver: %1$s</string>
+    <string name="protection_ambient_provider_device">Geräte-DNS</string>
+    <string name="protection_ambient_provider_device_fallback">Geräte-DNS mit verschlüsseltem Fallback</string>
+    <string name="protection_ambient_provider_mullvad">Mullvad</string>
+    <string name="protection_ambient_open_action">Lava öffnen</string>
+
+    <string name="backup_setup_title">Sichere deine Wiederherstellungsphrase</string>
+    <string name="backup_setup_confirm_hint">Gib die Phrase zur Bestätigung ein</string>
+    <string name="backup_setup_saved_ack">Ich habe meine Wiederherstellungsphrase notiert</string>
+    <string name="backup_setup_no_recovery_ack">Mir ist klar, dass Lava sie nicht wiederherstellen kann, wenn ich sie verliere</string>
+    <string name="backup_setup_confirm_both">Bestätige beide Hinweise, um fortzufahren.</string>
+    <string name="backup_setup_phrase_mismatch">Die Phrase stimmt nicht überein. Prüfe Schreibweise und Reihenfolge.</string>
+    <string name="backup_save">Speichern</string>
+    <string name="backup_restore_title">Gib deine Wiederherstellungsphrase ein</string>
+    <string name="backup_restore_hint">Wiederherstellungsphrase</string>
+    <string name="backup_restore">Wiederherstellen</string>
+    <string name="backup_restore_review_title">Dieses Backup wiederherstellen?</string>
+    <string name="backup_restore_resolver_confirm">Die wiederhergestellte DNS-Auswahl anwenden</string>
+    <string name="backup_restore_confirm_resolver">Bestätige die DNS-Änderung, um fortzufahren.</string>
+
+    <string name="backup_failure_upload_failed">Lokal verschlüsselt, aber der Upload ist fehlgeschlagen: Versuche es erneut.</string>
+    <string name="backup_failure_deletion_not_saved">Die Backup-Löschung konnte nicht sicher gespeichert werden. Versuche es erneut.</string>
+    <string name="backup_failure_local_cleanup_incomplete">Online-Backup gelöscht. Lokale Backup-Daten konnten nicht vollständig entfernt werden. Versuche erneut, das Backup auszuschalten.</string>
+    <string name="backup_failure_remote_delete_offline">Das für dein Konto gespeicherte Backup konnte nicht gelöscht werden — du bist möglicherweise offline oder abgemeldet. Das Backup wurde beibehalten; versuche es erneut, wenn du wieder online bist.</string>
+    <string name="backup_failure_deletion_pending">Die Löschung des Backups steht noch aus. Melde dich beim ursprünglichen Konto an und versuche erneut, das Backup auszuschalten.</string>
+    <string name="backup_failure_state_unavailable">Der Backup-Status ist nicht verfügbar. Entsperre dein Gerät und versuche es erneut.</string>
+
+    <string name="vpn_restriction_device_ineligible">Dieses Gerät hat nicht genug Speicher für die Verkettung.</string>
+    <string name="vpn_restriction_device_state_unreadable">Lava kann dieses Gerät gerade nicht prüfen. Entsperre es und versuche es erneut.</string>
+
+    <string name="vpn_configuration_title">VPN-Konfiguration</string>
+    <string name="vpn_configuration_name">Name der Konfiguration</string>
+    <string name="vpn_configuration_content">WireGuard-Konfiguration</string>
+    <string name="vpn_configuration_keep_content">Leer lassen, um die gespeicherte Konfiguration beizubehalten.</string>
+    <string name="vpn_configuration_import">Konfigurationsdatei importieren</string>
+    <string name="vpn_configuration_required">Gib eine WireGuard-Konfiguration ein oder importiere sie.</string>
+    <string name="vpn_configuration_invalid">Diese WireGuard-Konfiguration ist ungültig.</string>
+    <string name="vpn_configuration_import_failed">Die Konfigurationsdatei konnte nicht gelesen werden.</string>
+    <string name="vpn_configuration_import_too_large">Die Datei ist größer als 64 KB — viel zu groß für eine WireGuard-Konfiguration. Ist es die falsche Datei?</string>
+    <string name="vpn_configuration_import_not_text">Die Datei enthält keinen Text und ist daher keine WireGuard-Konfiguration.</string>
+    <string name="backup_restore_method_title">Aus Backup wiederherstellen</string>
+    <string name="backup_restore_method_device">Schlüssel dieses Geräts verwenden</string>
+    <string name="backup_restore_method_recovery">Wiederherstellungsphrase</string>
+    <string name="backup_restore_method_passkey">Passkey</string>
+    <string name="backup_passkey_consent_title">Passkey einrichten?</string>
+    <string name="backup_passkey_consent_message">Verwende deine Displaysperre, um dieses Backup auf einem anderen Gerät zu entsperren.</string>
+    <string name="backup_passkey_consent_confirm">Passkey verwenden</string>
+    <string name="backup_passkey_consent_skip">Ohne Passkey fortfahren</string>
+    <string name="backup_restore_review_summary">Geänderte Filter: %1$d. Einstellungen und DNS-Auswahl werden ersetzt.</string>
+    <string name="backup_restore_review_guard_unlocks">Freigeschaltete Lava Guards: %1$d → %2$d</string>
+    <string name="protection_ambient_status_plain_fallback">Ein · Unverschlüsselter DNS-Fallback</string>
+</resources>

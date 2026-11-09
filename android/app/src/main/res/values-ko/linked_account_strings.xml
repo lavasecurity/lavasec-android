@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Native AccountSheet copy from the frozen iOS 8fbe6ada catalog. -->
+<resources>
+    <string name="linked_account_title">계정</string>
+    <string name="linked_account_sign_out">모든 계정에서 로그아웃</string>
+    <string name="linked_account_delete">내 Lava 계정 삭제</string>
+    <string name="linked_account_confirm_title">Lava 계정을 삭제할까요?</string>
+    <string name="linked_account_confirm_body">로그인된 Lava 계정과 그 암호화 백업을 Lava 서버에서 삭제해요. 보호 설정은 이 기기에 그대로 남아요.</string>
+    <string name="linked_account_confirm_delete">삭제</string>
+    <string name="linked_account_close">닫기</string>
+    <string name="linked_account_cancel">취소</string>
+    <string name="linked_account_failure">다시 시도</string>
+    <string name="linked_account_provider">%1$s 계정</string>
+</resources>

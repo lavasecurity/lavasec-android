@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Exact recipient-facing copy from frozen iOS 3bd86116; counts describe payload contents. -->
+<resources>
+    <string name="share_card_title">Shared filter</string>
+    <string name="share_card_instruction">Scan to import — or to get Lava first</string>
+    <string name="share_card_setup">New? Install, finish setup, then scan again.</string>
+    <string name="share_card_provenance">Shared by another person. Not reviewed by Lava.</string>
+    <string name="share_card_blocklist_one">%1$s blocklist</string>
+    <string name="share_card_blocklist_many">%1$s blocklists</string>
+    <string name="share_card_blocked_one">%1$s blocked domain</string>
+    <string name="share_card_blocked_many">%1$s blocked domains</string>
+    <string name="share_card_custom_one">%1$s custom blocklist</string>
+    <string name="share_card_custom_many">%1$s custom blocklists</string>
+    <string name="share_card_allowed_one">%1$s allowed exception</string>
+    <string name="share_card_allowed_many">%1$s allowed exceptions</string>
+</resources>

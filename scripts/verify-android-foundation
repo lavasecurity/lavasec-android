@@ -1,0 +1,2533 @@
+#!/usr/bin/env python3
+"""Verify the checked-in Android foundation against its canonical contract."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import re
+import sys
+import tomllib
+import xml.etree.ElementTree as ET
+from pathlib import Path
+
+
+STALE_NAMESPACE = "app." + "lavasecurity.android"
+IGNORED_PARTS = {".git", ".gradle", "build", "migration-evidence", "node_modules"}
+EXPECTED_WRAPPER_SHA256 = "497c8c2a7e5031f6aa847f88104aa80a93532ec32ee17bdb8d1d2f67a194a9c7"
+EXPECTED_DISTRIBUTION_SHA256 = "a3c4ba4aca8f0075688b9c5b18939fd28e8cb4357c227da5c1d9f38343791439"
+MODULES = (
+    "app",
+    "foundation",
+    "product",
+    "platform-contracts",
+    "vpn",
+    "presentation",
+    "design-system",
+    "test-support",
+)
+LIBRARY_CONTRACT_KEYS = {
+    "foundation": "foundation",
+    "product": "product",
+    "platform-contracts": "platformContracts",
+    "vpn": "vpn",
+    "presentation": "presentation",
+    "design-system": "designSystem",
+    "test-support": "testSupport",
+}
+COMPOSE_MODULES = {"app", "presentation", "design-system"}
+ROOT_BUILD_CONTRACT = """buildscript {
+    dependencies {
+        classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.10")
+    }
+}
+
+plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.compose.compiler) apply false
+}
+
+extra["compileSdkVersion"] = 36
+extra["targetSdkVersion"] = 36
+extra["minSdkVersion"] = 28
+extra["ndkVersion"] = "27.2.12479018"
+
+// Shared SVG uses Node resolution from the Android root by default. Our locked
+// RN package lives in react-native/, so every autolinked library needs its actual root.
+extra["REACT_NATIVE_NODE_MODULES_DIR"] = file("react-native/node_modules/react-native").absolutePath
+"""
+SETTINGS_BUILD_CONTRACT = """pluginManagement {
+    // Autolinked libraries are Gradle projects. Install their locked sources BEFORE
+    // settings discovery, never concurrently with compilation in app:preBuild.
+    val rn = file("react-native")
+    val lock = rn.resolve("package-lock.json")
+    val digest = java.security.MessageDigest.getInstance("SHA-256").digest(lock.readBytes())
+        .joinToString("") { "%02x".format(it.toInt() and 0xff) }
+    val stamp = rn.resolve("node_modules/.lavasec-lock-hash")
+    if (!stamp.isFile || stamp.readText().trim() != digest ||
+        !rn.resolve("node_modules/@react-native/gradle-plugin/settings.gradle.kts").isFile) {
+        val npm = if (System.getProperty("os.name").lowercase().contains("win")) "npm.cmd" else "npm"
+        providers.exec {
+            workingDir(rn)
+            environment("NODE_ENV", "development")
+            commandLine(npm, "ci", "--include=dev", "--ignore-scripts", "--no-audit", "--no-fund")
+        }.result.get().assertNormalExitValue()
+        stamp.writeText(digest + "\\n")
+    }
+
+    // Apply only the pinned, hash-checked upstream retirement guard before the
+    // autolinked native library enters Gradle's project/input discovery.
+    providers.exec {
+        workingDir(rn)
+        commandLine("node", "scripts/apply-native-screens-retirement-fix.mjs")
+    }.result.get().assertNormalExitValue()
+
+    // Validate and repair the shipped JS module before Metro discovers inputs,
+    // including cached dependency installs. Unexpected locked sources fail closed.
+    providers.exec {
+        workingDir(rn)
+        commandLine("node", "scripts/apply-core-removal-notification-fix.mjs")
+    }.result.get().assertNormalExitValue()
+
+    includeBuild("react-native/node_modules/@react-native/gradle-plugin")
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+plugins { id("com.facebook.react.settings") }
+
+extensions.configure<com.facebook.react.ReactSettingsExtension> {
+    autolinkLibrariesFromCommand(
+        command = listOf("node", "node_modules/@react-native-community/cli/build/bin.js", "config"),
+        workingDirectory = file("react-native"),
+        lockFiles = files("react-native/package.json", "react-native/package-lock.json", "react-native/react-native.config.js"),
+    )
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "lavasec-android"
+
+include(":app")
+include(":foundation")
+include(":product")
+include(":platform-contracts")
+include(":vpn")
+include(":presentation")
+include(":design-system")
+include(":test-support")
+
+includeBuild("react-native/node_modules/@react-native/gradle-plugin")
+"""
+PRODUCT_BUILD_CONTRACT = """plugins {
+    alias(libs.plugins.android.library)
+}
+
+android {
+    namespace = "com.lavasec.app.product"
+    compileSdk = 36
+    defaultConfig { minSdk = 28 }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    api(project(":foundation"))
+    api(libs.kotlinx.coroutines.core)
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+}
+"""
+PRESENTATION_BUILD_CONTRACT = """plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.compose.compiler)
+}
+
+android {
+    namespace = "com.lavasec.app.presentation"
+    compileSdk = 36
+    defaultConfig { minSdk = 28 }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    buildFeatures { compose = true }
+    testOptions { unitTests.isIncludeAndroidResources = true }
+}
+
+dependencies {
+    implementation(project(":foundation"))
+    implementation(project(":platform-contracts"))
+    implementation(project(":design-system"))
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.activity.compose)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    testImplementation(libs.junit)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    testImplementation(libs.robolectric)
+}
+"""
+MAIN_ACTIVITY_CONTRACT = """package com.lavasec.app
+
+import android.content.Intent
+import android.net.Uri
+import androidx.activity.ComponentActivity
+import android.os.Bundle
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModel
+import com.lavasec.app.designsystem.LavaTheme
+import com.lavasec.app.platform.ProtectionState
+import com.lavasec.app.presentation.GuardPrimaryAction
+import com.lavasec.app.presentation.GuardUiState
+import com.lavasec.app.presentation.ProductDeepLink
+import com.lavasec.app.presentation.ProductNavigation
+import com.lavasec.app.presentation.ProductShell
+import com.lavasec.app.presentation.activity.ActivityUiState
+
+class MainActivity : ComponentActivity() {
+    private val activityRecreationMarker: ActivityRecreationMarker by viewModels()
+    private val navigationRequest: MutableState<NavigationRequest> = mutableStateOf(
+        NavigationRequest(
+            navigation = ProductNavigation.guard,
+            sequence = 0L,
+        ),
+    )
+    private val guardState = GuardUiState.from(
+        state = ProtectionState.Off,
+        health = null,
+        nowEpochMillis = System.currentTimeMillis(),
+    )
+    private val protectionAction: ((GuardPrimaryAction) -> Unit)? = null
+    private val activityState = ActivityUiState.unavailable
+    private val versionName = BuildConfig.VERSION_NAME
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val isConfigurationRecreation =
+            activityRecreationMarker.consumeConfigurationChange()
+        if (savedInstanceState == null) {
+            deliverNavigation(intent)
+        } else {
+            navigationRequest.value = navigationRequest.value.copy(
+                navigation = ProductNavigation.restore(
+                    savedInstanceState.getStringArrayList(SAVED_NAVIGATION_PATH).orEmpty(),
+                ),
+            )
+            val isHistoryRelaunch =
+                (intent?.flags ?: 0) and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY != 0
+            if (!isConfigurationRecreation && !isHistoryRelaunch) {
+                deliverNavigation(intent)
+            }
+        }
+        enableEdgeToEdge()
+        setContent {
+            val request = navigationRequest.value
+            LavaTheme {
+                ProductShell(
+                    navigation = request.navigation,
+                    guardState = guardState,
+                    versionName = versionName,
+                    buildNumber = BuildConfig.VERSION_CODE.toString(),
+                    onNavigationChange = ::navigate,
+                    onGuardPrimaryAction = protectionAction,
+                    onOpenHelp = ::openHelp,
+                    activityState = this@MainActivity.activityState,
+                    activityQueryCallbacks = null,
+                    domainRowActionCallbacks = null,
+                    domainReviewCallbacks = null,
+                    domainNoticeCallbacks = null,
+                )
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        if (isChangingConfigurations) {
+            activityRecreationMarker.markConfigurationChange()
+        }
+        super.onDestroy()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putStringArrayList(
+            SAVED_NAVIGATION_PATH,
+            ArrayList(navigationRequest.value.navigation.save()),
+        )
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if (deliverNavigation(intent)) setIntent(intent)
+    }
+
+    private fun deliverNavigation(intent: Intent?): Boolean {
+        if (intent?.action != Intent.ACTION_VIEW) return false
+        val navigation = intent.dataString?.let(ProductDeepLink::parse) ?: return false
+        navigationRequest.value = NavigationRequest(
+            navigation = navigation,
+            sequence = navigationRequest.value.sequence + 1,
+        )
+        return true
+    }
+
+    private fun navigate(navigation: ProductNavigation) {
+        navigationRequest.value = navigationRequest.value.copy(navigation = navigation)
+    }
+
+    private fun openHelp() {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(HELP_URL)))
+    }
+
+    private data class NavigationRequest(
+        val navigation: ProductNavigation,
+        val sequence: Long,
+    )
+
+    private companion object {
+        const val HELP_URL = "https://lavasecurity.app/support/"
+        const val SAVED_NAVIGATION_PATH = "product_navigation_path"
+    }
+}
+
+internal class ActivityRecreationMarker : ViewModel() {
+    private var configurationChangePending = false
+
+    fun markConfigurationChange() {
+        configurationChangePending = true
+    }
+
+    fun consumeConfigurationChange(): Boolean {
+        val wasConfigurationChange = configurationChangePending
+        configurationChangePending = false
+        return wasConfigurationChange
+    }
+}
+"""
+PRODUCT_FORBIDDEN_QUALIFIED_PREFIXES = (
+    "android.",
+    "androidx.",
+    "com.lavasec.app.platform.",
+    "com.lavasec.app.presentation.",
+    "com.lavasec.app.vpn.",
+    "java.io.",
+    "java.net.",
+    "java.nio.file.",
+    "java.nio.channels.",
+    "java.sql.",
+    "javax.net.",
+    "javax.sql.",
+    "kotlin.io.path.",
+)
+PRODUCT_ALLOWED_FOUNDATION_TYPES = frozenset(
+    {
+        "com.lavasec.app.foundation.activity.ActivityDateRangePolicy",
+        "com.lavasec.app.foundation.activity.NetworkActivityContract",
+        "com.lavasec.app.foundation.activity.NetworkActivityEntry",
+        "com.lavasec.app.foundation.domain.DomainName",
+        "com.lavasec.app.foundation.domain.DomainValidationException",
+        "com.lavasec.app.foundation.filter.FilterDecisionReason",
+        "com.lavasec.app.foundation.filter.FilterProfileDraft",
+        "com.lavasec.app.foundation.filter.ManualDomainRules",
+        "com.lavasec.app.foundation.filter.ManualRuleEditResult",
+        "com.lavasec.app.foundation.filter.ManualRuleEditor",
+        "com.lavasec.app.foundation.filter.ManualRuleRejection",
+        "com.lavasec.app.foundation.filter.ManualRuleTarget",
+        "com.lavasec.app.foundation.subscription.FeatureLimits",
+        "com.lavasec.app.foundation.subscription.FeatureLimitAdmission",
+    }
+)
+PRODUCT_CATALOG_VERSIONS = {
+    "coroutines": "1.10.2",
+    "coroutinesTest": "1.10.2",
+    "junit": "4.13.2",
+}
+PRODUCT_CATALOG_LIBRARIES = {
+    "kotlinx-coroutines-core": {
+        "module": "org.jetbrains.kotlinx:kotlinx-coroutines-core",
+        "version": {"ref": "coroutines"},
+    },
+    "kotlinx-coroutines-test": {
+        "module": "org.jetbrains.kotlinx:kotlinx-coroutines-test",
+        "version": {"ref": "coroutinesTest"},
+    },
+    "junit": {
+        "module": "junit:junit",
+        "version": {"ref": "junit"},
+    },
+}
+PRODUCT_TEST_SOURCE_SET = re.compile(
+    r"(?:test|androidTest|testFixtures)(?:[A-Z].*)?"
+)
+ANDROID_XML_NAMESPACE = "http://schemas.android.com/apk/res/android"
+MANAGED_DEVICE_PATTERNS = (
+    ("android.app.admin", re.compile(r"android\.app\.(?:admin|device_admin)", re.IGNORECASE)),
+    ("device admin", re.compile(r"device[\s_-]*admin", re.IGNORECASE)),
+    ("device policy", re.compile(r"device[\s_-]*policy", re.IGNORECASE)),
+    ("DPC", re.compile(r"dpc", re.IGNORECASE)),
+    ("MDM", re.compile(r"mdm", re.IGNORECASE)),
+    ("managed device", re.compile(r"managed[\s_-]*(?:device|profile|user)", re.IGNORECASE)),
+    ("device owner", re.compile(r"device[\s_-]*owner", re.IGNORECASE)),
+    ("profile owner", re.compile(r"profile[\s_-]*owner", re.IGNORECASE)),
+    (
+        "managed provisioning",
+        re.compile(
+            r"(?:ACTION[\s_.-]*)?(?:GET[\s_.-]*)?PROVISION(?:ING)?[\s_.-]*"
+            r"(?:MODE|MANAGED[\s_.-]*(?:DEVICE|PROFILE|USER))",
+            re.IGNORECASE,
+        ),
+    ),
+)
+
+
+def translate_java_unicode_escapes_once(source: str) -> str:
+    """Decode raw Java Unicode escapes once, before comment and literal lexing.
+
+    Java performs this translation before it recognizes tokens, so an escape can
+    create a comment marker, string delimiter, or identifier character. Decode
+    every eligible backslash plus one-or-more ``u`` characters and four hex
+    digits, while honoring the JLS contiguous-backslash rule and never rescanning
+    characters produced by translation.
+    """
+    output: list[str] = []
+    index = 0
+
+    while index < len(source):
+        if source[index] == "\\" and _java_backslash_is_unicode_eligible(output):
+            marker = index + 1
+            while marker < len(source) and source[marker] == "u":
+                marker += 1
+            digits = source[marker : marker + 4]
+            if (
+                marker > index + 1
+                and len(digits) == 4
+                and all(character in "0123456789abcdefABCDEF" for character in digits)
+            ):
+                output.append(chr(int(digits, 16)))
+                index = marker + 4
+                continue
+        output.append(source[index])
+        index += 1
+
+    return "".join(output)
+
+
+def _java_backslash_is_unicode_eligible(translated: list[str]) -> bool:
+    contiguous_backslashes = 0
+    for character in reversed(translated):
+        if character != "\\":
+            break
+        contiguous_backslashes += 1
+    return contiguous_backslashes % 2 == 0
+
+
+def source_without_comments(
+    source: str,
+    *,
+    nested_block_comments: bool,
+    escaped_triple_delimiters: bool,
+) -> str:
+    """Remove language comments while preserving string and character literal content."""
+    output: list[str] = []
+    index = 0
+    state = "code"
+    block_depth = 0
+
+    while index < len(source):
+        if state == "code":
+            if source.startswith("//", index):
+                output.append(" ")
+                index += 2
+                state = "line-comment"
+            elif source.startswith("/*", index):
+                output.append(" ")
+                index += 2
+                block_depth = 1
+                state = "block-comment"
+            elif source.startswith('"""', index):
+                output.append('"""')
+                index += 3
+                state = "triple-string"
+            elif source[index] == '"':
+                output.append('"')
+                index += 1
+                state = "string"
+            elif source[index] == "'":
+                output.append("'")
+                index += 1
+                state = "character"
+            else:
+                output.append(source[index])
+                index += 1
+        elif state == "line-comment":
+            if source[index] in "\r\n":
+                output.append(source[index])
+                index += 1
+                state = "code"
+            else:
+                index += 1
+        elif state == "block-comment":
+            if nested_block_comments and source.startswith("/*", index):
+                block_depth += 1
+                index += 2
+            elif source.startswith("*/", index):
+                block_depth -= 1
+                index += 2
+                if block_depth == 0:
+                    state = "code"
+            elif source[index] in "\r\n":
+                output.append(source[index])
+                index += 1
+            else:
+                index += 1
+        elif state in {"string", "character"}:
+            delimiter = '"' if state == "string" else "'"
+            output.append(source[index])
+            if source[index] == "\\" and index + 1 < len(source):
+                output.append(source[index + 1])
+                index += 2
+            else:
+                if source[index] == delimiter:
+                    state = "code"
+                index += 1
+        else:
+            triple_delimiter = source.startswith('"""', index)
+            if triple_delimiter and escaped_triple_delimiters:
+                preceding_backslashes = 0
+                lookbehind = index - 1
+                while lookbehind >= 0 and source[lookbehind] == "\\":
+                    preceding_backslashes += 1
+                    lookbehind -= 1
+                triple_delimiter = preceding_backslashes % 2 == 0
+            if triple_delimiter:
+                output.append('"""')
+                index += 3
+                state = "code"
+            else:
+                output.append(source[index])
+                index += 1
+
+    return "".join(output)
+
+
+def source_without_literals(
+    source: str,
+    *,
+    escaped_triple_delimiters: bool,
+) -> str:
+    """Remove string and character literal bodies while preserving line structure."""
+    output: list[str] = []
+    index = 0
+    state = "code"
+
+    while index < len(source):
+        if state == "code":
+            if source.startswith('"""', index):
+                output.append("   ")
+                index += 3
+                state = "triple-string"
+            elif source[index] == '"':
+                output.append(" ")
+                index += 1
+                state = "string"
+            elif source[index] == "'":
+                output.append(" ")
+                index += 1
+                state = "character"
+            else:
+                output.append(source[index])
+                index += 1
+        elif state in {"string", "character"}:
+            delimiter = '"' if state == "string" else "'"
+            if source[index] in "\r\n":
+                output.append(source[index])
+                index += 1
+            elif source[index] == "\\" and index + 1 < len(source):
+                output.append("  ")
+                index += 2
+            else:
+                if source[index] == delimiter:
+                    state = "code"
+                output.append(" ")
+                index += 1
+        else:
+            triple_delimiter = source.startswith('"""', index)
+            if triple_delimiter and escaped_triple_delimiters:
+                preceding_backslashes = 0
+                lookbehind = index - 1
+                while lookbehind >= 0 and source[lookbehind] == "\\":
+                    preceding_backslashes += 1
+                    lookbehind -= 1
+                triple_delimiter = preceding_backslashes % 2 == 0
+            if triple_delimiter:
+                output.append("   ")
+                index += 3
+                state = "code"
+            else:
+                output.append(source[index] if source[index] in "\r\n" else " ")
+                index += 1
+
+    return "".join(output)
+
+
+def product_semantic_source(source: str, *, kotlin: bool) -> str:
+    """Keep executable code, including Kotlin templates, while blanking prose."""
+    output = [character if character in "\r\n" else " " for character in source]
+
+    def copy(index: int) -> None:
+        output[index] = source[index]
+
+    def scan_comment(index: int, block: bool) -> int:
+        if not block:
+            index += 2
+            while index < len(source) and source[index] not in "\r\n":
+                index += 1
+            return index
+
+        index += 2
+        depth = 1
+        while index < len(source) and depth:
+            if kotlin and source.startswith("/*", index):
+                depth += 1
+                index += 2
+            elif source.startswith("*/", index):
+                depth -= 1
+                index += 2
+            else:
+                index += 1
+        return index
+
+    def triple_closes(index: int) -> bool:
+        if not source.startswith('\"\"\"', index):
+            return False
+        if kotlin:
+            return True
+        backslashes = 0
+        lookbehind = index - 1
+        while lookbehind >= 0 and source[lookbehind] == "\\":
+            backslashes += 1
+            lookbehind -= 1
+        return backslashes % 2 == 0
+
+    def scan_string(index: int, triple: bool) -> int:
+        delimiter_size = 3 if triple else 1
+        index += delimiter_size
+        while index < len(source):
+            if triple and triple_closes(index):
+                return index + 3
+            if not triple and source[index] == '"':
+                return index + 1
+            if not triple and source[index] == "\\" and index + 1 < len(source):
+                index += 2
+                continue
+            if kotlin and source[index] == "$" and index + 1 < len(source):
+                if source[index + 1] == "{":
+                    index = scan_code(index + 2, stop_at_closing_brace=True)
+                    continue
+                if source[index + 1].isalpha() or source[index + 1] in "_$":
+                    index += 2
+                    while index < len(source) and (
+                        source[index].isalnum() or source[index] in "_$"
+                    ):
+                        index += 1
+                    continue
+            index += 1
+        return index
+
+    def scan_character(index: int) -> int:
+        index += 1
+        while index < len(source):
+            if source[index] == "\\" and index + 1 < len(source):
+                index += 2
+            elif source[index] == "'":
+                return index + 1
+            else:
+                index += 1
+        return index
+
+    def scan_code(index: int, *, stop_at_closing_brace: bool) -> int:
+        brace_depth = 0
+        while index < len(source):
+            if stop_at_closing_brace and source[index] == "}" and brace_depth == 0:
+                return index + 1
+            if source.startswith("//", index):
+                index = scan_comment(index, block=False)
+            elif source.startswith("/*", index):
+                index = scan_comment(index, block=True)
+            elif source.startswith('\"\"\"', index):
+                index = scan_string(index, triple=True)
+            elif source[index] == '"':
+                index = scan_string(index, triple=False)
+            elif source[index] == "'":
+                index = scan_character(index)
+            else:
+                copy(index)
+                if source[index] == "{":
+                    brace_depth += 1
+                elif source[index] == "}" and brace_depth:
+                    brace_depth -= 1
+                index += 1
+        return index
+
+    scan_code(0, stop_at_closing_brace=False)
+    return "".join(output)
+
+
+def balanced_closing_index(
+    semantic_source: str,
+    opening_index: int,
+    opening: str,
+    closing: str,
+) -> int | None:
+    """Return the matching delimiter in already lexed executable source."""
+    if opening_index >= len(semantic_source) or semantic_source[opening_index] != opening:
+        return None
+    depth = 0
+    for index in range(opening_index, len(semantic_source)):
+        character = semantic_source[index]
+        if character == opening:
+            depth += 1
+        elif character == closing:
+            depth -= 1
+            if depth == 0:
+                return index
+    return None
+
+
+def structural_call_arguments(source: str, call_name: str) -> list[str]:
+    """Collect balanced Kotlin/Gradle call arguments, ignoring comments and literals."""
+    semantic = product_semantic_source(source, kotlin=True)
+    calls: list[str] = []
+    pattern = re.compile(rf"(?<![A-Za-z0-9_$]){re.escape(call_name)}\s*\(")
+    for match in pattern.finditer(semantic):
+        opening = semantic.find("(", match.start(), match.end())
+        closing = balanced_closing_index(semantic, opening, "(", ")")
+        if closing is not None:
+            calls.append(source[opening + 1 : closing])
+    return calls
+
+
+def split_top_level_arguments(source: str) -> list[str]:
+    """Split a balanced Kotlin argument list without splitting nested expressions."""
+    semantic = product_semantic_source(source, kotlin=True)
+    arguments: list[str] = []
+    start = 0
+    round_depth = square_depth = curly_depth = 0
+    for index, character in enumerate(semantic):
+        if character == "(":
+            round_depth += 1
+        elif character == ")" and round_depth:
+            round_depth -= 1
+        elif character == "[":
+            square_depth += 1
+        elif character == "]" and square_depth:
+            square_depth -= 1
+        elif character == "{":
+            curly_depth += 1
+        elif character == "}" and curly_depth:
+            curly_depth -= 1
+        elif character == "," and round_depth == square_depth == curly_depth == 0:
+            argument = source[start:index].strip()
+            if argument:
+                arguments.append(argument)
+            start = index + 1
+    final = source[start:].strip()
+    if final:
+        arguments.append(final)
+    return arguments
+
+
+def split_top_level_assignment(source: str) -> tuple[str, str] | None:
+    """Split one named Kotlin argument at its top-level equals token."""
+    semantic = product_semantic_source(source, kotlin=True)
+    round_depth = square_depth = curly_depth = 0
+    for index, character in enumerate(semantic):
+        if character == "(":
+            round_depth += 1
+        elif character == ")" and round_depth:
+            round_depth -= 1
+        elif character == "[":
+            square_depth += 1
+        elif character == "]" and square_depth:
+            square_depth -= 1
+        elif character == "{":
+            curly_depth += 1
+        elif character == "}" and curly_depth:
+            curly_depth -= 1
+        elif character == "=" and round_depth == square_depth == curly_depth == 0:
+            return source[:index].strip(), source[index + 1 :].strip()
+    return None
+
+
+def compact_semantic_expression(source: str) -> str:
+    return re.sub(r"\s+", "", product_semantic_source(source, kotlin=True))
+
+
+def simple_kotlin_string_value(source: str) -> str | None:
+    """Decode the simple literal forms accepted for Gradle project paths."""
+    candidate = source.strip()
+    if candidate.startswith('"""') and candidate.endswith('"""'):
+        value = candidate[3:-3]
+        return None if "$" in value else value
+    if not (candidate.startswith('"') and candidate.endswith('"')):
+        return None
+    try:
+        value = json.loads(candidate)
+    except json.JSONDecodeError:
+        return None
+    return value if isinstance(value, str) and "$" not in value else None
+
+
+def project_targets(source: str) -> tuple[list[str], list[str]]:
+    targets: list[str] = []
+    unresolved: list[str] = []
+    calls = structural_call_arguments(source, "project")
+    semantic = product_semantic_source(source, kotlin=True)
+    project_identifiers = re.findall(r"(?<![A-Za-z0-9_$])project(?![A-Za-z0-9_$])", semantic)
+    if len(project_identifiers) != len(calls):
+        unresolved.append("unaccounted project reference")
+    for call in calls:
+        arguments = split_top_level_arguments(call)
+        if len(arguments) != 1:
+            unresolved.append(compact_semantic_expression(call))
+            continue
+        first = arguments[0]
+        assignment = split_top_level_assignment(first)
+        if assignment is not None:
+            name, first = assignment
+            if compact_semantic_expression(name) != "path":
+                unresolved.append(compact_semantic_expression(call))
+                continue
+        target = simple_kotlin_string_value(first)
+        if target is None:
+            unresolved.append(compact_semantic_expression(call))
+        else:
+            targets.append(target)
+    return targets, unresolved
+
+
+def extract_named_brace_body(source: str, keyword: str, name: str) -> str | None:
+    semantic = product_semantic_source(source, kotlin=True)
+    match = re.search(
+        rf"\b{re.escape(keyword)}\s+{re.escape(name)}\b",
+        semantic,
+    )
+    if match is None:
+        return None
+    opening = semantic.find("{", match.end())
+    if opening < 0:
+        return None
+    closing = balanced_closing_index(semantic, opening, "{", "}")
+    return None if closing is None else source[opening + 1 : closing]
+
+
+def extract_kotlin_function(source: str, name: str) -> str | None:
+    """Extract one uniquely named block- or expression-bodied Kotlin function."""
+    semantic = product_semantic_source(source, kotlin=True)
+    matches = list(re.finditer(rf"\bfun\s+{re.escape(name)}\s*\(", semantic))
+    if len(matches) != 1:
+        return None
+    parameter_opening = semantic.find("(", matches[0].start(), matches[0].end())
+    parameter_closing = balanced_closing_index(semantic, parameter_opening, "(", ")")
+    if parameter_closing is None:
+        return None
+    cursor = parameter_closing + 1
+    while cursor < len(semantic) and semantic[cursor] not in "={":
+        cursor += 1
+    if cursor >= len(semantic):
+        return None
+    if semantic[cursor] == "{":
+        closing = balanced_closing_index(semantic, cursor, "{", "}")
+        return None if closing is None else source[matches[0].start() : closing + 1]
+    end = product_statement_end(semantic, cursor + 1)
+    return source[matches[0].start() : end]
+
+
+def kotlin_string_literals(source: str) -> list[str]:
+    """Return decoded ordinary Kotlin literals after comments are removed."""
+    commentless = source_without_comments(
+        source,
+        nested_block_comments=True,
+        escaped_triple_delimiters=False,
+    )
+    values: list[str] = []
+    pattern = re.compile(r'"((?:\\.|[^"\\])*)"')
+    for match in pattern.finditer(commentless):
+        try:
+            value = json.loads(match.group(0))
+        except json.JSONDecodeError:
+            continue
+        if isinstance(value, str):
+            values.append(value)
+    return values
+
+
+PRODUCT_IDENTIFIER = r"(?:`[^`\r\n]+`|[A-Za-z_$][A-Za-z0-9_$]*)"
+PRODUCT_QUALIFIED_NAME = re.compile(
+    rf"{PRODUCT_IDENTIFIER}(?:\s*\.\s*(?:{PRODUCT_IDENTIFIER}|\*))+"
+)
+PRODUCT_NAME_SEGMENT = re.compile(rf"{PRODUCT_IDENTIFIER}|\*")
+PRODUCT_SHADOW_ROOTS = ("android", "androidx", "com", "java", "javax", "kotlin")
+
+
+def normalized_qualified_segments(source: str) -> list[tuple[re.Match[str], tuple[str, ...]]]:
+    names: list[tuple[re.Match[str], tuple[str, ...]]] = []
+    for match in PRODUCT_QUALIFIED_NAME.finditer(source):
+        segments = tuple(
+            token[1:-1] if token.startswith("`") and token.endswith("`") else token
+            for token in PRODUCT_NAME_SEGMENT.findall(match.group(0))
+        )
+        names.append((match, segments))
+    return names
+
+
+def product_brace_scopes(source: str) -> list[tuple[int, int]]:
+    stack: list[int] = []
+    scopes: list[tuple[int, int]] = []
+    for index, character in enumerate(source):
+        if character == "{":
+            stack.append(index)
+        elif character == "}" and stack:
+            scopes.append((stack.pop(), index))
+    return scopes
+
+
+def product_innermost_scope(
+    scopes: list[tuple[int, int]],
+    position: int,
+    source_length: int,
+) -> tuple[int, int]:
+    containing = [scope for scope in scopes if scope[0] < position < scope[1]]
+    return max(containing, key=lambda scope: scope[0], default=(-1, source_length))
+
+
+def product_statement_end(source: str, start: int) -> int:
+    round_depth = 0
+    square_depth = 0
+    curly_depth = 0
+    index = start
+    while index < len(source):
+        character = source[index]
+        if character == "(":
+            round_depth += 1
+        elif character == ")" and round_depth:
+            round_depth -= 1
+        elif character == "[":
+            square_depth += 1
+        elif character == "]" and square_depth:
+            square_depth -= 1
+        elif character == "{":
+            curly_depth += 1
+        elif character == "}" and curly_depth:
+            curly_depth -= 1
+        elif character == ";" and round_depth == square_depth == curly_depth == 0:
+            return index + 1
+        elif character in "\r\n" and round_depth == square_depth == curly_depth == 0:
+            previous = index - 1
+            while previous >= start and source[previous].isspace():
+                previous -= 1
+            if previous < start or source[previous] not in "=.,:+-*/%&|^!?(<[":
+                return index + 1
+        index += 1
+    return len(source)
+
+
+def product_shadow_declarations(
+    source: str,
+) -> tuple[list[tuple[int, int]], list[tuple[str, int, tuple[int, int]]]]:
+    roots = "|".join(PRODUCT_SHADOW_ROOTS)
+    patterns = (
+        (rf"\b(?:val|var)\s+`?({roots})`?\b", "statement"),
+        (rf"\b(?:class|object|interface|typealias)\s+`?({roots})`?\b", "immediate"),
+        (rf"\b[A-Za-z_$][A-Za-z0-9_$<>?\[\].]*\s+`?({roots})`?\s*(?=[=;])", "statement"),
+    )
+    scopes = product_brace_scopes(source)
+    declarations: list[tuple[str, int, tuple[int, int]]] = []
+    for pattern, activation_kind in patterns:
+        for match in re.finditer(pattern, source):
+            activation = (
+                product_statement_end(source, match.end())
+                if activation_kind == "statement"
+                else match.end()
+            )
+            declarations.append(
+                (
+                    match.group(1),
+                    activation,
+                    product_innermost_scope(scopes, match.start(), len(source)),
+                )
+            )
+    return scopes, declarations
+
+
+def product_root_is_shadowed(
+    root: str,
+    position: int,
+    source_length: int,
+    scopes: list[tuple[int, int]],
+    declarations: list[tuple[str, int, tuple[int, int]]],
+) -> bool:
+    reference_scopes = {(-1, source_length)}
+    reference_scopes.update(scope for scope in scopes if scope[0] < position < scope[1])
+    return any(
+        declared_root == root
+        and activation <= position
+        and declaration_scope in reference_scopes
+        for declared_root, activation, declaration_scope in declarations
+    )
+
+
+def product_name_is_directive(source: str, start: int) -> bool:
+    line_start = max(source.rfind("\n", 0, start), source.rfind("\r", 0, start)) + 1
+    prefix = source[line_start:start]
+    return re.fullmatch(r"\s*(?:package|import(?:\s+static)?)\s+", prefix) is not None
+
+
+def qualified_name_starts_with(segments: tuple[str, ...], prefix: str) -> bool:
+    expected = tuple(prefix.rstrip(".").split("."))
+    return len(segments) > len(expected) and segments[: len(expected)] == expected
+
+
+def allowed_foundation_name(segments: tuple[str, ...]) -> bool:
+    for allowed in PRODUCT_ALLOWED_FOUNDATION_TYPES:
+        expected = tuple(allowed.split("."))
+        if segments[: len(expected)] == expected:
+            return True
+    return False
+
+
+def stale_namespace_paths(root: Path) -> list[Path]:
+    findings: list[Path] = []
+    for path in root.rglob("*"):
+        if not path.is_file() or any(part in IGNORED_PARTS for part in path.parts):
+            continue
+        try:
+            text = path.read_text(encoding="utf-8")
+        except (UnicodeDecodeError, OSError):
+            continue
+        if STALE_NAMESPACE in text:
+            findings.append(path)
+    return findings
+
+
+def read_text(root: Path, relative_path: str, errors: list[str]) -> str | None:
+    path = root / relative_path
+    if not path.is_file():
+        errors.append(f"missing {relative_path}")
+        return None
+    return path.read_text(encoding="utf-8")
+
+
+def extract_block(source: str, block_name: str) -> str | None:
+    matches = list(re.finditer(rf"(?m)^\s*{re.escape(block_name)}\s*\{{", source))
+    if len(matches) != 1:
+        return None
+    opening = source.find("{", matches[0].start())
+    depth = 0
+    for index in range(opening, len(source)):
+        if source[index] == "{":
+            depth += 1
+        elif source[index] == "}":
+            depth -= 1
+            if depth == 0:
+                return source[opening + 1 : index]
+    return None
+
+
+def exact_assignment(
+    source: str,
+    property_name: str,
+    expected: str,
+    relative_path: str,
+    errors: list[str],
+) -> None:
+    values = re.findall(
+        rf"(?<![A-Za-z0-9_]){re.escape(property_name)}\s*=\s*(\"[^\"]*\"|[A-Za-z0-9_.]+)",
+        source,
+    )
+    if values != [expected]:
+        errors.append(
+            f"{relative_path} must assign {property_name} exactly once to {expected}; found {values}"
+        )
+
+
+def verify_settings(root: Path, errors: list[str]) -> None:
+    relative = "android/settings.gradle.kts"
+    settings = read_text(root, relative, errors)
+    if settings is None:
+        return
+
+    includes = re.findall(r'(?m)^\s*include\(\s*"(:[^"]+)"\s*\)\s*$', settings)
+    expected_includes = [f":{module}" for module in MODULES]
+    if includes != expected_includes:
+        errors.append(
+            f"{relative} must include exactly the canonical modules {expected_includes}; found {includes}"
+        )
+
+    for owner in ("pluginManagement", "dependencyResolutionManagement"):
+        owner_block = extract_block(settings, owner)
+        repositories = extract_block(owner_block, "repositories") if owner_block else None
+        if repositories is None:
+            errors.append(f"{relative} is missing the canonical {owner} repositories block")
+            continue
+        calls = re.findall(r"(?m)^\s*([A-Za-z][A-Za-z0-9.]*)\(\)\s*$", repositories)
+        residual = re.sub(r"(?m)^\s*[A-Za-z][A-Za-z0-9.]*\(\)\s*$", "", repositories).strip()
+        if calls != ["google", "mavenCentral"] or residual:
+            errors.append(
+                f"{relative} {owner} repositories must be exactly google() and mavenCentral()"
+            )
+
+
+def verify_plugins(
+    source: str,
+    module: str,
+    expected: list[str],
+    relative_path: str,
+    errors: list[str],
+) -> None:
+    plugins = extract_block(source, "plugins")
+    if plugins is None:
+        errors.append(f"{relative_path} must contain exactly one plugins block")
+        return
+    aliases = re.findall(r"alias\(libs\.plugins\.([A-Za-z0-9.]+)\)", plugins)
+    residual = re.sub(r"alias\(libs\.plugins\.[A-Za-z0-9.]+\)", "", plugins)
+    residual = re.sub(r"(?m)(?:#|//).*$", "", residual).strip()
+    if module == "app":
+        # Official React Native autolinking is the only additional app plugin.
+        ids = re.findall(r'id\("([^\"]+)"\)', residual)
+        if ids == ["com.facebook.react"]:
+            residual = re.sub(r'id\("com\.facebook\.react"\)', "", residual).strip()
+    if aliases != expected or residual:
+        errors.append(
+            f"{relative_path} plugin contract for {module} must be exactly {expected}; "
+            f"found {aliases}"
+        )
+
+
+PUBLIC_DEBUG_SIGNING = '''providers.gradleProperty("lavaDebugKeystore").orNull?.let { path ->
+                signingConfig = signingConfigs.getByName("debug").apply {
+                    storeFile = file(path)
+                    storePassword = "android"
+                    keyAlias = "androiddebugkey"
+                    keyPassword = "android"
+                }
+            }'''
+
+
+def signing_source_without_public_debug(source: str, module: str) -> str:
+    """Permit exactly the public preview-key override inside the application's debug variant.
+
+    Release/library signing, arbitrary credentials and other debug signing code still fail.
+    CI separately checks the APK's certificate against the committed public key.
+    """
+    if module != "app":
+        return source
+    builds = extract_block(source, "buildTypes")
+    debug = extract_block(builds, "debug") if builds is not None else None
+    if debug is not None and debug.count(PUBLIC_DEBUG_SIGNING) == 1:
+        return source.replace(debug, debug.replace(PUBLIC_DEBUG_SIGNING, "", 1), 1)
+    return source
+
+
+def verify_module_builds(root: Path, contract: dict[str, object], errors: list[str]) -> None:
+    for module in MODULES:
+        relative = f"android/{module}/build.gradle.kts"
+        source = read_text(root, relative, errors)
+        if source is None:
+            continue
+
+        expected_plugins = ["android.application" if module == "app" else "android.library"]
+        if module in COMPOSE_MODULES:
+            expected_plugins.append("compose.compiler")
+        verify_plugins(source, module, expected_plugins, relative, errors)
+
+        namespace = (
+            contract["namespace"]
+            if module == "app"
+            else contract["moduleNamespaces"][LIBRARY_CONTRACT_KEYS[module]]
+        )
+        exact_assignment(source, "namespace", f'"{namespace}"', relative, errors)
+        exact_assignment(source, "compileSdk", str(contract["compileSdk"]), relative, errors)
+        exact_assignment(source, "minSdk", str(contract["minSdk"]), relative, errors)
+        exact_assignment(
+            source,
+            "sourceCompatibility",
+            "JavaVersion.VERSION_17",
+            relative,
+            errors,
+        )
+        exact_assignment(
+            source,
+            "targetCompatibility",
+            "JavaVersion.VERSION_17",
+            relative,
+            errors,
+        )
+
+        signing_tokens = re.findall(
+            r"(?i)\b(signingConfig|signingConfigs|storeFile|storePassword|keyAlias|keyPassword)\b",
+            signing_source_without_public_debug(source, module),
+        )
+        if signing_tokens:
+            errors.append(f"{relative} must not contain signing configuration; found {signing_tokens}")
+
+        if module in COMPOSE_MODULES:
+            bom = "implementation(platform(libs.androidx.compose.bom))"
+            if source.count(bom) != 1:
+                errors.append(f"{relative} must consume the Compose BOM exactly once")
+
+    app_relative = "android/app/build.gradle.kts"
+    app = read_text(root, app_relative, errors)
+    if app is None:
+        return
+    exact_assignment(app, "applicationId", f'"{contract["applicationId"]}"', app_relative, errors)
+    exact_assignment(app, "targetSdk", str(contract["targetSdk"]), app_relative, errors)
+    builds = extract_block(app, "buildTypes")
+    debug = extract_block(builds, "debug") if builds is not None else ""
+    exact_assignment(debug or "", "applicationIdSuffix", f'"{contract["debugApplicationIdSuffix"]}"', app_relative, errors)
+    suffixes = re.findall(r'(?m)^\s*applicationIdSuffix\s*=\s*("[^"\r\n]*")\s*$', app)
+    if sorted(suffixes) != ['".debug"', '".foss"']:
+        errors.append(f"{app_relative} must assign only the canonical debug/FOSS package suffixes")
+    flavors = extract_block(app, "productFlavors")
+    foss = extract_block(flavors, 'create("foss")') if flavors is not None else None
+    if foss is None or 'applicationIdSuffix = ".foss"' not in foss:
+        errors.append(f"{app_relative} must keep the explicit FOSS application identity")
+    required_version_lines = (
+        'providers.gradleProperty("lavasecVersionName").orElse(releaseVersion.getProperty("versionName"))',
+        'providers.gradleProperty("lavasecVersionCode").map(String::toInt).orElse(releaseVersion.getProperty("versionCode").toInt())',
+    )
+    for required in required_version_lines:
+        if app.count(required) != 1:
+            errors.append(f"{app_relative} must contain exactly one canonical version provider {required!r}")
+
+
+def verify_root_build(root: Path, contract: dict[str, object], errors: list[str]) -> None:
+    relative = "android/build.gradle.kts"
+    source = read_text(root, relative, errors)
+    if source is None:
+        return
+    kotlin_runtime = f'classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:{contract["kotlin"]}")'
+    if source.count(kotlin_runtime) != 1:
+        errors.append(f"{relative} must pin the built-in Kotlin runtime exactly once")
+    plugins = extract_block(source, "plugins")
+    plugin_lines = (
+        [line.strip() for line in plugins.splitlines() if line.strip()]
+        if plugins is not None
+        else []
+    )
+    expected_plugin_lines = [
+        "alias(libs.plugins.android.application) apply false",
+        "alias(libs.plugins.android.library) apply false",
+        "alias(libs.plugins.compose.compiler) apply false",
+    ]
+    if plugin_lines != expected_plugin_lines:
+        errors.append(
+            f"{relative} root plugin contract must be exactly {expected_plugin_lines}; "
+            f"found {plugin_lines}"
+        )
+    all_gradle = "\n".join(
+        path.read_text(encoding="utf-8")
+        for path in (root / "android").rglob("*.gradle.kts")
+        if not any(part in IGNORED_PARTS for part in path.parts)
+    )
+    if "org.jetbrains.kotlin.android" in all_gradle:
+        errors.append("org.jetbrains.kotlin.android is forbidden with AGP built-in Kotlin")
+
+
+def verify_catalog(root: Path, contract: dict[str, object], errors: list[str]) -> None:
+    relative = "android/gradle/libs.versions.toml"
+    path = root / relative
+    if not path.is_file():
+        errors.append(f"missing {relative}")
+        return
+    try:
+        catalog = tomllib.loads(path.read_text(encoding="utf-8"))
+    except tomllib.TOMLDecodeError as exc:
+        errors.append(f"{relative} is invalid TOML: {exc}")
+        return
+    expected_versions = {
+        "agp": contract["agp"],
+        "kotlin": contract["kotlin"],
+        "composeBom": contract["composeBom"],
+    }
+    for key, expected in expected_versions.items():
+        actual = catalog.get("versions", {}).get(key)
+        if actual != expected:
+            errors.append(f"{relative} versions.{key} must be {expected!r}; found {actual!r}")
+    expected_plugins = {
+        "android-application": {"id": "com.android.application", "version": {"ref": "agp"}},
+        "android-library": {"id": "com.android.library", "version": {"ref": "agp"}},
+        "compose-compiler": {
+            "id": "org.jetbrains.kotlin.plugin.compose",
+            "version": {"ref": "kotlin"},
+        },
+    }
+    if catalog.get("plugins") != expected_plugins:
+        errors.append(f"{relative} must contain exactly the canonical plugin aliases")
+
+    for key, expected in PRODUCT_CATALOG_VERSIONS.items():
+        actual = catalog.get("versions", {}).get(key)
+        if actual != expected:
+            errors.append(
+                f"{relative} product catalog versions.{key} must be {expected!r}; "
+                f"found {actual!r}"
+            )
+    libraries = catalog.get("libraries", {})
+    for alias, expected in PRODUCT_CATALOG_LIBRARIES.items():
+        actual = libraries.get(alias)
+        if actual != expected:
+            errors.append(
+                f"{relative} product catalog alias {alias!r} must be {expected!r}; "
+                f"found {actual!r}"
+            )
+
+
+def verify_product_boundary(root: Path, errors: list[str]) -> None:
+    for relative, expected in (
+        ("android/build.gradle.kts", ROOT_BUILD_CONTRACT),
+        ("android/settings.gradle.kts", SETTINGS_BUILD_CONTRACT),
+    ):
+        source = read_text(root, relative, errors)
+        if source is not None and source != expected:
+            errors.append(
+                f"{relative} must match the exact product Gradle boundary contract"
+            )
+
+    build_relative = "android/product/build.gradle.kts"
+    build = read_text(root, build_relative, errors)
+    if build is None:
+        return
+
+    if build != PRODUCT_BUILD_CONTRACT:
+        errors.append(f"{build_relative} must match the exact product build contract")
+
+    source_root = root / "android" / "product" / "src"
+    if not source_root.is_dir():
+        return
+
+    production_source_sets: list[Path] = []
+    for source_set in sorted(source_root.iterdir()):
+        if not source_set.is_dir() or source_set.is_symlink():
+            errors.append(
+                f"{source_set.relative_to(root)} product boundary payload is not an approved "
+                "source set"
+            )
+        elif PRODUCT_TEST_SOURCE_SET.fullmatch(source_set.name) is None:
+            production_source_sets.append(source_set)
+
+    for source_set in production_source_sets:
+        approved_sources: list[Path] = []
+        for entry in sorted(source_set.iterdir()):
+            if entry.name == "AndroidManifest.xml" and entry.is_file() and not entry.is_symlink():
+                continue
+            if entry.name not in {"kotlin", "java"} or not entry.is_dir() or entry.is_symlink():
+                errors.append(
+                    f"{entry.relative_to(root)} product boundary payload is not approved"
+                )
+                continue
+            expected_suffix = ".kt" if entry.name == "kotlin" else ".java"
+            for path in sorted(entry.rglob("*")):
+                if path.is_dir() and not path.is_symlink():
+                    continue
+                if path.is_symlink() or not path.is_file() or path.suffix != expected_suffix:
+                    errors.append(
+                        f"{path.relative_to(root)} product boundary payload is not approved"
+                    )
+                    continue
+                approved_sources.append(path)
+
+        sources = sorted(approved_sources)
+        for path in sources:
+            try:
+                source = path.read_text(encoding="utf-8")
+            except (UnicodeDecodeError, OSError) as exc:
+                errors.append(f"cannot inspect product boundary source {path}: {exc}")
+                continue
+            if path.suffix == ".java":
+                source = translate_java_unicode_escapes_once(source)
+            code = product_semantic_source(source, kotlin=path.suffix == ".kt")
+            brace_scopes, shadow_declarations = product_shadow_declarations(code)
+            reported_capabilities: set[str] = set()
+            foundation_reported = False
+            for match, segments in normalized_qualified_segments(code):
+                directive = product_name_is_directive(code, match.start())
+                if not directive and product_root_is_shadowed(
+                    segments[0],
+                    match.start(),
+                    len(code),
+                    brace_scopes,
+                    shadow_declarations,
+                ):
+                    continue
+                for prefix in PRODUCT_FORBIDDEN_QUALIFIED_PREFIXES:
+                    if qualified_name_starts_with(segments, prefix):
+                        reported_capabilities.add(prefix)
+                if (
+                    qualified_name_starts_with(segments, "com.lavasec.app.foundation.")
+                    and not allowed_foundation_name(segments)
+                ):
+                    foundation_reported = True
+
+            relative = path.relative_to(root)
+            for prefix in sorted(reported_capabilities):
+                errors.append(
+                    f"{relative} product boundary references forbidden {prefix}"
+                )
+            if foundation_reported:
+                errors.append(
+                    f"{relative} product foundation API is outside the explicit allowlist"
+                )
+
+        manifest = source_set / "AndroidManifest.xml"
+        if not manifest.is_file():
+            continue
+        relative = manifest.relative_to(root)
+        try:
+            document = ET.parse(manifest).getroot()
+        except ET.ParseError as exc:
+            errors.append(f"{relative} product boundary manifest is invalid XML: {exc}")
+            continue
+        if document.tag != "manifest" or document.attrib or list(document):
+            errors.append(
+                f"{relative} product boundary manifest must be an empty manifest"
+            )
+
+
+def production_source_sets(android_root: Path) -> list[Path]:
+    names = {"main", "play", "foss", "release", "playRelease", "fossRelease"}
+    return sorted(child for source_root in android_root.glob("*/src")
+                  for child in source_root.iterdir() if child.name in names and child.is_dir())
+
+
+def production_language_sources(root: Path) -> list[Path]:
+    sources: list[Path] = []
+    android_root = root / "android"
+    if not android_root.is_dir():
+        return sources
+    for main_source_set in production_source_sets(android_root):
+        if not main_source_set.is_dir() or any(
+            part in IGNORED_PARTS for part in main_source_set.parts
+        ):
+            continue
+        for language, extension in (("kotlin", "*.kt"), ("java", "*.java")):
+            source_root = main_source_set / language
+            if source_root.is_dir():
+                sources.extend(sorted(source_root.rglob(extension)))
+    return sources
+
+
+def verify_activity_boundary(root: Path, errors: list[str]) -> None:
+    presentation_build_relative = "android/presentation/build.gradle.kts"
+    presentation_build = read_text(root, presentation_build_relative, errors)
+    if presentation_build is not None:
+        if presentation_build != PRESENTATION_BUILD_CONTRACT:
+            errors.append(
+                f"{presentation_build_relative} presentation product dependency boundary "
+                "must match the exact audited build contract"
+            )
+        targets, unresolved = project_targets(presentation_build)
+        allowed_targets = [":foundation", ":platform-contracts", ":design-system"]
+        if unresolved or sorted(targets) != sorted(allowed_targets):
+            errors.append(
+                f"{presentation_build_relative} presentation product dependency boundary "
+                "requires exactly the literal project paths "
+                f"{allowed_targets}; found {targets} with {len(unresolved)} unresolved expression(s)"
+            )
+
+    runtime_types = ("ProductActivityPort", "ProductActivityStateMachine")
+    runtime_owner_allowlist = {
+        Path("android/app/src/main/kotlin/com/lavasec/app/product/activity/ActivityOwner.kt"),
+        Path(
+            "android/app/src/main/kotlin/com/lavasec/app/product/activity/"
+            "AndroidProductActivityPort.kt"
+        ),
+    }
+    runtime_findings: list[str] = []
+    for path in production_language_sources(root):
+        relative = path.relative_to(root)
+        if len(relative.parts) > 1 and relative.parts[:2] == ("android", "product"):
+            continue
+        if relative in runtime_owner_allowlist:
+            continue
+        try:
+            source = path.read_text(encoding="utf-8")
+        except (UnicodeDecodeError, OSError):
+            continue
+        if path.suffix == ".java":
+            source = translate_java_unicode_escapes_once(source)
+        semantic = product_semantic_source(source, kotlin=path.suffix == ".kt")
+        for type_name in runtime_types:
+            if re.search(rf"\b{re.escape(type_name)}\b", semantic):
+                runtime_findings.append(f"{relative}:{type_name}")
+    if runtime_findings:
+        errors.append(
+            "Activity runtime composition references are forbidden outside :product; found "
+            + ", ".join(runtime_findings)
+        )
+
+    synthetic_types = (
+        "ActivityDateRangeUi",
+        "ActivityCountSnapshot",
+        "ActivityOverviewSnapshot",
+        "TopDomainRowUi",
+        "TopDomainsSnapshot",
+        "DomainHistoryRowUi",
+        "DomainHistorySnapshot",
+        "DomainHistorySentinelKeyUi",
+        "ActivityUiState",
+    )
+    synthetic_findings: list[str] = []
+    mapper_relative = Path(
+        "android/app/src/main/kotlin/com/lavasec/app/product/ProductActivityUiMapper.kt"
+    )
+    for path in production_language_sources(root):
+        relative = path.relative_to(root)
+        if relative.parts[:4] != ("android", "app", "src", "main"):
+            continue
+        try:
+            source = path.read_text(encoding="utf-8")
+        except (UnicodeDecodeError, OSError):
+            continue
+        if path.suffix == ".java":
+            source = translate_java_unicode_escapes_once(source)
+        semantic = product_semantic_source(source, kotlin=path.suffix == ".kt")
+        for type_name in synthetic_types:
+            type_reference = rf"(?:\b{re.escape(type_name)}\b|`{re.escape(type_name)}`)"
+            direct_constructor = re.search(
+                rf"{type_reference}\s*\(",
+                semantic,
+            )
+            import_alias = re.search(
+                rf"(?m)^\s*import\s+[^\r\n;]*{type_reference}\s+as\b",
+                semantic,
+            )
+            type_alias = re.search(
+                rf"(?m)^\s*typealias\s+[^\r\n=]+=\s*[^\r\n]*"
+                rf"{type_reference}",
+                semantic,
+            )
+            constructor_reference = re.search(
+                rf"::\s*{type_reference}",
+                semantic,
+            )
+            singleton_copy = re.search(
+                rf"{type_reference}\s*\.\s*unavailable\s*\.\s*copy\s*\(",
+                semantic,
+            )
+            indirect_construction = any(
+                finding is not None
+                for finding in (
+                    import_alias,
+                    type_alias,
+                    constructor_reference,
+                    singleton_copy,
+                )
+            )
+            if indirect_construction or (
+                direct_constructor is not None and relative != mapper_relative
+            ):
+                synthetic_findings.append(f"{relative}:{type_name}")
+    if synthetic_findings:
+        errors.append(
+            "synthetic Activity construction is forbidden outside the audited mapper; found "
+            + ", ".join(synthetic_findings)
+        )
+
+    main_relative = "android/app/src/main/kotlin/com/lavasec/app/MainActivity.kt"
+    main_source = read_text(root, main_relative, errors)
+    if main_source is not None:
+        _verify_main_activity_boundary(main_source, main_relative, errors)
+
+    owner_relative = "android/app/src/main/kotlin/com/lavasec/app/MainProductViewModel.kt"
+    owner_source = read_text(root, owner_relative, errors)
+    if owner_source is not None:
+        _verify_main_product_owner_boundary(owner_source, owner_relative, errors)
+
+    protection_activity_sources = {
+        relative: read_text(root, relative, errors)
+        for relative in (
+            "android/app/src/main/kotlin/com/lavasec/app/ProductionApplicationGraphs.kt",
+            "android/app/src/main/kotlin/com/lavasec/app/ApplicationGraphLifecycleOwner.kt",
+            "android/app/src/main/kotlin/com/lavasec/app/LavasecApplication.kt",
+            "android/app/src/main/kotlin/com/lavasec/app/directboot/DirectBootStorage.kt",
+            "android/platform-contracts/src/main/kotlin/com/lavasec/app/platform/"
+            "VerifiedFilterRuntimeLease.kt",
+            "android/app/src/main/kotlin/com/lavasec/app/data/"
+            "CredentialProtectionActivitySink.kt",
+            "android/vpn/src/main/kotlin/com/lavasec/app/vpn/ProductionVpnOwnedRuntime.kt",
+            "android/vpn/src/main/kotlin/com/lavasec/app/vpn/VpnServiceContracts.kt",
+            "android/vpn/src/main/kotlin/com/lavasec/app/vpn/VpnServiceCommandOwner.kt",
+            "android/app/src/main/kotlin/com/lavasec/app/notification/"
+            "CredentialConnectivityNotificationOwner.kt",
+            "android/app/src/main/kotlin/com/lavasec/app/data/"
+            "CredentialConfigurationRepository.kt",
+            "android/app/src/main/kotlin/com/lavasec/app/data/SeededSourceCache.kt",
+            "android/app/src/main/kotlin/com/lavasec/app/MainProductViewModel.kt",
+            "android/app/src/main/kotlin/com/lavasec/app/onboarding/OnboardingOwner.kt",
+            "android/app/src/main/kotlin/com/lavasec/app/product/privacy/PrivacyOwner.kt",
+            "android/app/src/main/kotlin/com/lavasec/app/product/privacy/LocalPrivacyServices.kt",
+            "android/app/src/main/kotlin/com/lavasec/app/diagnostics/DiagnosticsFeedbackOwner.kt",
+        )
+    }
+    if all(source is not None for source in protection_activity_sources.values()):
+        _verify_protection_activity_composition(
+            {relative: source for relative, source in protection_activity_sources.items() if source},
+            errors,
+        )
+
+    navigation_relative = (
+        "android/presentation/src/main/kotlin/com/lavasec/app/presentation/"
+        "ProductNavigation.kt"
+    )
+    navigation_source = read_text(root, navigation_relative, errors)
+    if navigation_source is not None:
+        _verify_activity_deep_links(navigation_source, navigation_relative, errors)
+
+
+def _verify_main_activity_boundary(
+    source: str,
+    relative: str,
+    errors: list[str],
+) -> None:
+    semantic = product_semantic_source(source, kotlin=True)
+    forbidden_host_types = ("NativeDomainActionHost", "DomainActionCoordinator")
+    if any(re.search(rf"\b{type_name}\b", semantic) for type_name in forbidden_host_types):
+        errors.append(f"{relative} Activity runtime composition is forbidden in MainActivity")
+
+    class_body = extract_named_brace_body(source, "class", "MainActivity")
+    if class_body is None:
+        errors.append(f"{relative} MainActivity Activity state contract cannot be parsed")
+        errors.append(f"{relative} MainActivity callback contract cannot be parsed")
+        return
+    class_semantic = product_semantic_source(class_body, kotlin=True)
+    component_imports = re.findall(
+        r"(?m)^\s*import\s+[^\r\n;]*\bComponentActivity\b[^\r\n;]*$",
+        semantic,
+    )
+    canonical_component_import = "importandroidx.activity.ComponentActivity"
+    component_import_valid = (
+        len(component_imports) == 1
+        and compact_semantic_expression(component_imports[0])
+        == canonical_component_import
+    )
+    class_header_valid = len(
+        re.findall(
+            r"\bclass\s+MainActivity\s*:\s*ComponentActivity\s*\(\s*\)\s*\{",
+            semantic,
+        )
+    ) == 1
+
+    owner_declarations = re.findall(
+        r"\bprivate\s+val\s+productViewModel\s*:\s*MainProductViewModel\s+"
+        r"get\s*\(\s*\)\s*=\s*\(\s*application\s+as\s+LavasecApplication\s*\)\s*\.\s*foregroundProduct\b",
+        class_semantic,
+    )
+    forbidden_placeholders = (
+        r"\bActivityUiState\s*\.\s*unavailable\b",
+        r"\bGuardUiState\s*\.\s*from\s*\(",
+        r"\bProtectionState\s*\.\s*Off\b",
+    )
+    host_valid = (
+        component_import_valid
+        and class_header_valid
+        and len(owner_declarations) == 1
+        and not any(re.search(pattern, class_semantic) for pattern in forbidden_placeholders)
+        and len(re.findall(r"\bOnboardingScreen\s*\(", class_semantic)) == 1
+        and len(re.findall(r"\bProductUnavailableScreen\s*\(", class_semantic)) == 1
+        and len(re.findall(r"\bcollectAsState\s*\(", class_semantic)) == 1
+    )
+
+    shell_calls = structural_call_arguments(class_body, "ProductShell")
+    if len(shell_calls) != 1:
+        host_valid = False
+        errors.append(
+            f"{relative} MainActivity production host requires exactly one ProductShell call"
+        )
+        named_arguments: dict[str, list[str]] = {}
+    else:
+        named_arguments = {}
+        for argument in split_top_level_arguments(shell_calls[0]):
+            assignment = split_top_level_assignment(argument)
+            if assignment is None:
+                continue
+            name, expression = assignment
+            compact_name = compact_semantic_expression(name)
+            named_arguments.setdefault(compact_name, []).append(expression)
+
+    expected_arguments = {
+        "guardHealth": "protection.guard",
+        "activityState": "product.activity",
+        "activityQueryCallbacks": "activityCallbacks",
+        "domainRowActionCallbacks": "rowCallbacks",
+        "domainReviewCallbacks": "reviewCallbacks",
+        "domainNoticeCallbacks": "noticeCallbacks",
+        "privacyDataState": "privacyDataState",
+        "privacyDataCallbacks": "privacyDataCallbacks",
+        "customizationState": "customizationState",
+        "customizationCallbacks": "customizationCallbacks",
+        "securityState": "securityState",
+        "securityCallbacks": "securityCallbacks",
+        "bugReportState": "product.bugReport",
+        "bugReportCallbacks": "bugReportCallbacks",
+        "settingsResolverState": "settingsResolverState",
+        "securityNowMillis": "securityNowMillis.value",
+    }
+    invalid_arguments = [
+        name for name, expected in expected_arguments.items()
+        if len(named_arguments.get(name, [])) != 1
+        or compact_semantic_expression(named_arguments[name][0]) != expected
+    ]
+    if invalid_arguments:
+        host_valid = False
+    if not host_valid:
+        errors.append(
+            f"{relative} MainActivity production host must collect one generation-bound owner "
+            f"and pass exact product capabilities; invalid {invalid_arguments}"
+        )
+
+
+def _verify_main_product_owner_boundary(
+    source: str,
+    relative: str,
+    errors: list[str],
+) -> None:
+    semantic = product_semantic_source(source, kotlin=True)
+    required = (
+        r"\bclass\s+MainProductViewModel\b",
+        r"\bfactories\s*:\s*StateFlow\s*<\s*CredentialProductOwnerFactory\s*\?\s*>",
+        r"\bfactories\s*\.\s*collectLatest\b",
+        r"\bfactory\s*\.\s*create\s*\(\s*ownerScope\s*\)",
+        r"\bcreated\s*\.\s*close\s*\(\s*\)",
+        r"\bcreated\s*\.\s*onboarding\s*\.\s*state\b",
+        r"\bcreated\s*\.\s*protection\s*\?\s*\.\s*state\b",
+        r"\bcreated\s*\.\s*activity\s*\?\s*\.\s*state\b",
+        r"\bcreated\s*\.\s*privacy\s*\?\s*\.\s*state\b",
+        r"\bcreated\s*\.\s*diagnostics\s*\?\s*\.\s*state\b",
+    )
+    forbidden = (
+        r"\bActivityCountSnapshot\s*\(",
+        r"\bActivityOverviewSnapshot\s*\(",
+        r"\bTopDomainRowUi\s*\(",
+        r"\bDomainHistoryRowUi\s*\(",
+    )
+    if any(re.search(pattern, semantic) is None for pattern in required) or any(
+        re.search(pattern, semantic) for pattern in forbidden
+    ):
+        errors.append(
+            f"{relative} MainProductViewModel production owner contract is not exact"
+        )
+
+
+def _verify_protection_activity_composition(
+    sources: dict[str, str],
+    errors: list[str],
+) -> None:
+    semantic = "\n".join(product_semantic_source(source, kotlin=True) for source in sources.values())
+    required = (
+        r"\bdatabase\s*\.\s*recoverAbandonedProtectionSessions\s*\(\s*\)",
+        r"\bCredentialProtectionActivitySink\s*\(",
+        r"\bacceptProtectionEvidence\s*\(",
+        r"\brecordProtectionState\s*\(",
+        r"\brecordProtectionHeartbeat\s*\(",
+        r"\bVpnProtectionEvidence\s*\.\s*State\s*\(",
+        r"\bVpnProtectionEvidence\s*\.\s*Heartbeat\s*\(",
+        r"evidence\s*\.\s*engineGeneration\s*==\s*currentEngineGeneration",
+        r"\bChainedEngineQueue\s*\(\s*\)",
+        r"\bterminalPublication\s*\.\s*publish\s*\(",
+        r"\bterminalExit\s*\.\s*exit\s*\(",
+        r"if\s*\(\s*historyStore\s*\.\s*write\s*\(\s*next\s*\)\s*\)\s*history\s*=\s*next",
+        r"\bif\s*\(\s*requireCompletedOnboarding\s*\)",
+        r"\bfail\s*\(\s*SeededSourceCacheFailure\s*\.\s*REDIRECT_HOST_MISMATCH",
+        r"\bArrayDeque\s*<\s*ProductNavigation\s*>",
+        r"\bdrainNavigation\s*\(",
+        r"current\s*\.\s*reconstructionRequired\s*\|\|\s*current\s*\.\s*commitInFlight",
+        r"keepCounts\s*=\s*current\s*\.\s*keepCounts\s*&&\s*settings\s*\.\s*keepCounts",
+        r"current\s*\.\s*keepNetworkActivity\s*&&\s*settings\s*\.\s*keepNetworkActivity",
+        r"persistConfiguration\s*\(\s*settings\s*\)\s*durableCommitted\s*=\s*true\s*"
+        r"applyCommittedLoggingPolicy\s*\(\s*settings\s*\)",
+        r"repeat\s*\(\s*POST_COMMIT_POLICY_ATTEMPTS\s*\)",
+        r"activityWriter\s*\.\s*applyLoggingPolicy\s*\(\s*initialState\s*\.\s*logging\s*\)",
+        r"\bCommittedReconciliationRequired\s*\(",
+        r"\blastPrivacyReconciliationGeneration\b",
+        r"owners\s*\.\s*get\s*\(\s*\)\s*===\s*current\s*&&\s*"
+        r"privacy\s*\.\s*state\s*\.\s*value\s*\.\s*lastMutation\s+is\s*"
+        r"[^\s]*CommittedReconciliationRequired\s*&&\s*"
+        r"lastPrivacyReconciliationGeneration\s*\.\s*getAndSet\s*\(\s*"
+        r"current\s*\.\s*graphGeneration\s*\)\s*!=\s*current\s*\.\s*graphGeneration\s*\)\s*"
+        r"\{\s*rotateCredentialGraph\s*\(\s*current\s*\.\s*graphGeneration\s*\)",
+        r"if\s*\(\s*durableCommitted\s*\)\s*\{\s*"
+        r"PrivacyMutationResult\s*\.\s*CommittedReconciliationRequired\s*\(",
+        r"rotateCredentialGraph\s*:\s*\(\s*Long\s*\)\s*->\s*Unit",
+        r"rotateCredentialGraph\s*\(\s*expectedGeneration\s*:\s*Long\s*\)\s*=\s*"
+        r"mutex\s*\.\s*withLock\s*\{",
+        r"if\s*\(\s*credentialGraph\s*\?\s*\.\s*graphGeneration\s*!=\s*"
+        r"expectedGeneration\s*\)\s*return@withLock",
+        r"graphs\s*\.\s*rotateCredentialGraph\s*\(\s*expectedGeneration\s*\)",
+        r"\boverride\s+val\s+vpnHost\s*:\s*ProductionDeviceVpnHost\?",
+        r"\breadVerifiedDeviceProtectedSnapshotOrNull\s*\(",
+        r"confirmed\s*!=\s*null\s*&&\s*requiresFreshDeviceMirrorPublication\s*\(\s*"
+        r"persisted\s*=\s*persisted\s*,\s*credentialArtifact\s*=\s*FilterArtifactReference\s*\(\s*"
+        r"confirmed\s*\.\s*verifiedArtifact\s*\.\s*sha256\s*,\s*"
+        r"confirmed\s*\.\s*verifiedArtifact\s*\.\s*artifactIdentity",
+        r"withContext\s*\(\s*Dispatchers\s*\.\s*IO\s*\)\s*\{\s*"
+        r"readVerifiedDeviceProtectedSnapshotOrNull\s*\(",
+        r"VerifiedDeviceMirror\s*\(\s*snapshot\s*\.\s*state\s*,\s*snapshot\s*\.\s*artifact\s*\)",
+        r"val\s+mirror\s*=\s*readVerifiedDeviceMirror\s*\(\s*\)\s*\?:\s*return\s+true",
+        r"return\s+!\s*mirror\s*\.\s*state\s*\.\s*matches\s*\(\s*persisted\s*\)\s*\|\|\s*"
+        r"mirror\s*\.\s*artifact\s*!=\s*credentialArtifact",
+        r"\btakeDirectBootOpenedOrNull\s*\(",
+        r"\battachDeviceHostIfAvailable\s*\(",
+        r"\battachDeviceHostForReplacement\s*\(",
+        r"\bval\s+registration\s*=\s*try\s*\{\s*"
+        r"attachCredentialHost\s*\(\s*graph\s*\.\s*vpnHost\s*\)",
+        r"if\s*\(\s*!\s*closed\s*\)\s*attachDeviceHostForReplacement\s*\(\s*\)\s*"
+        r"val\s+registration\s*=\s*credentialRegistration",
+        r"\bretireProtection\s*=\s*vpn\s*::\s*stop",
+        r"runBlocking\s*\(\s*Dispatchers\s*\.\s*IO\s*\)\s*\{\s*"
+        r"graphs\s*\.\s*reconcile\s*\(\s*userUnlocked\s*=\s*false\s*\)",
+        r"\bNetworkRequest\s*\.\s*Builder\s*\(",
+        r"NET_CAPABILITY_NOT_VPN",
+        r"\bawaitingNetwork\s*=\s*true",
+        r"\bschedulePauseExpiry\s*\(",
+        r"delay\s*\(\s*minOf\s*\(\s*pause\s*\.\s*deadlineMillis\s*-\s*now\s*,\s*pauseClockRecheckMillis\s*\)\s*\)",
+        r"requestResume\s*\(\s*expectedPause\s*=\s*pause\s*\)",
+        r"candidate\s*\.\s*start\s*\(\s*\)[\s\S]*?"
+        r"runtime\s*=\s*candidate[\s\S]*?"
+        r"runCatching\s*\{\s*predecessor\s*\?\s*\.\s*close\s*\(\s*\)\s*\}",
+        r"\bval\s+terminal\s*=\s*engineQueue\s*\.\s*run\s*\{",
+        r"terminal\s*\?\s*\.\s*let\s*\(\s*::\s*terminateRuntime\s*\)",
+        r"networkRegistration\s*=\s*networkRegistration\s*\.\s*also\s*\{\s*"
+        r"networkRegistration\s*=\s*null\s*\}",
+        r"runBlocking\s*\(\s*Dispatchers\s*\.\s*IO\s*\)\s*\{\s*"
+        r"readVerifiedDeviceProtectedSnapshotOrNull\s*\(",
+        r"\bDeviceProtectedConfigurationReader\s*\(",
+        r"\bval\s+envelope\s*=\s*DeviceProtectedConfigurationReader\s*\(",
+    )
+    unlock_before_publish = any(
+        re.search(
+            r"finally\s*\{\s*admission\s*\.\s*unlock\s*\(\s*\)",
+            product_semantic_source(source, kotlin=True),
+        )
+        for relative, source in sources.items()
+        if relative.endswith("PrivacyOwner.kt") or relative.endswith("DiagnosticsFeedbackOwner.kt")
+    )
+    required_occurrences = (
+        (r"\bterminalPublication\s*\.\s*publish\s*\(", 2),
+        (r"\battachDeviceHostIfAvailable\s*\(\s*\)", 3),
+        (r"\bawaitingNetwork\s*=\s*true", 4),
+        (r"runBlocking\s*\(\s*Dispatchers\s*\.\s*IO\s*\)\s*\{\s*"
+         r"readVerifiedDeviceProtectedSnapshotOrNull\s*\(", 2),
+    )
+    missing_occurrences = any(
+        len(re.findall(pattern, semantic)) < minimum
+        for pattern, minimum in required_occurrences
+    )
+    if (
+        any(re.search(pattern, semantic) is None for pattern in required)
+        or missing_occurrences
+        or unlock_before_publish
+    ):
+        errors.append("production protection activity evidence contract is not exact")
+
+
+def _verify_activity_deep_links(
+    source: str,
+    relative: str,
+    errors: list[str],
+) -> None:
+    object_body = extract_named_brace_body(source, "object", "ProductDeepLink")
+    if object_body is None:
+        errors.append(f"{relative} Activity deep-link contract cannot be parsed")
+        return
+
+    parse_web = extract_kotlin_function(object_body, "parseWeb")
+    route_for = extract_kotlin_function(object_body, "routeFor")
+    canonical_web = [
+        ("/app/guard", "Guard"),
+        ("/app/filters", "Filters"),
+        ("/app/activity", "Activity"),
+        ("/app/settings", "Settings"),
+    ]
+    canonical_custom = [
+        ("guard", "Guard"),
+        ("filters", "Filters"),
+        ("activity", "Activity"),
+        ("settings", "Settings"),
+    ]
+    route_pattern = re.compile(
+        r'"([^"\\]+)"\s*->\s*ProductNavigation\s*\.\s*forRoute\s*\('
+        r"\s*ProductDestination\s*\.\s*([A-Za-z_$][A-Za-z0-9_$]*)\s*\)"
+    )
+    actual_web = route_pattern.findall(parse_web or "")
+    actual_custom = route_pattern.findall(route_for or "")
+    expected_literals = sorted(
+        [route for route, _ in canonical_web]
+        + [route for route, _ in canonical_custom]
+        + ["", "lavasecurity", "https", "lavasecurity.app"]
+    )
+    semantic_object = product_semantic_source(object_body, kotlin=True)
+    broadening_identifiers = (
+        "startsWith",
+        "contains",
+        "matches",
+        "Regex",
+        "toRegex",
+        "matchEntire",
+        "findAll",
+    )
+    broadened = any(
+        re.search(rf"\b{identifier}\b", semantic_object)
+        for identifier in broadening_identifiers
+    )
+    unknown_fallbacks = len(re.findall(r"\belse\s*->\s*null\b", semantic_object))
+    if (
+        actual_web != canonical_web
+        or actual_custom != canonical_custom
+        or sorted(kotlin_string_literals(object_body)) != expected_literals
+        or broadened
+        or unknown_fallbacks != 3
+    ):
+        errors.append(
+            f"{relative} Activity deep-link ingress must remain the four exact overview routes"
+        )
+
+
+def verify_manifest(root: Path, errors: list[str]) -> None:
+    relative = "android/app/src/main/AndroidManifest.xml"
+    path = root / relative
+    if not path.is_file():
+        errors.append(f"missing {relative}")
+        return
+    try:
+        manifest = ET.parse(path).getroot()
+    except ET.ParseError as exc:
+        errors.append(f"{relative} is invalid XML: {exc}")
+        return
+    def android(name: str) -> str:
+        return f"{{{ANDROID_XML_NAMESPACE}}}{name}"
+    if manifest.tag != "manifest" or manifest.get("package") is not None:
+        errors.append(f"{relative} must use the Gradle application identity without a manifest package")
+    applications = manifest.findall("application")
+    if len(applications) != 1:
+        errors.append(f"{relative} must declare exactly one application")
+        return
+    application = applications[0]
+    expected_application = {
+        android("name"): ".LavasecApplication",
+        android("allowBackup"): "false",
+        android("icon"): "@mipmap/ic_launcher",
+        android("label"): "@string/app_name",
+        android("roundIcon"): "@mipmap/ic_launcher_round",
+        android("supportsRtl"): "true",
+        android("theme"): "@style/Theme.Lavasec",
+        android("usesCleartextTraffic"): "false",
+    }
+    if application.attrib != expected_application:
+        errors.append(
+            f"{relative} manifest application private production surface attributes must be "
+            f"canonical; found {application.attrib}"
+        )
+    play_relative = "android/app/src/play/AndroidManifest.xml"
+    try:
+        play_manifest = ET.parse(root / play_relative).getroot()
+    except (OSError, ET.ParseError) as exc:
+        errors.append(f"{play_relative} must contain the Play-only OAuth surface: {exc}")
+        return
+    play_application = play_manifest.find("application")
+    if (play_manifest.tag != "manifest" or play_manifest.attrib or
+        [item.tag for item in play_manifest] != ["queries", "application"] or
+        play_application is None or play_application.attrib or
+        [item.tag for item in play_application] != ["activity", "activity"]):
+        errors.append(f"{play_relative} must retain exactly the Play-only OAuth activities and credential provider query")
+        return
+    queries = play_manifest.findall("queries")
+    if (len(queries) != 1 or queries[0].attrib or len(queries[0]) != 1 or
+        queries[0][0].tag != "intent" or queries[0][0].attrib or len(queries[0][0]) != 1 or
+        queries[0][0][0].tag != "action" or len(queries[0][0][0]) or
+        queries[0][0][0].attrib != {android("name"): "android.service.credentials.CredentialProviderService"}):
+        errors.append(f"{play_relative} must keep only the narrow credential-provider query")
+    if len(application.findall("activity")) != 2:
+        errors.append(f"{relative} must exclude account activities from shared/FOSS source")
+    activities = play_application.findall("activity") + application.findall("activity")
+    canonical_oauth_browser_activity = {
+        android("name"): ".account.AppleOAuthBrowserActivity",
+        android("exported"): "false",
+        android("excludeFromRecents"): "true",
+        android("theme"): "@android:style/Theme.Translucent.NoTitleBar",
+    }
+    canonical_oauth_callback_activity = {
+        android("name"): ".account.AppleOAuthCallbackActivity",
+        android("exported"): "true",
+        android("excludeFromRecents"): "true",
+        android("noHistory"): "true",
+        android("theme"): "@android:style/Theme.Translucent.NoTitleBar",
+    }
+    canonical_main_activity = {
+        android("name"): ".MainActivity",
+        android("exported"): "true",
+        android("launchMode"): "singleTop",
+        android("relinquishTaskIdentity"): "true",
+    }
+    # MainActivity owns product deep links. The only other VIEW/BROWSABLE owner
+    # is the exact package-scoped Apple OAuth callback below. RN remains the
+    # sole launcher, with no browsable/view routes or arbitrary intent filters.
+    canonical_react_activity = {
+        android("name"): ".reactnative.LavaReactActivity",
+        android("exported"): "true",
+        android("configChanges"): (
+            "keyboard|keyboardHidden|orientation|screenLayout|screenSize|"
+            "smallestScreenSize|uiMode"
+        ),
+        android("theme"): "@style/Theme.AppCompat.DayNight.NoActionBar",
+        android("windowSoftInputMode"): "adjustResize",
+    }
+    canonical_activities = [
+        canonical_oauth_browser_activity,
+        canonical_oauth_callback_activity,
+        canonical_main_activity,
+        canonical_react_activity,
+    ]
+    if (
+        len(activities) != len(canonical_activities)
+        or any(
+            activity.attrib != expected
+            for activity, expected in zip(activities, canonical_activities)
+        )
+    ):
+        errors.append(
+            f"{relative} manifest activity attributes and order must retain exactly "
+            "the unexported Apple OAuth browser, narrow exported Apple OAuth callback, "
+            "exported singleTop .MainActivity, and DayNight RN launcher"
+        )
+        return
+    browser_activity, callback_activity, main_activity, react_activity = activities
+    expected_component_order = [
+        "provider", "provider", "provider", "provider", "receiver",
+        "activity", "activity",
+    ]
+    if len(browser_activity) != 0:
+        errors.append(f"{relative} Apple OAuth browser must have no children or intent filters")
+    expected_callback_filters = [({}, [
+        ("action", {android("name"): "android.intent.action.VIEW"}),
+        ("category", {android("name"): "android.intent.category.DEFAULT"}),
+        ("category", {android("name"): "android.intent.category.BROWSABLE"}),
+        ("data", {
+            android("scheme"): "${applicationId}.auth",
+            android("host"): "oauth",
+            android("pathPrefix"): "/apple/",
+        }),
+    ])]
+    actual_callback_filters = [
+        (item.attrib, [(child.tag, child.attrib) for child in item])
+        for item in callback_activity.findall("intent-filter")
+    ]
+    callback_filter_valid = (
+        len(callback_activity) == 1
+        and actual_callback_filters == expected_callback_filters
+        and all(len(child) == 0 for child in callback_activity[0])
+    )
+    if not callback_filter_valid:
+        errors.append(
+            f"{relative} Apple OAuth callback must contain exactly one canonical "
+            "package-scheme oauth /apple/ intent filter"
+        )
+    expected_launcher_filters = [({}, [
+        ("action", {android("name"): "android.intent.action.MAIN"}),
+        ("category", {android("name"): "android.intent.category.LAUNCHER"}),
+    ])]
+    actual_launcher_filters = [
+        (item.attrib, [(child.tag, child.attrib) for child in item])
+        for item in react_activity.findall("intent-filter")
+    ]
+    if actual_launcher_filters != expected_launcher_filters or len(react_activity) != 1:
+        errors.append(f"{relative} RN host must contain exactly one canonical launcher intent filter")
+    expected_intent_filters = [
+        (
+            {},
+            [
+                ("action", {android("name"): "android.intent.action.VIEW"}),
+                ("category", {android("name"): "android.intent.category.DEFAULT"}),
+                ("category", {android("name"): "android.intent.category.BROWSABLE"}),
+                ("data", {android("scheme"): "${lavaDeepLinkScheme}"}),
+            ],
+        ),
+        (
+            {android("autoVerify"): "true"},
+            [
+                ("action", {android("name"): "android.intent.action.VIEW"}),
+                ("category", {android("name"): "android.intent.category.DEFAULT"}),
+                ("category", {android("name"): "android.intent.category.BROWSABLE"}),
+                (
+                    "data",
+                    {
+                        android("scheme"): "https",
+                        android("host"): "lavasecurity.app",
+                        android("pathPrefix"): "/app/",
+                    },
+                ),
+            ],
+        ),
+    ]
+    actual_intent_filters = [
+        (item.attrib, [(child.tag, child.attrib) for child in item])
+        for item in main_activity.findall("intent-filter")
+    ]
+    if actual_intent_filters != expected_intent_filters:
+        errors.append(
+            f"{relative} MainActivity must contain exactly "
+            "one browsable lavasecurity intent filter, and one auto-verified HTTPS /app/ "
+            "intent filter"
+        )
+
+    additional_ingress_owners = []
+    for component in application:
+        if component is main_activity or (component is callback_activity and callback_filter_valid):
+            continue
+        for item in component.findall("intent-filter"):
+            actions = {
+                child.get(android("name"))
+                for child in item.findall("action")
+            }
+            categories = {
+                child.get(android("name"))
+                for child in item.findall("category")
+            }
+            if (
+                "android.intent.action.VIEW" in actions
+                or "android.intent.category.BROWSABLE" in categories
+            ):
+                additional_ingress_owners.append(component.tag)
+    if additional_ingress_owners:
+        errors.append(
+            f"{relative} must not declare a VIEW or BROWSABLE intent filter outside "
+            "the canonical .MainActivity and exact Apple OAuth callback; "
+            f"found {additional_ingress_owners}"
+        )
+
+    permissions = [
+        item.get(android("name")) for item in manifest.findall("uses-permission")
+    ]
+    # The biometric prompt is a real platform surface: USE_BIOMETRIC (API 29+) is required by
+    # android.hardware.biometrics.BiometricPrompt, and USE_FINGERPRINT (API 28 only) by the legacy
+    # FingerprintManager availability probe. CAMERA is required by the filter-share QR import
+    # (TakePicture), decoded on-device with no network. These are the exact additional normal
+    # permissions the private surface permits; any other permission still broadens the surface and
+    # is rejected.
+    expected_permissions = [
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT",
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.CAMERA",
+    ]
+    providers = application.findall("provider")
+    receivers = application.findall("receiver")
+    def file_provider_with_authority(name: str, authority: str, resource: str) -> bool:
+        candidate = next(
+            (
+                item for item in providers
+                if item.get(android("name")) == name
+                and item.get(android("authorities")) == authority
+            ),
+            None,
+        )
+        if candidate is None:
+            return False
+        if candidate.attrib != {
+            android("name"): name,
+            android("authorities"): authority,
+            android("exported"): "false",
+            android("grantUriPermissions"): "true",
+        }:
+            return False
+        metadata = candidate.findall("meta-data")
+        return (
+            len(candidate) == 1
+            and len(metadata) == 1
+            and metadata[0].attrib == {
+                android("name"): "android.support.FILE_PROVIDER_PATHS",
+                android("resource"): resource,
+            }
+        )
+
+    # Exactly three narrow FileProviders: local logs, transient camera capture, and recipient
+    # filter-card images. Each is unexported and negotiates only a per-URI grant.
+    file_provider_valid = file_provider_with_authority(
+        ".files.LocalLogExportFileProvider", "${applicationId}.local-log-export", "@xml/local_log_export_paths",
+    )
+    camera_file_provider_valid = file_provider_with_authority(
+        ".files.FilterQrCaptureFileProvider", "${applicationId}.camera", "@xml/camera_paths",
+    )
+    card_file_provider_valid = file_provider_with_authority(
+        ".files.FilterShareCardFileProvider", "${applicationId}.filter-card", "@xml/filter_card_paths",
+    )
+    startup_provider = next(
+        (
+            item for item in providers
+            if item.get(android("name")) == "androidx.startup.InitializationProvider"
+        ),
+        None,
+    )
+    startup_provider_valid = startup_provider is not None and startup_provider.attrib == {
+        android("name"): "androidx.startup.InitializationProvider",
+        android("authorities"): "${applicationId}.androidx-startup",
+        android("exported"): "false",
+        f"{{http://schemas.android.com/tools}}node": "merge",
+    }
+    if startup_provider_valid:
+        metadata = startup_provider.findall("meta-data")
+        startup_provider_valid = (
+            len(startup_provider) == 1
+            and len(metadata) == 1
+            and metadata[0].attrib == {
+                android("name"): "androidx.work.WorkManagerInitializer",
+                f"{{http://schemas.android.com/tools}}node": "remove",
+            }
+        )
+    all_components_explicit = all(
+        android("exported") in component.attrib
+        for component in application
+        if component.tag in {"activity", "activity-alias", "provider", "receiver", "service"}
+    )
+    receiver_valid = len(receivers) == 1 and receivers[0].attrib == {
+        android("name"): ".work.ActivityRetentionUnlockReceiver",
+        android("directBootAware"): "true",
+        android("exported"): "false",
+    }
+    if receiver_valid:
+        filters = receivers[0].findall("intent-filter")
+        receiver_valid = (
+            len(receivers[0]) == 1
+            and len(filters) == 1
+            and [(child.tag, child.attrib) for child in filters[0]] == [
+                ("action", {android("name"): "android.intent.action.USER_UNLOCKED"})
+            ]
+        )
+    paths_relative = "android/app/src/main/res/xml/local_log_export_paths.xml"
+    paths = root / paths_relative
+    paths_valid = False
+    if paths.is_file():
+        try:
+            paths_root = ET.parse(paths).getroot()
+            paths_valid = (
+                paths_root.tag == "paths"
+                and not paths_root.attrib
+                and len(paths_root) == 1
+                and paths_root[0].tag == "cache-path"
+                and paths_root[0].attrib == {
+                    "name": "local-log-exports",
+                    "path": "local-log-exports/",
+                }
+            )
+        except ET.ParseError:
+            paths_valid = False
+    camera_paths_relative = "android/app/src/main/res/xml/camera_paths.xml"
+    camera_paths = root / camera_paths_relative
+    camera_paths_valid = False
+    if camera_paths.is_file():
+        try:
+            camera_root = ET.parse(camera_paths).getroot()
+            camera_paths_valid = (
+                camera_root.tag == "paths"
+                and not camera_root.attrib
+                and len(camera_root) == 1
+                and camera_root[0].tag == "cache-path"
+                and camera_root[0].attrib == {
+                    "name": "camera-captures",
+                    "path": "camera-captures/",
+                }
+            )
+        except ET.ParseError:
+            camera_paths_valid = False
+    card_paths_relative = "android/app/src/main/res/xml/filter_card_paths.xml"
+    card_paths = root / card_paths_relative
+    card_paths_valid = False
+    if card_paths.is_file():
+        try:
+            card_root = ET.parse(card_paths).getroot()
+            card_paths_valid = (
+                card_root.tag == "paths"
+                and not card_root.attrib
+                and len(card_root) == 1
+                and card_root[0].tag == "cache-path"
+                and card_root[0].attrib == {
+                    "name": "filter-share-cards",
+                    "path": "filter-share-cards/",
+                }
+            )
+        except ET.ParseError:
+            card_paths_valid = False
+    if (
+        permissions != expected_permissions
+        or len(providers) != 4
+        or not file_provider_valid
+        or not camera_file_provider_valid
+        or not card_file_provider_valid
+        or not startup_provider_valid
+        or not receiver_valid
+        or not all_components_explicit
+        or [child.tag for child in application] != expected_component_order
+        or not paths_valid
+        or not camera_paths_valid
+        or not card_paths_valid
+    ):
+        errors.append(
+            f"{relative} private production surface and {paths_relative} must remain narrow"
+        )
+
+
+def verify_vpn_manifest(root: Path, errors: list[str]) -> None:
+    relative = "android/vpn/src/main/AndroidManifest.xml"
+    path = root / relative
+    if not path.is_file():
+        errors.append(f"missing {relative}")
+        return
+    try:
+        manifest = ET.parse(path).getroot()
+    except ET.ParseError as exc:
+        errors.append(f"{relative} VPN service manifest is invalid XML: {exc}")
+        return
+
+    def android(name: str) -> str:
+        return f"{{{ANDROID_XML_NAMESPACE}}}{name}"
+
+    tools = "{http://schemas.android.com/tools}"
+    permissions = [
+        item.get(android("name")) for item in manifest.findall("uses-permission")
+    ]
+    expected_permissions = [
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.INTERNET",
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_SYSTEM_EXEMPTED",
+    ]
+    applications = manifest.findall("application")
+    valid = (
+        manifest.tag == "manifest"
+        and not manifest.attrib
+        and manifest.get("package") is None
+        and permissions == expected_permissions
+        and len(applications) == 1
+        and not applications[0].attrib
+        and len(applications[0]) == 1
+        and [child.tag for child in manifest] == [
+            "uses-permission",
+            "uses-permission",
+            "uses-permission",
+            "uses-permission",
+            "uses-permission",
+            "application",
+        ]
+    )
+    services = applications[0].findall("service") if applications else []
+    expected_service = {
+        android("name"): ".LavaVpnService",
+        android("directBootAware"): "true",
+        android("exported"): "true",
+        android("foregroundServiceType"): "systemExempted",
+        android("permission"): "android.permission.BIND_VPN_SERVICE",
+        f"{tools}ignore": "ForegroundServicePermission",
+    }
+    valid = valid and len(services) == 1 and services[0].attrib == expected_service
+    if valid:
+        service = services[0]
+        filters = service.findall("intent-filter")
+        metadata = service.findall("meta-data")
+        valid = (
+            len(service) == 2
+            and len(filters) == 1
+            and [(child.tag, child.attrib) for child in filters[0]] == [
+                ("action", {android("name"): "android.net.VpnService"})
+            ]
+            and len(metadata) == 1
+            and metadata[0].attrib == {
+                android("name"): "android.net.VpnService.SUPPORTS_ALWAYS_ON",
+                android("value"): "true",
+            }
+        )
+    if not valid:
+        errors.append(
+            f"{relative} VPN service manifest must retain the exact protected direct-boot service"
+        )
+
+
+def verify_managed_device_boundary(root: Path, errors: list[str]) -> None:
+    production_paths: list[Path] = []
+    android_root = root / "android"
+    if android_root.is_dir():
+        for main_source_set in production_source_sets(android_root):
+            if not main_source_set.is_dir() or any(
+                part in IGNORED_PARTS for part in main_source_set.parts
+            ):
+                continue
+            manifest = main_source_set / "AndroidManifest.xml"
+            if manifest.is_file():
+                production_paths.append(manifest)
+            for language, extension in (("kotlin", "*.kt"), ("java", "*.java")):
+                source_root = main_source_set / language
+                if source_root.is_dir():
+                    production_paths.extend(sorted(source_root.rglob(extension)))
+
+    for path in production_paths:
+        if not path.is_file():
+            continue
+        try:
+            source = path.read_text(encoding="utf-8")
+        except (UnicodeDecodeError, OSError):
+            continue
+        if path.suffix == ".xml":
+            try:
+                xml_root = ET.fromstring(source)
+            except ET.ParseError:
+                continue
+            semantic_tokens: list[str] = []
+            for element in xml_root.iter():
+                semantic_tokens.append(str(element.tag))
+                for name, value in element.attrib.items():
+                    semantic_tokens.extend((name, value))
+            source = "\n".join(semantic_tokens)
+        else:
+            if path.suffix == ".java":
+                source = translate_java_unicode_escapes_once(source)
+            source = source_without_comments(
+                source,
+                nested_block_comments=path.suffix == ".kt",
+                escaped_triple_delimiters=path.suffix == ".java",
+            )
+        for label, pattern in MANAGED_DEVICE_PATTERNS:
+            if pattern.search(source):
+                relative = path.relative_to(root)
+                errors.append(
+                    f"managed-device declaration or API token {label!r} is forbidden in {relative}"
+                )
+
+
+def verify_wrapper(root: Path, contract: dict[str, object], errors: list[str]) -> None:
+    relative = "android/gradle/wrapper/gradle-wrapper.properties"
+    properties = read_text(root, relative, errors)
+    if properties is not None:
+        expected_url = f"distributionUrl=https\\://services.gradle.org/distributions/gradle-{contract['gradle']}-all.zip"
+        expected_checksum = f"distributionSha256Sum={EXPECTED_DISTRIBUTION_SHA256}"
+        if properties.count(expected_url) != 1 or properties.count(expected_checksum) != 1:
+            errors.append(f"{relative} must pin the canonical Gradle distribution and checksum")
+
+    wrapper_jar = root / "android" / "gradle" / "wrapper" / "gradle-wrapper.jar"
+    if not wrapper_jar.is_file():
+        errors.append("missing android/gradle/wrapper/gradle-wrapper.jar")
+    elif hashlib.sha256(wrapper_jar.read_bytes()).hexdigest() != EXPECTED_WRAPPER_SHA256:
+        errors.append("android/gradle/wrapper/gradle-wrapper.jar has the wrong SHA-256")
+
+
+def verify_chained_availability_authority(root: Path, errors: list[str]) -> None:
+    """Pin the chained engine-eligibility gate to authoritative sources only.
+
+    The raw policy accepts caller-supplied facts, so it must stay module-internal: if it were
+    public, any consumer could mint an eligible verdict (and therefore a `ChainedEnginePermit`)
+    without consulting the entitlement port or the device store. The public path is
+    `ChainedAvailabilityAuthority.current()`; `Eligible` and the permit must be unforgeable.
+    """
+    relative = (
+        "android/platform-contracts/src/main/kotlin/com/lavasec/app/platform/"
+        "ChainedAvailability.kt"
+    )
+    source = read_text(root, relative, errors)
+    if source is None:
+        return
+    required = (
+        "internal object ChainedAvailabilityPolicy",
+        "class Eligible internal constructor()",
+        "class ChainedEnginePermit private constructor(",
+        "fun consumeForConstruction(): Boolean",
+        "fun issue(authority: ChainedAvailabilityAuthority): ChainedEnginePermit?",
+        "class ChainedAvailabilityAuthority internal constructor(",
+        "fun production(",
+        "override fun current(): ChainedAvailability",
+    )
+    for literal in required:
+        if literal not in source:
+            errors.append(
+                f"{relative} must keep the chained availability gate authoritative; "
+                f"missing {literal!r}"
+            )
+    if "public object ChainedAvailabilityPolicy" in source:
+        errors.append(
+            f"{relative} must not expose the caller-supplied-facts policy publicly"
+        )
+    if "fun issue(provider:" in source:
+        errors.append(
+            f"{relative} must not mint permits from an arbitrary provider interface"
+        )
+
+
+def foundation_errors(root: Path) -> list[str]:
+    errors: list[str] = []
+    contract_path = root / "contracts" / "android-foundation.json"
+    if not contract_path.is_file():
+        return ["missing contracts/android-foundation.json"]
+    try:
+        contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return [f"contracts/android-foundation.json is invalid JSON: {exc}"]
+
+    verify_settings(root, errors)
+    verify_module_builds(root, contract, errors)
+    verify_root_build(root, contract, errors)
+    verify_catalog(root, contract, errors)
+    verify_product_boundary(root, errors)
+    verify_activity_boundary(root, errors)
+    verify_manifest(root, errors)
+    verify_vpn_manifest(root, errors)
+    verify_managed_device_boundary(root, errors)
+    verify_chained_availability_authority(root, errors)
+    verify_wrapper(root, contract, errors)
+
+    for obsolete in ("android/core",):
+        if (root / obsolete).exists():
+            errors.append(f"obsolete module remains: {obsolete}")
+    return errors
+
+
+def main(argv: list[str]) -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
+    parser.add_argument("--stale-only", action="store_true")
+    args = parser.parse_args(argv)
+
+    findings = stale_namespace_paths(args.root.resolve())
+    if findings:
+        for path in findings:
+            print(f"{STALE_NAMESPACE} is forbidden in {path}", file=sys.stderr)
+        return 1
+    if args.stale_only:
+        return 0
+    errors = foundation_errors(args.root.resolve())
+    if errors:
+        for error in errors:
+            print(error, file=sys.stderr)
+        return 1
+    print("Android foundation contract verified")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

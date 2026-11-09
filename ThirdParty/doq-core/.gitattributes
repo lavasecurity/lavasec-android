@@ -1,0 +1,2 @@
+# Retain the pinned dependency's legal notice byte-for-byte, including upstream spaces.
+BORINGSSL-LICENSE -whitespace

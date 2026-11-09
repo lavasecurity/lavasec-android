@@ -1,0 +1,46 @@
+{
+  "allowedDomains" : [
+
+  ],
+  "blockedDomains" : [
+
+  ],
+  "customBlocklists" : [
+
+  ],
+  "enabledBlocklistIDs" : [
+
+  ],
+  "fallbackResolverPresetID" : "quad9-unfiltered-dot",
+  "fallbackToDeviceDNS" : false,
+  "keepDomainDiagnostics" : true,
+  "keepFilteringCounts" : true,
+  "keepLavaGuardProgress" : true,
+  "keepNetworkActivity" : true,
+  "lavaGuardUnlocks" : {
+    "records" : [
+
+    ]
+  },
+  "protectionEnabledHint" : false,
+  "resolverPresetID" : "cloudflare-1111-doh",
+  "savedDNSResolutionSelections" : [
+    {
+      "id" : "cloudflare-1111-doh",
+      "isEnabled" : true,
+      "name" : "",
+      "primary" : "",
+      "secondary" : ""
+    },
+    {
+      "id" : "quad9-unfiltered-dot",
+      "isEnabled" : true,
+      "name" : "",
+      "primary" : "",
+      "secondary" : ""
+    }
+  ],
+  "schemaVersion" : 2,
+  "usesEncryptedDeviceDNSFallback" : true,
+  "usesExplicitDNSTiers" : true
+}

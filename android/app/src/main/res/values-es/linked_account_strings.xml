@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Native AccountSheet copy from the frozen iOS 8fbe6ada catalog. -->
+<resources>
+    <string name="linked_account_title">Cuenta</string>
+    <string name="linked_account_sign_out">Cerrar sesión en todas las cuentas</string>
+    <string name="linked_account_delete">Eliminar tu cuenta de Lava</string>
+    <string name="linked_account_confirm_title">¿Eliminar tu cuenta de Lava?</string>
+    <string name="linked_account_confirm_body">Esto elimina la cuenta de Lava con la que has iniciado sesión y su copia de seguridad cifrada de los servidores de Lava. Tus ajustes de protección permanecen en este dispositivo.</string>
+    <string name="linked_account_confirm_delete">Eliminar</string>
+    <string name="linked_account_close">Cerrar</string>
+    <string name="linked_account_cancel">Cancelar</string>
+    <string name="linked_account_failure">Reintentar</string>
+    <string name="linked_account_provider">Cuenta de %1$s</string>
+</resources>

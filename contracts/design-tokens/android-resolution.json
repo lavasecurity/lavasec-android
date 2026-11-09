@@ -1,0 +1,611 @@
+{
+  "canonicalSha256": "fdd5ea879f372b49342b86bbb53f116305d087a88046f055bf2c33df6fc015eb",
+  "source": {
+    "repository": "lavasecurity/lavasec-ios-internal",
+    "commit": "e10aa3c0101cc99511ad667029a32a0bcdc998cf",
+    "path": "design/lava-design-tokens.json"
+  },
+  "contractLeafMappings": {
+    "colors.cardBackground.light": {
+      "sourceValue": [
+        1,
+        1,
+        1
+      ],
+      "status": "resolved",
+      "android": "LavaColors.CardBackground"
+    },
+    "colors.cardBackground.dark": {
+      "sourceValue": [
+        0.17,
+        0.17,
+        0.18
+      ],
+      "status": "resolved",
+      "android": "LavaColors.CardBackgroundDark"
+    },
+    "colors.cream.light": {
+      "sourceValue": [
+        1,
+        0.98,
+        0.94
+      ],
+      "status": "resolved",
+      "android": "LavaColors.Cream"
+    },
+    "colors.cream.dark": {
+      "sourceValue": [
+        0.11,
+        0.1,
+        0.09
+      ],
+      "status": "resolved",
+      "android": "LavaColors.CreamDark"
+    },
+    "colors.dangerRed.light": {
+      "sourceValue": [
+        0.86,
+        0.2,
+        0.18
+      ],
+      "status": "resolved",
+      "android": "LavaColors.Danger"
+    },
+    "colors.dangerRed.dark": {
+      "sourceValue": [
+        1,
+        0.45,
+        0.4
+      ],
+      "status": "resolved",
+      "android": "LavaColors.DangerDark"
+    },
+    "colors.groupedBackground.light": {
+      "sourceValue": [
+        0.96,
+        0.98,
+        0.96
+      ],
+      "status": "resolved",
+      "android": "LavaColors.GroupedBackground"
+    },
+    "colors.groupedBackground.dark": {
+      "sourceValue": [
+        0.04,
+        0.07,
+        0.06
+      ],
+      "status": "resolved",
+      "android": "LavaColors.GroupedBackgroundDark"
+    },
+    "colors.guardianFaceLight.light": {
+      "sourceValue": [
+        1,
+        0.98,
+        0.93
+      ],
+      "status": "resolved",
+      "android": "LavaColors.GuardianFaceLight"
+    },
+    "colors.guardianFaceLight.dark": {
+      "sourceValue": [
+        0.94,
+        0.98,
+        0.95
+      ],
+      "status": "resolved",
+      "android": "LavaColors.GuardianFaceLightDark"
+    },
+    "colors.guardianSleepGray.light": {
+      "sourceValue": [
+        0.67,
+        0.71,
+        0.69
+      ],
+      "status": "resolved",
+      "android": "LavaColors.GuardianSleepGray"
+    },
+    "colors.guardianSleepGray.dark": {
+      "sourceValue": [
+        0.36,
+        0.4,
+        0.38
+      ],
+      "status": "resolved",
+      "android": "LavaColors.GuardianSleepGrayDark"
+    },
+    "colors.ink.light": {
+      "sourceValue": [
+        0.13,
+        0.23,
+        0.2
+      ],
+      "status": "resolved",
+      "android": "LavaColors.Ink"
+    },
+    "colors.ink.dark": {
+      "sourceValue": [
+        0.92,
+        0.96,
+        0.93
+      ],
+      "status": "resolved",
+      "android": "LavaColors.InkDark"
+    },
+    "colors.lavaOrange.light": {
+      "sourceValue": [
+        0.95,
+        0.34,
+        0.18
+      ],
+      "status": "resolved",
+      "android": "LavaColors.LavaOrange"
+    },
+    "colors.lavaOrange.dark": {
+      "sourceValue": [
+        1,
+        0.54,
+        0.34
+      ],
+      "status": "resolved",
+      "android": "LavaColors.LavaOrangeDark"
+    },
+    "colors.lavaOrangeSoft.light": {
+      "sourceValue": [
+        1,
+        0.92,
+        0.86
+      ],
+      "status": "resolved",
+      "android": "LavaColors.LavaOrangeSoft"
+    },
+    "colors.lavaOrangeSoft.dark": {
+      "sourceValue": [
+        0.3,
+        0.13,
+        0.08
+      ],
+      "status": "resolved",
+      "android": "LavaColors.LavaOrangeSoftDark"
+    },
+    "colors.panelActionFill.light": {
+      "sourceValue": [
+        0.82,
+        0.93,
+        0.87
+      ],
+      "status": "resolved",
+      "android": "LavaColors.PanelActionFill"
+    },
+    "colors.panelActionFill.dark": {
+      "sourceValue": [
+        0.12,
+        0.29,
+        0.21
+      ],
+      "status": "resolved",
+      "android": "LavaColors.PanelActionFillDark"
+    },
+    "colors.panelActionGreen.light": {
+      "sourceValue": [
+        0.12,
+        0.4,
+        0.28
+      ],
+      "status": "resolved",
+      "android": "LavaColors.PanelActionGreen"
+    },
+    "colors.panelActionGreen.dark": {
+      "sourceValue": [
+        0.45,
+        0.86,
+        0.63
+      ],
+      "status": "resolved",
+      "android": "LavaColors.PanelActionGreenDark"
+    },
+    "colors.panelActionPressedFill.light": {
+      "sourceValue": [
+        0.75,
+        0.88,
+        0.81
+      ],
+      "status": "resolved",
+      "android": "LavaColors.PanelActionPressedFill"
+    },
+    "colors.panelActionPressedFill.dark": {
+      "sourceValue": [
+        0.15,
+        0.35,
+        0.25
+      ],
+      "status": "resolved",
+      "android": "LavaColors.PanelActionPressedFillDark"
+    },
+    "colors.panelBackground.light": {
+      "sourceValue": [
+        0.98,
+        1,
+        0.98
+      ],
+      "status": "resolved",
+      "android": "LavaColors.PanelBackground"
+    },
+    "colors.panelBackground.dark": {
+      "sourceValue": [
+        0.01,
+        0.05,
+        0.035
+      ],
+      "status": "resolved",
+      "android": "LavaColors.PanelBackgroundDark"
+    },
+    "colors.panelStroke.light": {
+      "sourceValue": [
+        0.72,
+        0.86,
+        0.76
+      ],
+      "status": "resolved",
+      "android": "LavaColors.PanelStroke"
+    },
+    "colors.panelStroke.dark": {
+      "sourceValue": [
+        0.16,
+        0.32,
+        0.24
+      ],
+      "status": "resolved",
+      "android": "LavaColors.PanelStrokeDark"
+    },
+    "colors.quietControl.light": {
+      "sourceValue": [
+        0.38,
+        0.46,
+        0.42
+      ],
+      "status": "resolved",
+      "android": "LavaColors.QuietControl"
+    },
+    "colors.quietControl.dark": {
+      "sourceValue": [
+        0.22,
+        0.3,
+        0.26
+      ],
+      "status": "resolved",
+      "android": "LavaColors.QuietControlDark"
+    },
+    "colors.safeControlGreen.light": {
+      "sourceValue": [
+        0.16,
+        0.47,
+        0.34
+      ],
+      "status": "resolved",
+      "android": "LavaColors.SafeControlGreen"
+    },
+    "colors.safeControlGreen.dark": {
+      "sourceValue": [
+        0.13,
+        0.5,
+        0.32
+      ],
+      "status": "resolved",
+      "android": "LavaColors.SafeControlGreenDark"
+    },
+    "colors.safeGreen.light": {
+      "sourceValue": [
+        0.16,
+        0.47,
+        0.34
+      ],
+      "status": "resolved",
+      "android": "LavaColors.SafeGreen"
+    },
+    "colors.safeGreen.dark": {
+      "sourceValue": [
+        0.45,
+        0.86,
+        0.63
+      ],
+      "status": "resolved",
+      "android": "LavaColors.SafeGreenDark"
+    },
+    "colors.softGreen.light": {
+      "sourceValue": [
+        0.91,
+        0.97,
+        0.94
+      ],
+      "status": "resolved",
+      "android": "LavaColors.SoftGreen"
+    },
+    "colors.softGreen.dark": {
+      "sourceValue": [
+        0.1,
+        0.22,
+        0.17
+      ],
+      "status": "resolved",
+      "android": "LavaColors.SoftGreenDark"
+    },
+    "systemColors.primaryText.ios": {
+      "sourceValue": ".label",
+      "status": "source-only",
+      "android": "Pinned iOS source semantic"
+    },
+    "systemColors.primaryText.android": {
+      "sourceValue": "map to the platform on-surface/secondary/tertiary text color",
+      "status": "native",
+      "android": "MaterialTheme.colorScheme.onSurface"
+    },
+    "systemColors.secondaryText.ios": {
+      "sourceValue": ".secondaryLabel",
+      "status": "source-only",
+      "android": "Pinned iOS source semantic"
+    },
+    "systemColors.secondaryText.android": {
+      "sourceValue": "map to the platform on-surface/secondary/tertiary text color",
+      "status": "native",
+      "android": "MaterialTheme.colorScheme.onSurfaceVariant"
+    },
+    "systemColors.tertiaryText.ios": {
+      "sourceValue": ".tertiaryLabel",
+      "status": "source-only",
+      "android": "Pinned iOS source semantic"
+    },
+    "systemColors.tertiaryText.android": {
+      "sourceValue": "map to the platform on-surface/secondary/tertiary text color",
+      "status": "native",
+      "android": "MaterialTheme.colorScheme.onSurfaceVariant"
+    },
+    "spacing.xs": {
+      "sourceValue": 4,
+      "status": "resolved",
+      "android": "LavaSpacing.xs"
+    },
+    "spacing.sm": {
+      "sourceValue": 8,
+      "status": "resolved",
+      "android": "LavaSpacing.sm"
+    },
+    "spacing.md": {
+      "sourceValue": 12,
+      "status": "resolved",
+      "android": "LavaSpacing.md"
+    },
+    "spacing.lg": {
+      "sourceValue": 16,
+      "status": "resolved",
+      "android": "LavaSpacing.lg"
+    },
+    "spacing.xl": {
+      "sourceValue": 18,
+      "status": "resolved",
+      "android": "LavaSpacing.xl"
+    },
+    "spacing.screenHorizontal": {
+      "sourceValue": 18,
+      "status": "resolved",
+      "android": "LavaSpacing.screenHorizontal"
+    },
+    "spacing.screenTop": {
+      "sourceValue": 16,
+      "status": "resolved",
+      "android": "LavaSpacing.screenTop"
+    },
+    "spacing.screenBottom": {
+      "sourceValue": 96,
+      "status": "resolved",
+      "android": "LavaSpacing.screenBottom"
+    },
+    "radii.cardCornerRadius": {
+      "sourceValue": 20,
+      "status": "resolved",
+      "android": "LavaRadii.card"
+    },
+    "radii.compactCornerRadius": {
+      "sourceValue": 16,
+      "status": "resolved",
+      "android": "LavaRadii.compact"
+    },
+    "radii.selectionCornerRadius": {
+      "sourceValue": 12,
+      "status": "resolved",
+      "android": "LavaRadii.selection"
+    },
+    "radii.controlCornerRadius": {
+      "sourceValue": 12,
+      "status": "resolved",
+      "android": "LavaRadii.control"
+    },
+    "radii.pillCornerRadius": {
+      "sourceValue": 14,
+      "status": "resolved",
+      "android": "LavaRadii.pill"
+    },
+    "radii.iconBadgeCornerRadius": {
+      "sourceValue": 10,
+      "status": "resolved",
+      "android": "LavaRadii.iconBadge"
+    },
+    "iconSizes.badge": {
+      "sourceValue": 10,
+      "status": "resolved",
+      "android": "LavaIconSizes.badge"
+    },
+    "iconSizes.inline": {
+      "sourceValue": 13,
+      "status": "resolved",
+      "android": "LavaIconSizes.inline"
+    },
+    "iconSizes.small": {
+      "sourceValue": 16,
+      "status": "resolved",
+      "android": "LavaIconSizes.small"
+    },
+    "iconSizes.control": {
+      "sourceValue": 17,
+      "status": "resolved",
+      "android": "LavaIconSizes.control"
+    },
+    "iconSizes.endpointCompact": {
+      "sourceValue": 25,
+      "status": "resolved",
+      "android": "LavaIconSizes.endpointCompact"
+    },
+    "iconSizes.endpoint": {
+      "sourceValue": 30,
+      "status": "resolved",
+      "android": "LavaIconSizes.endpoint"
+    },
+    "iconSizes.node": {
+      "sourceValue": 40,
+      "status": "resolved",
+      "android": "LavaIconSizes.node"
+    },
+    "iconSizes.hero": {
+      "sourceValue": 44,
+      "status": "resolved",
+      "android": "LavaIconSizes.hero"
+    },
+    "iconSizes.heroResult": {
+      "sourceValue": 56,
+      "status": "resolved",
+      "android": "LavaIconSizes.heroResult"
+    },
+    "typography.metricNumeral.ios": {
+      "sourceValue": ".system(size: 42, weight: .bold, design: .rounded)",
+      "status": "source-only",
+      "android": "Pinned iOS source typography"
+    },
+    "typography.metricNumeral.usage": {
+      "sourceValue": "overview metric block headline value; pair with monospacedDigit",
+      "status": "resolved",
+      "android": "LavaTypography.metricNumeral"
+    },
+    "typography.metricNumeral.android": {
+      "sourceValue": "map to a rounded bold display style at ~42sp with tabular figures",
+      "status": "resolved",
+      "android": "LavaTypography.metricNumeral"
+    },
+    "tiers.calm.accent": {
+      "sourceValue": "safeGreen",
+      "status": "resolved",
+      "android": "LavaTier.CALM.accent"
+    },
+    "tiers.calm.allowsDelightMotion": {
+      "sourceValue": false,
+      "status": "resolved",
+      "android": "LavaTier.CALM.allowsDelightMotion"
+    },
+    "tiers.calm.usesMonospacedMetadata": {
+      "sourceValue": false,
+      "status": "resolved",
+      "android": "LavaTier.CALM.usesMonospacedMetadata"
+    },
+    "tiers.celebratory.accent": {
+      "sourceValue": "lavaOrange",
+      "status": "resolved",
+      "android": "LavaTier.CELEBRATORY.accent"
+    },
+    "tiers.celebratory.allowsDelightMotion": {
+      "sourceValue": true,
+      "status": "resolved",
+      "android": "LavaTier.CELEBRATORY.allowsDelightMotion"
+    },
+    "tiers.celebratory.usesMonospacedMetadata": {
+      "sourceValue": false,
+      "status": "resolved",
+      "android": "LavaTier.CELEBRATORY.usesMonospacedMetadata"
+    },
+    "tiers.technical.accent": {
+      "sourceValue": "ink",
+      "status": "resolved",
+      "android": "LavaTier.TECHNICAL.accent"
+    },
+    "tiers.technical.allowsDelightMotion": {
+      "sourceValue": false,
+      "status": "resolved",
+      "android": "LavaTier.TECHNICAL.allowsDelightMotion"
+    },
+    "tiers.technical.usesMonospacedMetadata": {
+      "sourceValue": true,
+      "status": "resolved",
+      "android": "LavaTier.TECHNICAL.usesMonospacedMetadata"
+    }
+  },
+  "iosSourceAdditions": {
+    "lavaOrangeText": {
+      "source": "LavaSecApp/LavaDesignSystem/LavaTokens.swift",
+      "light": [
+        0.75,
+        0.25,
+        0.09
+      ],
+      "dark": [
+        1,
+        0.54,
+        0.34
+      ],
+      "android": [
+        "0xFFBF4017",
+        "0xFFFF8A57"
+      ]
+    },
+    "lavaOrangeSelectedFill": {
+      "source": "LavaSecApp/LavaDesignSystem/LavaTokens.swift",
+      "light": [
+        0.78,
+        0.28,
+        0.12
+      ],
+      "dark": [
+        0.68,
+        0.28,
+        0.15
+      ],
+      "android": [
+        "0xFFC7471F",
+        "0xFFAD4726"
+      ]
+    },
+    "navigationBadgeContainer": {
+      "source": "LavaSecApp/LavaDesignSystem/LavaComponents.swift",
+      "sourceValue": 38,
+      "android": "LavaNavigationCardMetrics.badgeSize"
+    }
+  },
+  "androidOnly": {
+    "dynamicColor": "Disabled by default; Android 12+ users may opt in without changing Lava semantic status colors.",
+    "errorRole": "Material light error #B3261E is used for normal-size error text; the pinned danger token remains the semantic danger color.",
+    "motion": "Animator duration scale is observed and exposed through LocalLavaReducedMotion; explicit app/test override wins.",
+    "semanticIcons": "Native project-owned Material-style vectors replace SF Symbols by semantic role.",
+    "shapeFamily": "All five Material 3 shape roles resolve to pinned Lava radii; no baseline 4dp or 28dp corners remain.",
+    "typographyFallback": "sans-serif-rounded is preferred, with native sans-serif as the OEM fallback.",
+    "surfaceFamily": "Every Material 3 surface/elevation, inverse, fixed accent, and active-outline role resolves to the pinned Lava palette; no baseline purple-neutral defaults remain."
+  },
+  "approvedDeviations": [
+    {
+      "id": "DS-ANDROID-001",
+      "area": "icons",
+      "reason": "SF Symbols are Apple-proprietary; Android uses project-owned native vectors with identical semantic roles."
+    },
+    {
+      "id": "DS-ANDROID-002",
+      "area": "dynamic-color",
+      "reason": "Material dynamic color is opt-in on API 31+ while product status semantics remain pinned."
+    },
+    {
+      "id": "DS-ANDROID-003",
+      "area": "error",
+      "reason": "The light Material error role is darker than brand danger red to meet 4.5:1 text contrast."
+    },
+    {
+      "id": "DS-ANDROID-004",
+      "area": "typography",
+      "reason": "OEM font availability requires a rounded-system to system-sans fallback chain."
+    }
+  ]
+}

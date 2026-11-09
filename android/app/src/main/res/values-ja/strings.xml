@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="share_local_activity">ローカルアクティビティの書き出しを共有</string>
+    <string name="send_feedback">フィードバックを送信</string>
+    <string name="app_name">Lava Security</string>
+    <string name="connectivity_problem_notification_channel_name">接続の問題</string>
+    <string name="protection_status_notification_channel_name">保護ステータス</string>
+    <string name="protection_ambient_status_on">Lava Security はオンです</string>
+    <string name="protection_ambient_status_paused">Lava Security は一時停止中です</string>
+    <string name="protection_ambient_status_starting">保護を開始しています…</string>
+    <string name="protection_ambient_status_stopping">保護を停止しています…</string>
+    <string name="protection_ambient_status_reconnect_needed">再接続が必要です</string>
+    <string name="protection_ambient_status_device_fallback">デバイスのDNSフォールバックが有効です</string>
+    <string name="protection_ambient_status_encrypted_fallback">暗号化DNSフォールバックが有効です</string>
+    <string name="protection_ambient_filter_line">フィルター: %1$s</string>
+    <string name="protection_ambient_resolver_line">リゾルバ: %1$s</string>
+    <string name="protection_ambient_provider_device">端末の DNS</string>
+    <string name="protection_ambient_provider_device_fallback">端末の DNS + 暗号化フォールバック</string>
+    <string name="protection_ambient_provider_mullvad">Mullvad</string>
+    <string name="protection_ambient_open_action">Lava を開く</string>
+
+    <string name="backup_setup_title">復元フレーズを保存</string>
+    <string name="backup_setup_confirm_hint">確認のためフレーズを入力</string>
+    <string name="backup_setup_saved_ack">復元フレーズを書き留めました</string>
+    <string name="backup_setup_no_recovery_ack">紛失した場合、Lava は復元できないことを理解しています</string>
+    <string name="backup_setup_confirm_both">続けるには両方の確認にチェックを入れてください。</string>
+    <string name="backup_setup_phrase_mismatch">フレーズが一致しません。つづりと順序を確認してください。</string>
+    <string name="backup_save">保存</string>
+    <string name="backup_restore_title">復元フレーズを入力</string>
+    <string name="backup_restore_hint">復元フレーズ</string>
+    <string name="backup_restore">復元</string>
+    <string name="backup_restore_review_title">このバックアップを復元しますか？</string>
+    <string name="backup_restore_resolver_confirm">バックアップされた DNS の選択を適用</string>
+    <string name="backup_restore_confirm_resolver">続けるには DNS の変更を確認してください。</string>
+
+    <string name="backup_failure_upload_failed">ローカルでは暗号化されていますが、アップロードに失敗しました。もう一度お試しください。</string>
+    <string name="backup_failure_deletion_not_saved">バックアップの削除状態を安全に保存できませんでした。もう一度お試しください。</string>
+    <string name="backup_failure_local_cleanup_incomplete">オンラインバックアップは削除されました。ローカルバックアップの削除を完了できませんでした。もう一度バックアップをオフにしてください。</string>
+    <string name="backup_failure_remote_delete_offline">アカウントのバックアップを削除できませんでした。オフラインかサインアウトしている可能性があります。バックアップはそのまま残されています。オンラインに戻ったら再試行してください。</string>
+    <string name="backup_failure_deletion_pending">バックアップの削除が保留中です。元のアカウントにサインインして、もう一度バックアップをオフにしてください。</string>
+    <string name="backup_failure_state_unavailable">バックアップの状態を確認できません。デバイスのロックを解除して、もう一度お試しください。</string>
+
+    <string name="vpn_restriction_device_ineligible">このデバイスにはチェーン接続に十分なメモリがありません。</string>
+    <string name="vpn_restriction_device_state_unreadable">Lava は現在このデバイスを確認できません。ロックを解除して再試行してください。</string>
+
+    <string name="vpn_configuration_title">VPN構成</string>
+    <string name="vpn_configuration_name">構成名</string>
+    <string name="vpn_configuration_content">WireGuard構成</string>
+    <string name="vpn_configuration_keep_content">空欄にすると保存済みの構成を維持します。</string>
+    <string name="vpn_configuration_import">構成ファイルを読み込む</string>
+    <string name="vpn_configuration_required">WireGuard構成を入力するか、ファイルから読み込んでください。</string>
+    <string name="vpn_configuration_invalid">このWireGuard構成は無効です。</string>
+    <string name="vpn_configuration_import_failed">構成ファイルを読み込めませんでした。</string>
+    <string name="vpn_configuration_import_too_large">このファイルは 64 KB を超えており、WireGuard 設定としては大きすぎます。別のファイルではありませんか？</string>
+    <string name="vpn_configuration_import_not_text">このファイルはテキストではないため、WireGuard 設定ではありません。</string>
+    <string name="backup_restore_method_title">バックアップから復元</string>
+    <string name="backup_restore_method_device">このデバイスの鍵を使う</string>
+    <string name="backup_restore_method_recovery">復元フレーズ</string>
+    <string name="backup_restore_method_passkey">パスキー</string>
+    <string name="backup_passkey_consent_title">パスキーを設定しますか？</string>
+    <string name="backup_passkey_consent_message">画面ロックを使って、別のデバイスでこのバックアップを解除します。</string>
+    <string name="backup_passkey_consent_confirm">パスキーを使う</string>
+    <string name="backup_passkey_consent_skip">パスキーなしで続ける</string>
+    <string name="backup_restore_review_summary">変更されるフィルター：%1$d。設定と DNS の選択が置き換わります。</string>
+    <string name="backup_restore_review_guard_unlocks">解除済みの Lava Guards：%1$d → %2$d</string>
+    <string name="protection_ambient_status_plain_fallback">オン · 平文DNSフォールバック</string>
+</resources>

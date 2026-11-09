@@ -1,0 +1,33 @@
+<resources>
+    <color name="lava_rn_safegreen">#ff246743</color>
+    <color name="lava_rn_safecontrolgreen">#ff286b45</color>
+    <color name="lava_rn_softgreen">#ffe0ecda</color>
+    <color name="lava_rn_panelactiongreen">#ff246743</color>
+    <color name="lava_rn_panelactionfill">#ffe0ecda</color>
+    <color name="lava_rn_panelactionpressedfill">#ffd1e2c9</color>
+    <color name="lava_rn_quietcontrol">#ff59685b</color>
+    <color name="lava_rn_lavaorange">#fff2572e</color>
+    <color name="lava_rn_lavaorangesoft">#ffffebdb</color>
+    <color name="lava_rn_lavaorangetext">#ffbf4017</color>
+    <color name="lava_rn_lavaorangeselectedfill">#ffc7471f</color>
+    <color name="lava_rn_cream">#fffffaf1</color>
+    <color name="lava_rn_ink">#ff263a2b</color>
+    <color name="lava_rn_primarytext">#ff263a2b</color>
+    <color name="lava_rn_navigationforeground">#ff000000</color>
+    <color name="lava_rn_secondarytext">#ff59685b</color>
+    <color name="lava_rn_tertiarytext">#ff68756a</color>
+    <color name="lava_rn_groupedbackground">#fffaf8f0</color>
+    <color name="lava_rn_cardbackground">#fff0eee3</color>
+    <color name="lava_rn_panelbackground">#fff0eee3</color>
+    <color name="lava_rn_panelstroke">#ffc7d4c5</color>
+    <color name="lava_rn_guardiansleepgray">#ffabb5b0</color>
+    <color name="lava_rn_guardianfacelight">#fffffaed</color>
+    <color name="lava_rn_dangerred">#ffdb332e</color>
+    <color name="lava_rn_errortext">#ffdb332e</color>
+    <color name="lava_rn_confirmationbuttontint">#ff263a2b</color>
+    <color name="lava_rn_actionforeground">#fffffaf1</color>
+    <color name="lava_rn_pressedsurface">#ffe3e5d9</color>
+    <color name="lava_rn_disabledsurface">#ffe5e5da</color>
+    <color name="lava_rn_separator">#ffd2d6ca</color>
+    <color name="lava_rn_focusring">#ff246743</color>
+</resources>

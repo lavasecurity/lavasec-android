@@ -1,0 +1,34 @@
+{
+  "revision": "4e552f33ab973c32539071f327803198f40279f5",
+  "files": {
+    "review/ActivityScreen.tsx": "41ec1650ee18e580aec7b9ef6837d19ff12b11fdfabb9387ef65e88909627961",
+    "review/local-log-actions.ts": "33abe52affed7b22b3cfd8341f6d3e6865bb1269ec9dd0ee99ed02e713f4b285",
+    "review/ContextMenu.tsx": "04f8412959dd5d17a09810630686424f72102bd56b12ab5304c1bbe238754235",
+    "review/PresentationCover.tsx": "8afbcdfb3d9fe3705ab377c61d8bbae6fa26a9001003543650cd3b866157791e",
+    "review/activity-scaffold.tsx": "5a99f3f729040a20eefbb5176cab3f18428317c9fa0cc82eed65e75431cacc74",
+    "review/detail-scaffold.tsx": "18f6eb59520f2a7e33490265b939ecbda4d44f17f4938ff1c313cd4f84eaced9",
+    "review/paging-scaffold.tsx": "5d3245a339af6b63d82381893c50b585ad2120577ccfa32edc2fd0aa730dc908",
+    "review/guard-material.tsx": "53f66004a8ad8eb64df6f4258777fde34683f1d3746e01436deda5a19c7f3089",
+    "review/onboarding-scaffold.tsx": "075c69cdaeb42a111bf9e60e15c642abf40dd2dd7702cf361c4829db247047b4",
+    "review/onboarding-motion.ts": "40c6bfe75d86b1501109e5284a3fd6bd619469df099b946c56ff463b6e5a3113",
+    "app/text-metrics.ts": "fdebdb102c57c801f06213282d5fc83e4f7d07c9887ff49bab5caa0cb3cce40c",
+    "app/presentation.tsx": "3c73d91cefa17dfb941615ccddbd491598eb37f0bfa58237204e0e6f1cb2fa28",
+    "src/OnboardingDrawing.tsx": "a59cf7c1c13c465b97ba2153dedc7b0bf8430e9d174b0779c288d551f6c9fa27",
+    "src/LavaDiscoveryDot.tsx": "f0af018e8061cd6c6d23d397f4d4b4207d633eb3d4b946ac0063650fedc52c04",
+    "src/flows/preparation/PreparationScreen.tsx": "1b4a5abdbd2e898a3c98772f76c6d50cada78be90d7e6fe302b2dfb0ae6b60f6",
+    "src/flows/preparation/motion.ts": "ff39c4870bb018b8978091f719747a58164b2afa0e9ad38f3c6e3df588d0f6bd",
+    "src/flows/SetupSection.tsx": "c27c79e6f726a12916bd4adcf739583631f439507eec9e146a639a48b274716c",
+    "src/flows/dns-help/DNSHelpScreen.tsx": "3b869e577ae34df08f6c21e6030a8f4f48b26ff35c40a39b991a9831844cbf5b",
+    "src/GuardianDrawing.tsx": "305250978a19a0f4965eb98f7820601006a41ed3af7f6b230235f07873f372fa",
+    "src/guardian-motion.ts": "2c74bc6be9717405ffdb1ec35132090b1d955b9283236bae490f1a8721a4b7b9"
+  },
+  "functions": {
+    "review/SettingsScreens.tsx#PrivacyScreen": "c35532f3629319dec72abd966cebec9d732872f5a05f5775159a41aa99e2bf17",
+    "review/settings-scaffold.tsx#SetupSection": "aaaae2c2724e0067a7fc5b5eb5e7e5ec2219e94177ef761f733f11dd67dfd972",
+    "review/DiagnosticScreens.tsx#StatsScreen": "3c1e0ccc0265e61cf074d137b5d63055ca662cdd316245ee373e48cfd48fb0c4"
+  },
+  "guardRows": "26e2095787157eb559632495f5e0eeba725cd0e7ae2554033d055dddc48f0aab",
+  "calls": {
+    "review/FilterScreens.tsx#Photo": "fd6cf2c8c8628dc9c717b8e276da3c0ad7e18a217c05480ca83ccefd10cd6195"
+  }
+}

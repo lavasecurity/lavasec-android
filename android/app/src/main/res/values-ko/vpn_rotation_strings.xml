@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vpn_rotation_awaiting_restart">VPN 연결은 시작할 때의 구성을 계속 사용하고 있습니다. 방금 저장한 구성으로 전환하려면 보호를 껐다가 다시 켜세요.</string>
+    <string name="vpn_rotation_running_removed">VPN 연결은 삭제한 구성을 계속 사용하며 보호를 중지할 때까지 유지됩니다. 보호를 끄거나 대신 사용할 구성을 가져오세요.</string>
+</resources>

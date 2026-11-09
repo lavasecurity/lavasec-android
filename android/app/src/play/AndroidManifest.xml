@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <queries>
+        <intent>
+            <action android:name="android.service.credentials.CredentialProviderService" />
+        </intent>
+    </queries>
+    <application>
+        <!-- Supabase Apple browser OAuth. The request/verifier is process-only; callbacks without
+             an exact pending path-bound state are refused, including after process loss. -->
+        <activity
+            android:name=".account.AppleOAuthBrowserActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".account.AppleOAuthCallbackActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="${applicationId}.auth"
+                    android:host="oauth"
+                    android:pathPrefix="/apple/" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

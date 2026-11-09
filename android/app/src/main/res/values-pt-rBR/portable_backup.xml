@@ -1,0 +1,17 @@
+<resources>
+    <string name="portable_backup_export_title">Exportar backup local criptografado</string>
+    <string name="portable_backup_import_title">Importar backup local criptografado</string>
+    <string name="portable_backup_password">Senha do backup</string>
+    <string name="portable_backup_password_confirm">Confirmar senha</string>
+    <string name="portable_backup_password_invalid">Use pelo menos 8 caracteres, um número e um símbolo. As duas senhas devem ser iguais.</string>
+    <string name="portable_backup_import_password">Digite a senha usada ao exportar este arquivo. Não é necessário ter uma conta nem conexão com a internet.</string>
+    <string name="portable_backup_export_summary">Inclui filtros, regras, URLs das fontes, endpoints DNS, preferências de retenção e Lava Guards desbloqueados, todos criptografados. As URLs dos endpoints podem conter credenciais de rede. Tokens de conta, compras, chaves privadas e histórico de atividades não são incluídos. Guarde a senha em segurança: a Lava não pode recuperá-la. Play e FOSS não compartilham dados automaticamente. Instalar o FOSS não cancela uma assinatura do Play.</string>
+    <string name="portable_backup_restore_summary">Revise as configurações deste arquivo. Você pode salvar o arquivo criptografado para depois mesmo sem conexão. Aplicá-lo pode exigir o download de fontes e está sujeito aos limites de recursos desta edição. A proteção deste dispositivo permanece como está. Contas, compras, chaves privadas e histórico não são transferidos.</string>
+    <string name="portable_backup_restore_now">Restaurar agora</string>
+    <string name="portable_backup_save_for_later">Salvar para depois</string>
+    <string name="portable_backup_pending_discard_title">Descartar o backup pendente?</string>
+    <string name="portable_backup_pending_discard_message">Excluir deste dispositivo a importação criptografada salva. As configurações atuais e o arquivo de backup original permanecerão inalterados.</string>
+    <string name="portable_backup_pending_replace_title">Substituir o backup pendente?</string>
+    <string name="portable_backup_pending_replace_message">Substituir a importação criptografada salva neste dispositivo por este arquivo. As configurações atuais permanecerão inalteradas.</string>
+    <string name="portable_backup_import_password_required">Insira a senha do backup.</string>
+</resources>

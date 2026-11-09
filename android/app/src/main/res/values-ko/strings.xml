@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="share_local_activity">로컬 활동 내보내기 공유</string>
+    <string name="send_feedback">의견 보내기</string>
+    <string name="app_name">Lava Security</string>
+    <string name="connectivity_problem_notification_channel_name">연결 문제</string>
+    <string name="protection_status_notification_channel_name">보호 상태</string>
+    <string name="protection_ambient_status_on">Lava Security이 켜져 있어요</string>
+    <string name="protection_ambient_status_paused">Lava Security이 일시 중지됐어요</string>
+    <string name="protection_ambient_status_starting">보호 시작 중…</string>
+    <string name="protection_ambient_status_stopping">보호 중지 중…</string>
+    <string name="protection_ambient_status_reconnect_needed">다시 연결 필요</string>
+    <string name="protection_ambient_status_device_fallback">기기 DNS 대체가 켜져 있습니다</string>
+    <string name="protection_ambient_status_encrypted_fallback">암호화된 DNS 대체 연결이 켜져 있습니다</string>
+    <string name="protection_ambient_filter_line">필터: %1$s</string>
+    <string name="protection_ambient_resolver_line">리졸버: %1$s</string>
+    <string name="protection_ambient_provider_device">기기 DNS</string>
+    <string name="protection_ambient_provider_device_fallback">기기 DNS + 암호화된 대체 연결</string>
+    <string name="protection_ambient_provider_mullvad">Mullvad</string>
+    <string name="protection_ambient_open_action">Lava 열기</string>
+
+    <string name="backup_setup_title">복구 문구 저장</string>
+    <string name="backup_setup_confirm_hint">확인을 위해 문구를 입력하세요</string>
+    <string name="backup_setup_saved_ack">복구 문구를 적어 두었습니다</string>
+    <string name="backup_setup_no_recovery_ack">분실하면 Lava가 대신 복구할 수 없음을 이해합니다</string>
+    <string name="backup_setup_confirm_both">계속하려면 두 확인란을 모두 선택하세요.</string>
+    <string name="backup_setup_phrase_mismatch">문구가 일치하지 않습니다. 철자와 순서를 확인하세요.</string>
+    <string name="backup_save">저장</string>
+    <string name="backup_restore_title">복구 문구 입력</string>
+    <string name="backup_restore_hint">복구 문구</string>
+    <string name="backup_restore">복원</string>
+    <string name="backup_restore_review_title">이 백업을 복원할까요?</string>
+    <string name="backup_restore_resolver_confirm">백업된 DNS 선택 적용</string>
+    <string name="backup_restore_confirm_resolver">계속하려면 DNS 변경을 확인하세요.</string>
+
+    <string name="backup_failure_upload_failed">로컬에서 암호화되었지만 업로드에 실패했습니다. 다시 시도하세요.</string>
+    <string name="backup_failure_deletion_not_saved">백업 삭제 상태를 안전하게 저장하지 못했습니다. 다시 시도하세요.</string>
+    <string name="backup_failure_local_cleanup_incomplete">온라인 백업을 삭제했습니다. 로컬 백업 정리를 완료하지 못했습니다. 백업 끄기를 다시 시도하세요.</string>
+    <string name="backup_failure_remote_delete_offline">계정에 저장된 백업을 삭제하지 못했습니다. 오프라인이거나 로그아웃 상태일 수 있습니다. 백업은 그대로 유지됩니다. 다시 온라인이 되면 재시도하세요.</string>
+    <string name="backup_failure_deletion_pending">백업 삭제가 보류 중입니다. 원래 계정에 로그인한 후 백업 끄기를 다시 시도하세요.</string>
+    <string name="backup_failure_state_unavailable">백업 상태를 확인할 수 없습니다. 기기 잠금을 해제한 후 다시 시도하세요.</string>
+
+    <string name="vpn_restriction_device_ineligible">이 기기에는 체이닝을 위한 메모리가 충분하지 않습니다.</string>
+    <string name="vpn_restriction_device_state_unreadable">Lava가 지금 이 기기를 확인할 수 없습니다. 잠금을 해제하고 다시 시도하세요.</string>
+
+    <string name="vpn_configuration_title">VPN 구성</string>
+    <string name="vpn_configuration_name">구성 이름</string>
+    <string name="vpn_configuration_content">WireGuard 구성</string>
+    <string name="vpn_configuration_keep_content">저장된 구성을 유지하려면 비워 두세요.</string>
+    <string name="vpn_configuration_import">구성 파일 가져오기</string>
+    <string name="vpn_configuration_required">WireGuard 구성을 입력하거나 가져오세요.</string>
+    <string name="vpn_configuration_invalid">이 WireGuard 구성은 유효하지 않습니다.</string>
+    <string name="vpn_configuration_import_failed">구성 파일을 읽을 수 없습니다.</string>
+    <string name="vpn_configuration_import_too_large">이 파일은 64KB보다 커서 WireGuard 설정 파일로는 너무 큽니다. 다른 파일을 선택한 것 아닌가요?</string>
+    <string name="vpn_configuration_import_not_text">이 파일은 텍스트 파일이 아니므로 WireGuard 구성 파일이 아닙니다.</string>
+    <string name="backup_restore_method_title">백업에서 복원</string>
+    <string name="backup_restore_method_device">이 기기의 키 사용</string>
+    <string name="backup_restore_method_recovery">복구 문구</string>
+    <string name="backup_restore_method_passkey">패스키</string>
+    <string name="backup_passkey_consent_title">패스키를 설정할까요?</string>
+    <string name="backup_passkey_consent_message">화면 잠금을 사용해 다른 기기에서 이 백업의 잠금을 해제하세요.</string>
+    <string name="backup_passkey_consent_confirm">패스키 사용</string>
+    <string name="backup_passkey_consent_skip">패스키 없이 계속</string>
+    <string name="backup_restore_review_summary">변경되는 필터: %1$d. 설정과 DNS 선택이 대체됩니다.</string>
+    <string name="backup_restore_review_guard_unlocks">잠금 해제된 Lava Guards: %1$d → %2$d</string>
+    <string name="protection_ambient_status_plain_fallback">켜짐 · 일반 DNS 대체 경로</string>
+</resources>

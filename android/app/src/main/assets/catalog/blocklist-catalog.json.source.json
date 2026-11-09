@@ -1,0 +1,10 @@
+{
+  "repository": "lavasecurity/lavasec-filters",
+  "commit": "f02537e62428aabfc98a36d57d29c9a64b3d1081",
+  "blob": "587c34de8ea62e3e0d48bd9932624ff59b37aa00",
+  "sha256": "73f9e145092a71f869df90b0b758949b3fa8453fe22d4b942503c8d8494d74c6",
+  "onboarding_recommended_source_ids": [
+    "blocklistproject-basic",
+    "stevenblack-unified"
+  ]
+}

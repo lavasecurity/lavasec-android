@@ -1,0 +1,1340 @@
+{
+  "files": {
+    "ThirdParty/doq-core/tests/fixtures/resolver.crt": {
+      "bytes": 1172,
+      "purpose": "Public synthetic TLS fixture; never a production identity",
+      "sha256": "973d725e6490ea8d454b78be5db12719b77204d94fe45847ae11778116e921c4"
+    },
+    "ThirdParty/doq-core/tests/fixtures/resolver.key": {
+      "bytes": 1704,
+      "purpose": "Public synthetic TLS fixture; never a production identity",
+      "sha256": "e84d5af0054426d992ee53692131f8fd57581d4c42420bfc9bd3636f7ce1142e"
+    },
+    "ThirdParty/doq-core/tests/fixtures/untrusted.crt": {
+      "bytes": 1131,
+      "purpose": "Public synthetic TLS fixture; never a production identity",
+      "sha256": "880203524266edf3936803c5b6bc2713816b91cade82e74f739e3e6df64fc9fc"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-intro.de.ogg": {
+      "bytes": 31110,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "ec9181ed539afaf0eb52c6090ebfd4b91d636f7a7e97a3bb89bc1ae98209b246"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-intro.en.ogg": {
+      "bytes": 28964,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "d7fce15d4f6cc417c9748e45686caff73df1079fbf6d124ffc348e886e4b9275"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-intro.es.ogg": {
+      "bytes": 27325,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "c01831c5e84042568ab32bbfbf1d26c6b13b5f66f519245b38cd8da1cb5ded6d"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-intro.fr.ogg": {
+      "bytes": 28026,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "dad92790971373d4553ff208834d6949d92efa15e9cd39944b70edf597effaea"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-intro.it.ogg": {
+      "bytes": 30137,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "35ad9c60803f0a0b2145decf35d08c2915e45f4e4010ad0d1474758987a03d46"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-intro.ja.ogg": {
+      "bytes": 37064,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "159f8b392fb778bfbca93e14dfe36bed919a51704a5c9dadd7e6c69527b4b6a4"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-intro.ko.ogg": {
+      "bytes": 25227,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "0fbfae8fca6384e24f71ce26e4d3eebe42a21f6867cd1f002083d6334f43aa03"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-intro.pt-BR.ogg": {
+      "bytes": 32379,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "61cb3f53689a19ed3c3fb5dd00d957c382db7cb00646722e6bbfa6d2383a8050"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-intro.zh-Hans.ogg": {
+      "bytes": 35893,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "0cbd93370f41631855ec29c08fd366359953bcf095ae4b37d868c1756160120e"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-intro.zh-Hant.ogg": {
+      "bytes": 38364,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "6cbbc197681440ea6b782debe6edf3f8e130031961fc8ca9b6720b4273eebda4"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-pass.de.ogg": {
+      "bytes": 25990,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "596a3776e08879b76c0ed5d518000b9928dad9d2641920c2de59103222911ed3"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-pass.en.ogg": {
+      "bytes": 26777,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "edc00a7c01f649f5db81900617bc4b591319cb5e7b33b48e3ad5f30b25bf4337"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-pass.es.ogg": {
+      "bytes": 26625,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "766415c210d8fbd789817af72f83408d5188753dbbc19d069b47213afb17824a"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-pass.fr.ogg": {
+      "bytes": 26438,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "c95b12f829f5db668d8586e399f1ce4ee427f4fba5518453e098977f042ed18f"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-pass.it.ogg": {
+      "bytes": 28457,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "e745a911455bd875e5db5436f419b8f2bbd54db63b7f9dfbae2eedae433935d9"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-pass.ja.ogg": {
+      "bytes": 27064,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "69dce5538d606bfe8e2046fd4620193159d6a5afaaa72a5181dce01c26a2518c"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-pass.ko.ogg": {
+      "bytes": 23360,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "12beff5191fbf852f01490dbff01bbd2ff80d5deea151ac4e10bfa0dacce5e00"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-pass.pt-BR.ogg": {
+      "bytes": 28925,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "53a2f988ac0fdef55123cb44455a42eeb69f6afc4fd7bac6b2167a7d3eddb917"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-pass.zh-Hans.ogg": {
+      "bytes": 31106,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "8e08e1de17dfb77d474ef7cd005f33598a4a62aa052b2b1fc5b9e237e50e968f"
+    },
+    "android/app/src/main/assets/ExploreNarration/allowed-pass.zh-Hant.ogg": {
+      "bytes": 30788,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "fad522bebe87393b05d5dbd52e78d2f4656a62ab0c20b2e1e3f1860506870bd0"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-intro.de.ogg": {
+      "bytes": 32401,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "3323d98aa762516df986ad61539c83ebe1112abfb96c0a35d2f3eee24cdbc319"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-intro.en.ogg": {
+      "bytes": 28872,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "31d542bb43c70dd4520cfe10dd8ffe7ca2810718637fa264a008836acfdf994c"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-intro.es.ogg": {
+      "bytes": 31213,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "a4e4ef90437f0fef9ca27c47f68afc5e7d1fc69dfa3136736cf8c89ab2067852"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-intro.fr.ogg": {
+      "bytes": 30211,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "9dc076b4dee14418239b36e68db6a9d5eec2bbf98a8961796c9f720ce828ec96"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-intro.it.ogg": {
+      "bytes": 29276,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "14f82ad8f874155a7de3c50a73cd995f2e994696b9ac9289202933c83a9576d8"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-intro.ja.ogg": {
+      "bytes": 30213,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "e88247e98132f2f62e64690dd7a5b786981ea9c61e55094ed5890f4e28852946"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-intro.ko.ogg": {
+      "bytes": 23611,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "7edc2d1546b3b17a212966523426afef46099f39f73750dfbdf5455054483677"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-intro.pt-BR.ogg": {
+      "bytes": 29694,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "525e24eda3b65731beb186148a67a784633a5512561edde801225ce6a81a7e45"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-intro.zh-Hans.ogg": {
+      "bytes": 34150,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "0edab12f5315f119104db565211698956713424b069524c4eff4b28cba49fb53"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-intro.zh-Hant.ogg": {
+      "bytes": 36415,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "7e41c654ccc2b36a87d942bfd23563a674e15a5a03217e1d7b26abe843ed42ab"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-stop.de.ogg": {
+      "bytes": 34644,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "ece4df33ddb15280854d2aac5dfd310cbfa936d6e5a3689933a8542994307eb9"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-stop.en.ogg": {
+      "bytes": 37145,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "a680dbe34134853a52ae4fe9cd25b9de7de5d30687097abc1b5a1a8cb59e432e"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-stop.es.ogg": {
+      "bytes": 32771,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "42bb0fe232dba529eeab64e9958e1e3cdca770c4f15d02565fa02055f483a16c"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-stop.fr.ogg": {
+      "bytes": 29746,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "7c220e1406a62288e93edf050d35c38a2cc00abcf5cf24131512c01adbb3b7ff"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-stop.it.ogg": {
+      "bytes": 34511,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "99b651172c94fd8a46f4b28c8cf6705564a0860816ab2c1e84b753744f438e30"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-stop.ja.ogg": {
+      "bytes": 33667,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "6478f287a977aa5988b2a166bf0872f82c365e909555b135cc0dab4e5b8d6b10"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-stop.ko.ogg": {
+      "bytes": 32531,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "8d86bc31ec7fce234dac86c53d6003252d5b53f9ca996f8e876589ba89e38e03"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-stop.pt-BR.ogg": {
+      "bytes": 39071,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "94f2c69b0b72a22d69c401b513064eec0127d1ca881a6cc844629dcca2fb466d"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-stop.zh-Hans.ogg": {
+      "bytes": 37046,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "0074119ae23c8a84716c9cd48458a24b1d972b101e565d63a9b7f923c3fb413c"
+    },
+    "android/app/src/main/assets/ExploreNarration/blocked-stop.zh-Hant.ogg": {
+      "bytes": 36210,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "7c61e7e88fa811e6595a8ee7ac1df25abc3a4e8cb4c1d34ef22b954c6694e7fb"
+    },
+    "android/app/src/main/assets/ExploreNarration/device.de.ogg": {
+      "bytes": 34578,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "ae8fd2ac920aab464be9e47f6ce5b3e5190e82c210fd1d7212ad3774fbdc01e8"
+    },
+    "android/app/src/main/assets/ExploreNarration/device.en.ogg": {
+      "bytes": 43142,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "0f89d273ea07263fc3e560df5b4373c01dd0c916493dfc33e9f7c9c8995bc02e"
+    },
+    "android/app/src/main/assets/ExploreNarration/device.es.ogg": {
+      "bytes": 35612,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "5e256b66d607ce3571680c2944375107fb9ac22ed8963b4830cbe8ccaab42783"
+    },
+    "android/app/src/main/assets/ExploreNarration/device.fr.ogg": {
+      "bytes": 30672,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "aa00fe09bb0c2c27d72243d4e76924bb941140ec3fc7d90e991d644a6179e2f7"
+    },
+    "android/app/src/main/assets/ExploreNarration/device.it.ogg": {
+      "bytes": 42723,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "b41e331f1e42faa17eea0a89f95ec6f7caab318e7c8ef33340267c4b4703dfb3"
+    },
+    "android/app/src/main/assets/ExploreNarration/device.ja.ogg": {
+      "bytes": 43328,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "110296968acb92d452e50857f47d3657876a1709c82b4537bad8da8159246d6b"
+    },
+    "android/app/src/main/assets/ExploreNarration/device.ko.ogg": {
+      "bytes": 36768,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "64c97b0cf028dccd0ce1f6ea4b7985e8e304a14fc208df30714ddb5ac9229fe1"
+    },
+    "android/app/src/main/assets/ExploreNarration/device.pt-BR.ogg": {
+      "bytes": 42408,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "2670731092a18678a351910c3c485efc0110401620b49576fea788d5e806d31b"
+    },
+    "android/app/src/main/assets/ExploreNarration/device.zh-Hans.ogg": {
+      "bytes": 43470,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "5c57e756dde3c1b04c2fa5293b1c6cf2edd87a2ed56d58e88894020a02c392db"
+    },
+    "android/app/src/main/assets/ExploreNarration/device.zh-Hant.ogg": {
+      "bytes": 47079,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "619033e9d1592c45ba6819a9d1a9c5296bb9afc4637329db613cdab675fe7b9b"
+    },
+    "android/app/src/main/assets/ExploreNarration/dns-choice.de.ogg": {
+      "bytes": 25491,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "20561ac7334a1d92f653d49d06ee0bb76a8d708be8627fdbedc09e6104aac40a"
+    },
+    "android/app/src/main/assets/ExploreNarration/dns-choice.en.ogg": {
+      "bytes": 28335,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "f43b32717595ea3313aa6f1930f54d84014cd1d64a1d277d3e7c41cc000be859"
+    },
+    "android/app/src/main/assets/ExploreNarration/dns-choice.es.ogg": {
+      "bytes": 27675,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "563955044cc7f74a34adf3bf694c1e29a453e02a842738fea469a7d38c745f09"
+    },
+    "android/app/src/main/assets/ExploreNarration/dns-choice.fr.ogg": {
+      "bytes": 26998,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "5f42fe85b5238cdcbf27ca9d0e463fd31c9ccfc57bfb37194ab48516b69644aa"
+    },
+    "android/app/src/main/assets/ExploreNarration/dns-choice.it.ogg": {
+      "bytes": 31065,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "82e5888dc5f5b17443b1c100cdad04581be29d4fae21c215f2fb32e0f3730130"
+    },
+    "android/app/src/main/assets/ExploreNarration/dns-choice.ja.ogg": {
+      "bytes": 36778,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "7ac53c6636daa9606b38a02007427eec0d02268d5f7d49906fc614b30832e342"
+    },
+    "android/app/src/main/assets/ExploreNarration/dns-choice.ko.ogg": {
+      "bytes": 28284,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "0de1f81aac9b67561b94d3e846a39ed70d63a4c8c8e39eb58b63d080feaa7409"
+    },
+    "android/app/src/main/assets/ExploreNarration/dns-choice.pt-BR.ogg": {
+      "bytes": 30391,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "bda9d80f446aae58cd6956c4a712690f7c9f8973bf67039a3e15e8086d23dca3"
+    },
+    "android/app/src/main/assets/ExploreNarration/dns-choice.zh-Hans.ogg": {
+      "bytes": 30582,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "67dc3dd282e70a2a12e42fe531ca31a6ef927f881fb634eabbb98274b3a54723"
+    },
+    "android/app/src/main/assets/ExploreNarration/dns-choice.zh-Hant.ogg": {
+      "bytes": 31995,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "18836c30347661557b15081828a472f21089cf30a2135f56a5cf25f1a819bc12"
+    },
+    "android/app/src/main/assets/ExploreNarration/ending.de.ogg": {
+      "bytes": 29334,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "2a3320b93f485775d3ef9904f66d03592c47c375bc2040e116033e9ee7a9e8a9"
+    },
+    "android/app/src/main/assets/ExploreNarration/ending.en.ogg": {
+      "bytes": 28386,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "3c86467652e88403adc819bf39544cde6d9b2a6179203a1ed697e0dd06ea0193"
+    },
+    "android/app/src/main/assets/ExploreNarration/ending.es.ogg": {
+      "bytes": 25581,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "231b614ef99a394b904ed14094cab4a05aa8e54b04cb9ce7b31c0c985866975f"
+    },
+    "android/app/src/main/assets/ExploreNarration/ending.fr.ogg": {
+      "bytes": 22322,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "31ac896c87148fa4707f6c8bf29ee943d53d8f44fdd5c00bb25a81c033f22267"
+    },
+    "android/app/src/main/assets/ExploreNarration/ending.it.ogg": {
+      "bytes": 29791,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "0ef0e96ab3bc5483e4cfc42c7a7999af230f10fef381aa7227451107b928785f"
+    },
+    "android/app/src/main/assets/ExploreNarration/ending.ja.ogg": {
+      "bytes": 35097,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "79a4483f14076dbb1fac1af0da50b7c36cdc9e84dafa884dbbaf1f597d8b1e68"
+    },
+    "android/app/src/main/assets/ExploreNarration/ending.ko.ogg": {
+      "bytes": 33764,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "9f47c3c87a8ded55eecb6be11c0efaecef1a941c26deab17ab49913586d3ab43"
+    },
+    "android/app/src/main/assets/ExploreNarration/ending.pt-BR.ogg": {
+      "bytes": 31012,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "efad68e418ed686ae9db2c594615f176a7938eff899642d24ca02af977a03a45"
+    },
+    "android/app/src/main/assets/ExploreNarration/ending.zh-Hans.ogg": {
+      "bytes": 30132,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "d2ebecddd394a0a3bdf255087084fb8b096a9fd428a1a5563a9c815e3e1f2010"
+    },
+    "android/app/src/main/assets/ExploreNarration/ending.zh-Hant.ogg": {
+      "bytes": 32367,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "29bfb0b8eb507f4fa293dc14d163dccb062601fa6ecee6a0b09a6c98090666c0"
+    },
+    "android/app/src/main/assets/ExploreNarration/filter-policy.de.ogg": {
+      "bytes": 36337,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "6fc98a0bc72722c17b5088c2fc54de8173cfe72109d5cafbabaa81e7bc4e654c"
+    },
+    "android/app/src/main/assets/ExploreNarration/filter-policy.en.ogg": {
+      "bytes": 34994,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "f70a2c57bc286149a19d71867e9095388021ea7bd9d2acd063324c72c7ae5e39"
+    },
+    "android/app/src/main/assets/ExploreNarration/filter-policy.es.ogg": {
+      "bytes": 32454,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "c5dc1d30b309816da71820c8cebe562604ce87023230f67cc904c786381903a0"
+    },
+    "android/app/src/main/assets/ExploreNarration/filter-policy.fr.ogg": {
+      "bytes": 45118,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "7d488f6e5701154c0342e7f8caf5540f774ece24001bfbd8477eff9d94e2f79e"
+    },
+    "android/app/src/main/assets/ExploreNarration/filter-policy.it.ogg": {
+      "bytes": 32509,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "23a7c2e92c961ddc554841b99e5619ad3b5766fa84aa4151a390c7969a25c251"
+    },
+    "android/app/src/main/assets/ExploreNarration/filter-policy.ja.ogg": {
+      "bytes": 35143,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "9c80cebc6436f02cd214dbd8b5ed7a3e5897e070e052e6d73a6d61f34764f895"
+    },
+    "android/app/src/main/assets/ExploreNarration/filter-policy.ko.ogg": {
+      "bytes": 31498,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "1db17a8462e857781b9e405fab0b67f18b85ffa00066421d0a7a7ae9397ded36"
+    },
+    "android/app/src/main/assets/ExploreNarration/filter-policy.pt-BR.ogg": {
+      "bytes": 33488,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "cd542cebf74c773e2f2bdf92de972cd39e821c2b83abf12d81a8094501da11d5"
+    },
+    "android/app/src/main/assets/ExploreNarration/filter-policy.zh-Hans.ogg": {
+      "bytes": 43150,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "7bdecea99b5a8c715d7a5922b4eff25e6aa758c285c0a1de51ea7b5d6fa4fb34"
+    },
+    "android/app/src/main/assets/ExploreNarration/filter-policy.zh-Hant.ogg": {
+      "bytes": 43992,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "a3404099ece16974b49dc6c4eb74cf5daa1de8ee6e8458e4708eddcc0bbd1600"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-complete.de.ogg": {
+      "bytes": 30980,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "534b1f8a97aa32860f76316f81928f11925fc7fc97f401b2b46611404f10ad91"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-complete.en.ogg": {
+      "bytes": 29841,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "dfc2aea12f7e7649eab375fb0b7a266dd2a1993fefefe8406e53785666fb4e7b"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-complete.es.ogg": {
+      "bytes": 33154,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "9f9d3766882f4452c35f7b27cd446298fddc3d9128a9413bac8881c2d6161bb5"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-complete.fr.ogg": {
+      "bytes": 25544,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "4e3705f913ee05cbae39e32e2d932f810c85d6ca349ad2c59fb701d4e60bebfc"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-complete.it.ogg": {
+      "bytes": 35612,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "da566355d80fc803d4acec1ffde7e5c73b36a3eb89c70d643ae391aa4fd680c1"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-complete.ja.ogg": {
+      "bytes": 37021,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "8c7cd6ddca6c0634f177c53ad5c904acc843f5e2d3cd89fa29a61ab6e66d7f4d"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-complete.ko.ogg": {
+      "bytes": 29323,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "9a0a4c416ac8a361885f5ecaf2b548ebd8caabda83346daba64660552edf54cc"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-complete.pt-BR.ogg": {
+      "bytes": 31360,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "0d61551d628d7b05e75ec2300dd27d1f0a242fe1c72af1bb677b6b2a8588c1f2"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-complete.zh-Hans.ogg": {
+      "bytes": 31138,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "80746ab5564da6ba1279a3908df764ddd1dc72947517816208210271e2773b54"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-complete.zh-Hant.ogg": {
+      "bytes": 31823,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "1481dee8ac284c18f43b8bc5c3337b8acd8f7df0b9635622e4b02b04390b38a1"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-intro.de.ogg": {
+      "bytes": 36258,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "0056d329a2fcec01bb92a672688f316359f9e8682f1e18a6324ba408276fba29"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-intro.en.ogg": {
+      "bytes": 40586,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "d85643eb0bb57a8667142ee9ac4a7be91bc18bee1ff323a850a9f4c986ad968d"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-intro.es.ogg": {
+      "bytes": 40544,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "6ff1e19dfaa7980162207018226790748ff0be431bd3a5283432a87ed5b813f5"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-intro.fr.ogg": {
+      "bytes": 30540,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "832b2262f5f3b9c9cacbd272c49c3f14e8464f487380b14386e735444ab6cc12"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-intro.it.ogg": {
+      "bytes": 35745,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "6f4be60a68df577e4dcfcbf39b133eacb045cd65598bbc6633f0ab69cd3ff10b"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-intro.ja.ogg": {
+      "bytes": 41875,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "70fa7bc27bb07e4cf66c1b83edeaba83c43868c24d1b4b0374906debe9a661fc"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-intro.ko.ogg": {
+      "bytes": 39201,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "6b24ea3a46aa1ca14452da4dcba4076bef9ab57cd1e48cb7a270cac97ca2b450"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-intro.pt-BR.ogg": {
+      "bytes": 38313,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "300633451705fba07830a9d8feb54cb619625f96d6c8cb7477c2e2ef9e31200f"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-intro.zh-Hans.ogg": {
+      "bytes": 41221,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "fd43dbc914e4827c277d90418a437484f18389a2f71c2e01630729052e786d11"
+    },
+    "android/app/src/main/assets/ExploreNarration/lookup-intro.zh-Hant.ogg": {
+      "bytes": 40887,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "2ff440dcd8372b1475691f64a55aed813fc7508c0c214c848abba2dafb551880"
+    },
+    "android/app/src/main/assets/ExploreNarration/route.de.ogg": {
+      "bytes": 23002,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "107bb3fa5d6a2d91e10bfee945c47bb6439658773d59787d96c05c6c29dc2b14"
+    },
+    "android/app/src/main/assets/ExploreNarration/route.en.ogg": {
+      "bytes": 28869,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "f69f8cf46af024720fa3ba22910102efb0d36edd93af9370ee705493b599e494"
+    },
+    "android/app/src/main/assets/ExploreNarration/route.es.ogg": {
+      "bytes": 26393,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "f5b908ed058c63f0acd2303dc0d99111fb48c5113806d45aa36ceae499920524"
+    },
+    "android/app/src/main/assets/ExploreNarration/route.fr.ogg": {
+      "bytes": 20780,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "3a755e819c5dc0c0f5387bb051853493687b091e84b930332effd42cef196631"
+    },
+    "android/app/src/main/assets/ExploreNarration/route.it.ogg": {
+      "bytes": 33930,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "421d8ac402c0b242bafc5d8a8a412f2cbb6625d2bdee16f5cc334fc32e153f01"
+    },
+    "android/app/src/main/assets/ExploreNarration/route.ja.ogg": {
+      "bytes": 33099,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "754fe9029a9c2f4c2f94fd0a85c43524554114eae2aa0cd55dff48143299caad"
+    },
+    "android/app/src/main/assets/ExploreNarration/route.ko.ogg": {
+      "bytes": 27286,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "6f7bc6df85345b0c6b97a64e67a12536bdb5795187765d8c84eb9c0b5d7de53e"
+    },
+    "android/app/src/main/assets/ExploreNarration/route.pt-BR.ogg": {
+      "bytes": 24306,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "4c7b4fcf7bd322d7cd812a42adf6ea243f9c1bf7a73e4397a058ba82bcfaaf7f"
+    },
+    "android/app/src/main/assets/ExploreNarration/route.zh-Hans.ogg": {
+      "bytes": 30228,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "544944565c900b65a834c62ca4e2811467a6e273082b6382f40fa1fbfee72528"
+    },
+    "android/app/src/main/assets/ExploreNarration/route.zh-Hant.ogg": {
+      "bytes": 31906,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "445f593d91967508d0210f3bf03051e88389f276a484af29922ab90aec27db7b"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn-follow.de.ogg": {
+      "bytes": 30377,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "161e0a25445b4d1fae18d3e2da07cd32e46e7942c5213bc0710c593eee040f2c"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn-follow.en.ogg": {
+      "bytes": 33144,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "b1789ffae0fbd6684d2d843dbabcf40b71a44d80c7f4cad4635be22ec8d9ada7"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn-follow.es.ogg": {
+      "bytes": 36135,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "c0b1b7eec35a95ab324db519e0c00063abdac9c9116995edf6cc795df1769358"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn-follow.fr.ogg": {
+      "bytes": 32309,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "71a5a124c1cb9b7e180d83b162fbb5177b8dbaf483761a6f8c55db148485739f"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn-follow.it.ogg": {
+      "bytes": 35753,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "7f0480be4bdbb6828a562a1cc5585278423a02a7080b1877498ce5d2e91aede9"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn-follow.ja.ogg": {
+      "bytes": 31962,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "5fdbcf218dcb8e39f81953eba2479a27f6ccc7399d32cdc94594da35e393d549"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn-follow.ko.ogg": {
+      "bytes": 28256,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "48156ec67929b54b5c9bfe0678d2d5eb1b93545f606a6ab7d4a57bc2e88f990b"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn-follow.pt-BR.ogg": {
+      "bytes": 36860,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "92b449b130d2dbf9ef66e5e79efca86b4dabe0396282b7ab7c425f2c6dbab40c"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn-follow.zh-Hans.ogg": {
+      "bytes": 35047,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "4b8aba99ba2539c8e5cee09ac0b869661e220823e366c3dcbcb58791538ad5a3"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn-follow.zh-Hant.ogg": {
+      "bytes": 33672,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "e809438b8d04568c68ccda1718c8ce941d1a0a043b6952794b6ed72918a279ca"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn.de.ogg": {
+      "bytes": 32677,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "79244a525d24417f54e272723b420ca90e43440d37f429a8338413a8e1433cbe"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn.en.ogg": {
+      "bytes": 37280,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "ba0f908714f79ab747b8ed1d33bf2c17038d2a49c1180dcc205d6476b9f1d896"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn.es.ogg": {
+      "bytes": 39858,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "823d4ff9eedaf51b8b2f8af1d959265fd2874a8b65d31bb081544d39211a681f"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn.fr.ogg": {
+      "bytes": 34497,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "6aeef55f75e6a1b42fa08136fecf2a16d31c6f1b056258d167c8ad1398489c5f"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn.it.ogg": {
+      "bytes": 36132,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "cc063fb84eb2736af5dda4a0099344540f8c594910ce0100a2ab815a3ba8c1f4"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn.ja.ogg": {
+      "bytes": 32773,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "694de1f578a496a67bd682595f04944f0e11462070372e390234f6b06a958fcd"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn.ko.ogg": {
+      "bytes": 29100,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "a03aaeed8a9b95ed445e54873d8029ca2e42ee660858de068a75f63b1db7f8ea"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn.pt-BR.ogg": {
+      "bytes": 38678,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "3c69dfe3467d2eecf298601ed315c7872caa0f8c4b627a5371c7fbfa58c7d68a"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn.zh-Hans.ogg": {
+      "bytes": 39231,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "769d308a2374c6d9da0c6d451da6ac67c98aefa39e5e3e10687919dfd768b99c"
+    },
+    "android/app/src/main/assets/ExploreNarration/vpn.zh-Hant.ogg": {
+      "bytes": 35925,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "6b5fd73325b41306f0771420c44fd39d758784055beefcea2766f03082d759a2"
+    },
+    "android/app/src/main/assets/fonts/MaterialSymbolsRounded350.ttf": {
+      "bytes": 23624,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "2c347e4a65fc0add15ac7f218b13fa6be0cb2a701c503d8f0241c390d0de3220"
+    },
+    "android/app/src/main/assets/fonts/MaterialSymbolsRounded350Filled.ttf": {
+      "bytes": 24752,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "f035f4d00806a8f4bc56e653ddc50650c9b2ee1228b1e4d4f66d5d3d438b659c"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-intro.de.caf": {
+      "bytes": 22712,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "be547035ad3427e84824adce039e3a5a0f7ec597301613b692aa8c8817034205"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-intro.en.caf": {
+      "bytes": 21106,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "81b105e53d00318d9916d1ad878baa384098a08bba172b7eba0c673b80548458"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-intro.es.caf": {
+      "bytes": 20007,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "20a5df20fea39e8634d07ec7a71d9d466636df1ae3e9f33003f11eb90735c111"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-intro.fr.caf": {
+      "bytes": 20168,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "637f61eeccf674c058e14207db2bcfcbef279e0d1c843ca0a038e9320834df32"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-intro.it.caf": {
+      "bytes": 21739,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "39edf2a43c63d06cfabf95d7a421765fc99f0fd7845d2ce7a1d742f83dd6b6ea"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-intro.ja.caf": {
+      "bytes": 26830,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "376618284ca3dc6b16249da96c5d47d37861dd1c4e708599c884fd5833605ac3"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-intro.ko.caf": {
+      "bytes": 18557,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "6c522ca74f2699dde0f387c3cfd152a5c163018368063dc5535feddd03518c7b"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-intro.pt-BR.caf": {
+      "bytes": 23549,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "2583a0140c4018b0cf5de1fd1d5b8269db7d6c3a16c15ff959202cd5944ac6d1"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-intro.zh-Hans.caf": {
+      "bytes": 26118,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "324a9d8cc18bc73d3069d512912f9789ec4b502d25e9cd71310a375cf9f09131"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-intro.zh-Hant.caf": {
+      "bytes": 27536,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "8d7aa0765aa9adf8007d6a0d89a903ea6ffef4b293d8b89daa39873646497428"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-pass.de.caf": {
+      "bytes": 18996,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "865813784574d479bdeec0f9ce06d68cdd7fb1aea4343e608c536b111ce7c77d"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-pass.en.caf": {
+      "bytes": 19567,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "5cb45f59ec9ee9f5925168d207f6b5e0938361acd7d34c794142109c52a511a5"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-pass.es.caf": {
+      "bytes": 19523,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "cdc0db5365f46d8198f7dd5aad316a22a1e4cf9dbd9a3a5b9e4e3dd2ce995920"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-pass.fr.caf": {
+      "bytes": 19336,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "b12db60f8350771b90af998f594f66619d529e0da5e6732206e08923ccaa7a1d"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-pass.it.caf": {
+      "bytes": 21031,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "71f2028ce0d3126f3b38e2b30ae0e3244f8ec8fe8b39b596573a3c31c001cd1a"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-pass.ja.caf": {
+      "bytes": 19854,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "f0c970d50efdef502e8fd67afe6eb079a7766dc8e2a504e26d37ac66a174bab5"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-pass.ko.caf": {
+      "bytes": 17230,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "1614e9faee1dcca28f4da5128860d46cb4b0aca58104bce5f619b4aff0f61cd2"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-pass.pt-BR.caf": {
+      "bytes": 21391,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "2f3135eb7f45a3821c636f0e33a106dc036cbb7c6f714d560cd5fece258481e7"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-pass.zh-Hans.caf": {
+      "bytes": 22789,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "ccac0d88e9036a7c68c188d42828208839ad98c486891a2fc48041d250244018"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/allowed-pass.zh-Hant.caf": {
+      "bytes": 22309,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "1f2e7c7055b2a383f914d3133f72c66a56a8d8a9e1ac67306053d13acb897a3b"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-intro.de.caf": {
+      "bytes": 23787,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "86b5c8acbca87d2d125a1e2da379203326a9575e0dc5ea4869677eab3490d611"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-intro.en.caf": {
+      "bytes": 21014,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "4500b01c511455212a1d4c21def7751e78e3d19aee296afeac3d254b88d63627"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-intro.es.caf": {
+      "bytes": 22707,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "ad96f816871b28bf0c05bbf9dc909417d91b3645cce3f81ebe04466059aa23c7"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-intro.fr.caf": {
+      "bytes": 22137,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "06bc48f86522c27c0e8cf249c16a2de7018cfef1d5ed563504977ec828f04c34"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-intro.it.caf": {
+      "bytes": 21310,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "955df894aa41a1c76d4c28a784f0cac469ed098c49f580c7a2128a75b04cb211"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-intro.ja.caf": {
+      "bytes": 22139,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "659e8f5a3ed41af36315d61193e9ced63502916e51651c6d27a8a2386f3c30ca"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-intro.ko.caf": {
+      "bytes": 17485,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "f1fe3aec54c9304e0a7f2ea95b6f800ea69a41f6090d7f5cb0de9a740896900b"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-intro.pt-BR.caf": {
+      "bytes": 22170,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "61760b143ff8ebf07a05c909f760e949613152dd9d6f99271679e274a94597a2"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-intro.zh-Hans.caf": {
+      "bytes": 24834,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "3f903c2c43866eddd62351bbd25587baa57e491b85b25ce184bcd27f90c8850d"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-intro.zh-Hant.caf": {
+      "bytes": 26127,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "3cd2d41c8fd9ddcc92814af0f3cfd373f77e05121dfb4657c065e00db733fe70"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-stop.de.caf": {
+      "bytes": 25490,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "3243ed26ff9e02d4cace6e33a5b82cc785fea3b6800182234ac3c68b3861714b"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-stop.en.caf": {
+      "bytes": 27235,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "d7f10673d0a9b554316c2528ab374bbdd9a031d7a0484b0da00a155c38c36990"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-stop.es.caf": {
+      "bytes": 24049,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "73c05679a6dfa74dc9179f834ada042045222b4680772dc2a622cd5bdf5296d5"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-stop.fr.caf": {
+      "bytes": 21780,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "a8f8c2bcc0bf0f810a6fefbdb675a2214e48402e3c818232743db611fca08e90"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-stop.it.caf": {
+      "bytes": 25249,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "3bedead1c83f1a9c6b0dd094d5dbd89c7ba3ef7eed44affd1b735ecb2cbdd347"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-stop.ja.caf": {
+      "bytes": 24513,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "b133cefaf029954edb2a500f8d0ca163f72135d759175936815a1378acdce62d"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-stop.ko.caf": {
+      "bytes": 23809,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "c1012ae3ac9dd82585cc2229b9db68c62eac10bc649b867f3d4379745fa46169"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-stop.pt-BR.caf": {
+      "bytes": 28729,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "2747d21678195dc6554a780c588a4f5008706c7a2521718259bf3d635e1f8158"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-stop.zh-Hans.caf": {
+      "bytes": 27217,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "6c1072924088d7ced3b15df5525c1396ced3246cf885f019cf120ebd27b0a95f"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/blocked-stop.zh-Hant.caf": {
+      "bytes": 26327,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "ce132a2c5ace658b3abdcb3b5fa275a893912d069f8ad8defe4824277dd99372"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/device.de.caf": {
+      "bytes": 25100,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "2760dcce62ef7cd468e6affc19f3a8df3a288bebcb60ae5bee0e43d4980792ec"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/device.en.caf": {
+      "bytes": 31396,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "b21a48bcc38aa8cb3cad080e07e0fcc36ebf10e6637c957015cc2ec22c330c92"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/device.es.caf": {
+      "bytes": 25702,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "7190cc892be4e1b785494599f2ab134546f13d47a66aa9f1915de98fa9730101"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/device.fr.caf": {
+      "bytes": 22490,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "5c3d8f1ea911e5255851f3df29e7dc83e465caaedd170bd7774ce7015508e1cb"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/device.it.caf": {
+      "bytes": 30978,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "5d3be45cda30174323e310896f2b3296ca168ab038c850b4a06f3262c4fa8fa4"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/device.ja.caf": {
+      "bytes": 31150,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "2079d4898ef0433e9a5bd2bfbb4936a25fc615739164b9b231ae9faba1b20c06"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/device.ko.caf": {
+      "bytes": 26750,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "0b53360c798f9fd4e4cae3f091fa03526dcf07631018974dc6e9c76d91aeefda"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/device.pt-BR.caf": {
+      "bytes": 30770,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "c0506ee66e031f7204f9ad18a6e6b4c24d3235c7963302c43e79cc26d0453f7c"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/device.zh-Hans.caf": {
+      "bytes": 31697,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "6343276f3df3ad4a9a89c1a10f1efd3d4a7079ac6e1d08db6cc93d8203070882"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/device.zh-Hant.caf": {
+      "bytes": 33983,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "577087f53672b9d91e9912e2164f42b06f948fed037f295db412bfadab3cfa20"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/dns-choice.de.caf": {
+      "bytes": 18821,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "45500c2e06d17c090831adb34b8addbdb4180b4b18f03df908746703fe8a9728"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/dns-choice.en.caf": {
+      "bytes": 20918,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "ab5d21e0e63ae41b962c2b98e7a990de414ce802628c30d1a01f27c5af777cca"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/dns-choice.es.caf": {
+      "bytes": 20249,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "52a8aa5a9162da7c313e8ecf4f7ecb786a532e02e2d8c71f5492e85d001c8d04"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/dns-choice.fr.caf": {
+      "bytes": 19680,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "accfe48428684d448790b6b0faf6ed6d39fdc18da6c6e2a7e1d39f58cb62ebad"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/dns-choice.it.caf": {
+      "bytes": 22775,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "49d5a4f0e0f3d33ac3d73a3dff7ed6f96169ec2328115bc21f47a966cf224145"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/dns-choice.ja.caf": {
+      "bytes": 26868,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "1537f4eef013797ffb652c649a52ac80b837450ee78e51c7994de10f65023cec"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/dns-choice.ko.caf": {
+      "bytes": 20750,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "4fd183ce2a94be424bbb8a62368fc69a45b7b6d299aeef868e53e60e2a47fbac"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/dns-choice.pt-BR.caf": {
+      "bytes": 22536,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "59a9d8ed2d80bddeee1fd2cc5c5cebc737764c386d465a187321a4dbe78387c8"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/dns-choice.zh-Hans.caf": {
+      "bytes": 22157,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "83582cbcbf6766c4858c60cf7a3894decb9f43d97762a1dd18b2a3acb27c3b49"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/dns-choice.zh-Hant.caf": {
+      "bytes": 22868,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "0c57ac7f2325360414393c34ec0aaf0faceffad42012389abc3201b3ac286511"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/ending.de.caf": {
+      "bytes": 21584,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "62c9ba5bdfa17e950f68a48a9762573a53c696a6d5aed375f8027ee516dcb4ba"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/ending.en.caf": {
+      "bytes": 20420,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "f710225aec5d1ead8f1f3900169393353f31930d3803ccd888eeabb28e9b555d"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/ending.es.caf": {
+      "bytes": 18587,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "ad69dba88fc88f29673f8a94c5c9f01ec0a7bde4fd5841fa65d02b5d786e0d3c"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/ending.fr.caf": {
+      "bytes": 16192,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "6a7765af08b2205bd2b9ba930ab8fe3bf51eb5baea9c76f03acbd303feb4c201"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/ending.it.caf": {
+      "bytes": 21393,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "cf6ea73cf38fd6f513d40e14e962925a85968d1e872cf8bd4d0a7c0bad1f1a09"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/ending.ja.caf": {
+      "bytes": 25187,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "c7c0b894f60bd8f2796653d47c46e37d597a528b131d59e0f6404d4121eedb22"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/ending.ko.caf": {
+      "bytes": 24934,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "ead292cdb5847fa97eb5f2a88445c45e8aac8af46463afe057548b9867bd2932"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/ending.pt-BR.caf": {
+      "bytes": 22398,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "a8550927fd1090c121ccf9f5093e38548172b3c7c3b5af7ff392eb637963dc49"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/ending.zh-Hans.caf": {
+      "bytes": 21788,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "7f092e6d7e9a7b20306215b793b34781f4d4ccc1497b4ca104939efe09f33188"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/ending.zh-Hant.caf": {
+      "bytes": 23078,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "3ddc36e05f920fa859b76f294b787fdf5eeef513724a5b80f4fa5b72ff363a6b"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/filter-policy.de.caf": {
+      "bytes": 26643,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "289f5dfa41be039c82b0c972dc069664cba13c17378def049faa3fc415995d3a"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/filter-policy.en.caf": {
+      "bytes": 25516,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "2eaf6ba22507e6c29df590c947d34f3d6d2ac43fe92308a0fd43faa960b4e121"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/filter-policy.es.caf": {
+      "bytes": 23732,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "5556f1f1f6153688a960318bd2d31df5d4037509e83bd84fd7a99ae80f337e7f"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/filter-policy.fr.caf": {
+      "bytes": 32724,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "f752a5c7f1071c52752f34ea47ad2a631004a7ecb014bbf83b3d3f0191321c11"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/filter-policy.it.caf": {
+      "bytes": 23787,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "16ccbaba001974a32815ac746994a89241e01f2790eb790ee35f769cd94683ce"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/filter-policy.ja.caf": {
+      "bytes": 25557,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "3ce93f0950b912036d5061dedee569dc1cf7060e059c1f6e919053ef388e27c6"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/filter-policy.ko.caf": {
+      "bytes": 23100,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "07081307f0df0b016d4870bb560c8a3a9e57bf17faa7460e417918cebd398eba"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/filter-policy.pt-BR.caf": {
+      "bytes": 24442,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "62ab1a84cc7736e9b1b41e33e0e71b6776b4bffd80d0321c223377713af1511f"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/filter-policy.zh-Hans.caf": {
+      "bytes": 31458,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "8a94cd23481e9930a8bc48ff333fd676d2a7d501c7e4c7cf724fbe453c43516c"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/filter-policy.zh-Hant.caf": {
+      "bytes": 31625,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "b470b2697cd782751167950fae5059a4ea51db503ba70668a5716682b034d9b8"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-complete.de.caf": {
+      "bytes": 22798,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "ee451a093f97080746137493fcfe4929b7b20efe0e2b5ea07a57b441fe88b28f"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-complete.en.caf": {
+      "bytes": 21875,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "9ddb7c992ab1b48581419ff19ff7e8471b3c1ee1cf8a96fff2ece3146289d59b"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-complete.es.caf": {
+      "bytes": 24432,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "651423e4425432841e4f2547baa13d7b20b34f5e815dadfb7fda385d9ed0ae0f"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-complete.fr.caf": {
+      "bytes": 18766,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "2a542c9290f4305fd69fe1140c09acaff0c52841996503a7b4cdbb80b955ffb7"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-complete.it.caf": {
+      "bytes": 26134,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "69e01eb0af980ffb7c32486a68c78e64f4c3bede8c0d536edd0b372e2759e21d"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-complete.ja.caf": {
+      "bytes": 27003,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "17fb16ff11731558a6a20e550623f2f5f16b43392dcda5e6a3d098a07126e247"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-complete.ko.caf": {
+      "bytes": 21465,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "0a592678ca0fafd1e611a6265accef70a438bee8321f7a48e207061d1d8508cd"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-complete.pt-BR.caf": {
+      "bytes": 23178,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "c89679b8c61029a784c72df55a2b75ac3df5ae513ca0d088ba0d3e701f1111a4"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-complete.zh-Hans.caf": {
+      "bytes": 22848,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "c5b7fd0ae771a563174e56c47c84d5351966eaa60c56adf4a9caf60663069784"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-complete.zh-Hant.caf": {
+      "bytes": 23155,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "00768ab0e8fb40872de44d5995428c7f3b118ec89dd22655fb7e82744f39b12e"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-intro.de.caf": {
+      "bytes": 26564,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "5cbbb7d0d2b53f32feb10829f4219d8b8b1a89b295243517b9fdd7de0f778a5b"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-intro.en.caf": {
+      "bytes": 29596,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "52217e875dd1373ccade57086470819b8d5546a5f75e6a82bb9fa4bf18057de8"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-intro.es.caf": {
+      "bytes": 29230,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "2a4ba6b50ec6b3c45fef8335203db81073f53e029031e08115a09c7d95e8c054"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-intro.fr.caf": {
+      "bytes": 22466,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "81dd82dc2e8a90471fa64a854176e6317e2a3ea31b2de15955c7115f9fabe36c"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-intro.it.caf": {
+      "bytes": 25943,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "b6b112eff0d2fae76327995e6677da9e24b688b419d2be5b09da017adcdfcfd1"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-intro.ja.caf": {
+      "bytes": 30561,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "f2d7679bed6c35679bad3402716e8e3dd0cd5f57c5d3884788e27e5693d4624a"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-intro.ko.caf": {
+      "bytes": 28643,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "5ae3000ac56e7d724cf1f6db4d18ddb8ebd0a60258854ad4e718e2d8701f4c23"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-intro.pt-BR.caf": {
+      "bytes": 28187,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "7017a24a769414e068beefcf5021dad8920da8a06adce0c5b69593b6c96b9fce"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-intro.zh-Hans.caf": {
+      "bytes": 29961,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "e1b577cdb8d90665db39c1049f5000dfca4f10a3176439dd01251fcae898e739"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/lookup-intro.zh-Hant.caf": {
+      "bytes": 29438,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "d5e0e4527753bd1b67801f702823068f4f08b2137c21eb0e4aa1d9454dad3411"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/route.de.caf": {
+      "bytes": 16872,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "3ef3e96f49457ebcfe1d498ac8d210507bee712fa0f069386608dfbae15000a2"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/route.en.caf": {
+      "bytes": 21011,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "4e366ad26bf36e80c7690ca3bcad26a880ebe56e3ffb83435fac04e9644e0252"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/route.es.caf": {
+      "bytes": 19399,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "2eedff65751c8244a5a65bc0ad761a5e90a2f7e07f87b696f4fb75f147bffd30"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/route.fr.caf": {
+      "bytes": 15190,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "85f2ae5bda7af966ab0d55bdf5bef5c83d8a6478661c41309d14944896da8e45"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/route.it.caf": {
+      "bytes": 24996,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "d5253f06028845d5726cdeb9ba72fcdc5370b6ecedbd64d7207a958683f64c71"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/route.ja.caf": {
+      "bytes": 24053,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "56351664f0564c01faabdb73e2a912309227c15bec5bade8c73c8ac63927cb06"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/route.ko.caf": {
+      "bytes": 20076,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "74663ab639d5c2657ebc25f50fc3aeb53f57e31cfec58c31d92dd0cb893b8893"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/route.pt-BR.caf": {
+      "bytes": 17744,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "06f4141bbb351bb78053fb6cc2ee4316d2ec363894a197dad07f9d87bb218691"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/route.zh-Hans.caf": {
+      "bytes": 21911,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "c3c18048ec30685bcab6afe4a91a7501abe70fcaa3a99f02febbdb9987a939d6"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/route.zh-Hant.caf": {
+      "bytes": 22833,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "f4b770e2597b9e091a948dc7e9e64a45f940e9040840d362298f90301e7dbf44"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn-follow.de.caf": {
+      "bytes": 22519,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "7edb2db63da27bdbbcf59cc050a995abc141b19b47040a45d8def2beea229171"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn-follow.en.caf": {
+      "bytes": 24206,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "ffd6938b13752d6a3b2d349eafd15d5cec9bd940069ff9bc91481ce0df460a87"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn-follow.es.caf": {
+      "bytes": 26333,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "b327b4ac85f63408d1fdf52ff75044ece4cfb217ae93f94bd8ac740da4ec54da"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn-follow.fr.caf": {
+      "bytes": 23803,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "0ee0e91f126441824827e6947117d9a61263c073a59326dbe693fc5e75e8aa6e"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn-follow.it.caf": {
+      "bytes": 26383,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "78a03bd61ea13da8695b00e0122dbcf0e8b4e87fc1d1883f788aed3edd0d9da4"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn-follow.ja.caf": {
+      "bytes": 23024,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "e3d4d304b8d16e71aaf315b70f8c7cf6a150946e84247c4d39b185800507bb62"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn-follow.ko.caf": {
+      "bytes": 20830,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "c9d3fd029ca00250fe523fc72a44cb4ac1251b547b563285af898151a81f7121"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn-follow.pt-BR.caf": {
+      "bytes": 26950,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "0b56d892007adcf41e035e957182d0730cac7adcd2e606f3d5ff5b177edefb7e"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn-follow.zh-Hans.caf": {
+      "bytes": 25650,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "bf272b9bfb597945917058f25cf250cb65a35e163ff5dd63c8a1a1f161bc6d6f"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn-follow.zh-Hant.caf": {
+      "bytes": 24410,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "04fbc79528ebb1fd4bbaa76d0011d0742555c2dfc0644f982baf375b37ec70d2"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn.de.caf": {
+      "bytes": 24171,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "e1211f4ad787a675f478579eda4e94d3ca2278b0e59ac068c7c3ceb2dd0ed6cf"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn.en.caf": {
+      "bytes": 27370,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "3088c32c163431db661a08ca612fb29638263a11f02ec23ce29d856ead17cd73"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn.es.caf": {
+      "bytes": 29300,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "94dcee70db611bb0609927f281570690bbcb718d8dfb5c7b6e41a38a9084fb6a"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn.fr.caf": {
+      "bytes": 25019,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "b2f3ca19cd3de49538fbb36ee63179a7be448588f63fc770f47a3d775abe6b74"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn.it.caf": {
+      "bytes": 26546,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "b52987aded8acb75a71f0f6da32b27e00906b5cc83742acf399231d7fdec2355"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn.ja.caf": {
+      "bytes": 23727,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "c4fb90ebefff8b94f6fbba058c1181e6aac1275f28891efab951d8865006782c"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn.ko.caf": {
+      "bytes": 21134,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "9ab8282419b86d67550317a153f46f62491025a19b2dc325edc47693694aaed1"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn.pt-BR.caf": {
+      "bytes": 28552,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "b54998891958a748a454f5f9b672cf8ef4815f74866a8017691ce1072d4321c4"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn.zh-Hans.caf": {
+      "bytes": 28727,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "d9b4439e4659dbd8ffff6e7cb60e96c889ad7aa24b4b4a1b080691800b24d39e"
+    },
+    "android/react-native/canonical/assets/ExploreNarration/vpn.zh-Hant.caf": {
+      "bytes": 26096,
+      "purpose": "Committed narration/font source asset; see adjacent license/provenance",
+      "sha256": "523e945869329b802955bd88b2697223700d6a25b79a1e5dd6f8a22c555e4422"
+    },
+    "android/vpn/src/androidTest/assets/doq/resolver.crt": {
+      "bytes": 1172,
+      "purpose": "Public synthetic TLS fixture; never a production identity",
+      "sha256": "973d725e6490ea8d454b78be5db12719b77204d94fe45847ae11778116e921c4"
+    },
+    "ci/lavasec-debug.keystore.b64": {
+      "bytes": 3556,
+      "purpose": "Public non-production debug keystore; never a release signer",
+      "sha256": "788aeacbfb9e29825d56ba11ac086a54055be3538a2207506bcc1acd2570ca71"
+    }
+  },
+  "schemaVersion": 1
+}

@@ -1,0 +1,29 @@
+{
+  "extends": "@react-native/typescript-config",
+  "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noEmit": true,
+    "moduleSuffixes": [
+      ".android",
+      ""
+    ]
+  },
+  "include": [
+    "App.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "CanonicalApp.tsx",
+    "canonical/**/*.ts",
+    "canonical/**/*.tsx",
+    "platform/**/*.ts",
+    "platform/**/*.tsx"
+  ],
+  "exclude": [
+    "canonical/**/*.ios.ts",
+    "canonical/**/*.ios.tsx",
+    "canonical/review/LavaUIReview.tsx"
+  ]
+}

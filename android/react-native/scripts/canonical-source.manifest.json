@@ -1,0 +1,2658 @@
+{
+  "schema": 1,
+  "generatedBy": "scripts/canonical-provenance.mjs",
+  "canonical": {
+    "repository": "lavasecurity/lavasec-ios-internal",
+    "packageDirectory": "ReactNative",
+    "license": "AGPL-3.0-only",
+    "revision": "4e552f33ab973c32539071f327803198f40279f5"
+  },
+  "roots": [
+    "app",
+    "assets",
+    "gallery",
+    "review",
+    "src",
+    "specs"
+  ],
+  "counts": {
+    "android-only": 16,
+    "divergence": 66,
+    "upstream": 203,
+    "overlay": 43,
+    "ios-platform": 21
+  },
+  "files": [
+    {
+      "path": "android/CustomBlocklistEntry.tsx",
+      "bytes": 5747,
+      "sha256": "7b7da8ee9677c063dcf9d98134db2fd48a8b852c8510cf4e2e2f0336e5927c34",
+      "class": "android-only",
+      "rationale": "Android-only module with no canonical iOS counterpart; reviewed."
+    },
+    {
+      "path": "android/CustomDNSEntry.tsx",
+      "bytes": 8814,
+      "sha256": "45dc1afa287c218a2dbda913440dceb6b416f2ff92536271b6fc141af58ce64d",
+      "class": "android-only",
+      "rationale": "Android-only module with no canonical iOS counterpart; reviewed."
+    },
+    {
+      "path": "android/CustomEntry.tsx",
+      "bytes": 670,
+      "sha256": "47a6200aae6345871fab8346df246aadbce5e5c33a1b630e4c93b0684c393c1d",
+      "class": "android-only",
+      "rationale": "Android-only module with no canonical iOS counterpart; reviewed."
+    },
+    {
+      "path": "android/EditionSettingsScreen.tsx",
+      "bytes": 5473,
+      "sha256": "74a830025424f9430b0d7c88f4742c45e6dffc3a18625bed0c3a2d301f921849",
+      "class": "android-only",
+      "rationale": "Android-only module with no canonical iOS counterpart; reviewed."
+    },
+    {
+      "path": "android/FilterIdentityForm.tsx",
+      "bytes": 7370,
+      "sha256": "13bd04ea3b3e84084f79809f2b865299eda53536e46f0f08c1a3dba9065f7e3d",
+      "class": "android-only",
+      "rationale": "Android-only module with no canonical iOS counterpart; reviewed."
+    },
+    {
+      "path": "android/VpnChainingScreen.tsx",
+      "bytes": 13793,
+      "sha256": "1de50287869a85eed5578150db7c78703d50dd55e9cbcf13141d31ad9d433070",
+      "class": "android-only",
+      "rationale": "Android-only module with no canonical iOS counterpart; reviewed."
+    },
+    {
+      "path": "android/componentProps.ts",
+      "bytes": 4126,
+      "sha256": "09df1b3ca34f4568ac42bfbac6143f806e7812831bcc4a9b3440af961e0bdf1e",
+      "class": "android-only",
+      "rationale": "Android-only module with no canonical iOS counterpart; reviewed."
+    },
+    {
+      "path": "android/edition.ts",
+      "bytes": 1262,
+      "sha256": "c1e0d868714128e3100278394fd5919f8281fe792f2cb87ff500541cee975dbb",
+      "class": "android-only",
+      "rationale": "Android-only module with no canonical iOS counterpart; reviewed."
+    },
+    {
+      "path": "android/guardCatalog.ts",
+      "bytes": 3468,
+      "sha256": "8ac3780b898e1abfe38f231daae5e1776987e856e3f64e29669eec4996c6a769",
+      "class": "android-only",
+      "rationale": "Android-only module with no canonical iOS counterpart; reviewed."
+    },
+    {
+      "path": "android/locale.ts",
+      "bytes": 1046,
+      "sha256": "872df87a1cef0ac4f0f7783708ab2661549aa5b9163826c24c787e7b67396447",
+      "class": "android-only",
+      "rationale": "Android-only module with no canonical iOS counterpart; reviewed."
+    },
+    {
+      "path": "android/material-symbols.ts",
+      "bytes": 4864,
+      "sha256": "ac382dedd7905c9303212d5a5ffdc3aa0a9c1a4835ee8c9fa047d2134b6594aa",
+      "class": "android-only",
+      "rationale": "Android-only module with no canonical iOS counterpart; reviewed."
+    },
+    {
+      "path": "android/runtime.ts",
+      "bytes": 57972,
+      "sha256": "598858752192397dbeab934f038bf1c71db57b28c288fc68e1a1760ae89b6d5c",
+      "class": "android-only",
+      "rationale": "Android-only module with no canonical iOS counterpart; reviewed."
+    },
+    {
+      "path": "app/actions.ts",
+      "bytes": 2982,
+      "sha256": "cc5b33bbb309ef01fb97e19d95a56cdcad0ba2a3a35f30894fb53a1ee0864579",
+      "class": "divergence",
+      "base": "app/actions.ts",
+      "baseSha256": "28085a2f47b97bf23f02f53f6034e8201b8ee85d2a2c0c19c9a21913c56279d6",
+      "rationale": "Canonical app module adapted for Android (locale/action/contract projection)."
+    },
+    {
+      "path": "app/contract.ts",
+      "bytes": 16755,
+      "sha256": "8af3b04046ce7037bb77ab2b63c0c5f6d78cd5f82f91a5e2c3bb3c48072e8f1d",
+      "class": "divergence",
+      "base": "app/contract.ts",
+      "baseSha256": "291856ece7ccf65ae487edc90a903ac6e1f6ccc9f87da198e3e38aa6d4ddbff6",
+      "rationale": "Canonical app module adapted for Android (locale/action/contract projection)."
+    },
+    {
+      "path": "app/navigation-turn.ts",
+      "bytes": 3300,
+      "sha256": "9f31f27a0f78f60ec122806825d0d7bcee76dda69ecb915b320a21ec139e1702",
+      "class": "upstream",
+      "baseSha256": "9f31f27a0f78f60ec122806825d0d7bcee76dda69ecb915b320a21ec139e1702"
+    },
+    {
+      "path": "app/presentation-hydration.ts",
+      "bytes": 2666,
+      "sha256": "b796b61b94c2454721fb90daeec6e55e37fb2d21080c1b1c67962c668b8e65c4",
+      "class": "divergence",
+      "base": "app/presentation-hydration.ts",
+      "baseSha256": "765dd7127ca48089b46ecac41a2b74fe50e35c9d92438b5c959e03b5d340e162",
+      "rationale": "Canonical app module adapted for Android (locale/action/contract projection)."
+    },
+    {
+      "path": "app/presentation.tsx",
+      "bytes": 7987,
+      "sha256": "8599d9c86abe1d3ec87c510ad195f3ce1e753555dc112413e5c3afd612dfd90d",
+      "class": "upstream",
+      "baseSha256": "8599d9c86abe1d3ec87c510ad195f3ce1e753555dc112413e5c3afd612dfd90d"
+    },
+    {
+      "path": "app/queries.ts",
+      "bytes": 8701,
+      "sha256": "b6ffb5923ad8817ebbe4a3eb38b9e1f19d56c6ea92e1d5511bf7c7b292d3ce8e",
+      "class": "divergence",
+      "base": "app/queries.ts",
+      "baseSha256": "7b665e0c0849f0ad2a2d9c8b46bf6c15d87010e7a98cd6581062c4b8a11c6be7",
+      "rationale": "Canonical app module adapted for Android (locale/action/contract projection)."
+    },
+    {
+      "path": "app/read-cache.ts",
+      "bytes": 7156,
+      "sha256": "4f670bf53147cd8b6e5b93aef6251e7373ad6c336c6de3d15c25c26e0552af0c",
+      "class": "divergence",
+      "base": "app/read-cache.ts",
+      "baseSha256": "b1cefaa4a6cb5a240c7ab685de3fdd0621b3a3d7cfb03793c263a3188b3612ff",
+      "rationale": "Canonical app module adapted for Android (locale/action/contract projection)."
+    },
+    {
+      "path": "app/store.ts",
+      "bytes": 29870,
+      "sha256": "8a7a76bc11f8764afcddc82668f0d043fda021e86c0b12536866ba95d5ecf15a",
+      "class": "divergence",
+      "base": "app/store.ts",
+      "baseSha256": "3844be23ec651bb973a0fc4bcbcb1526d4135075095c772e5f2e74746c5897f0",
+      "rationale": "Canonical app module adapted for Android (locale/action/contract projection)."
+    },
+    {
+      "path": "app/text-metrics.ts",
+      "bytes": 680,
+      "sha256": "3fea50e001c6a891b7b336b704cd92516deb7d05d227c99fc47e79d5f9a87c0a",
+      "class": "upstream",
+      "baseSha256": "3fea50e001c6a891b7b336b704cd92516deb7d05d227c99fc47e79d5f9a87c0a"
+    },
+    {
+      "path": "app/translations.ts",
+      "bytes": 1986045,
+      "sha256": "381b597f335e7e06311e8380e4703e0a96741e9c671ed38dd43954e9c0f8147e",
+      "class": "divergence",
+      "base": "app/translations.ts",
+      "baseSha256": "e9c216b05fd6e29322c396716c387690bd27a43db98680776f71647fb623884d",
+      "rationale": "Canonical app module adapted for Android (locale/action/contract projection)."
+    },
+    {
+      "path": "app/use-presentation-readiness.ts",
+      "bytes": 2452,
+      "sha256": "b81bfb81774e97132e5cb9553d649570672a85d719dcee4ee2f12c9758fff59c",
+      "class": "divergence",
+      "base": "app/use-presentation-readiness.ts",
+      "baseSha256": "a9465a4d63d9459ad468f1ae098f8b25607ac2dc76d11ef380c56261ec3e039e",
+      "rationale": "Canonical app module adapted for Android (locale/action/contract projection)."
+    },
+    {
+      "path": "app/use-route-view-state.ts",
+      "bytes": 1518,
+      "sha256": "9ec1cec0ce8ec33a6bad66f9388f2e5ed11ea827779d5fb368a42624b9795e01",
+      "class": "upstream",
+      "baseSha256": "9ec1cec0ce8ec33a6bad66f9388f2e5ed11ea827779d5fb368a42624b9795e01"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-intro.de.caf",
+      "bytes": 22712,
+      "sha256": "be547035ad3427e84824adce039e3a5a0f7ec597301613b692aa8c8817034205",
+      "class": "upstream",
+      "baseSha256": "be547035ad3427e84824adce039e3a5a0f7ec597301613b692aa8c8817034205"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-intro.en.caf",
+      "bytes": 21106,
+      "sha256": "81b105e53d00318d9916d1ad878baa384098a08bba172b7eba0c673b80548458",
+      "class": "upstream",
+      "baseSha256": "81b105e53d00318d9916d1ad878baa384098a08bba172b7eba0c673b80548458"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-intro.es.caf",
+      "bytes": 20007,
+      "sha256": "20a5df20fea39e8634d07ec7a71d9d466636df1ae3e9f33003f11eb90735c111",
+      "class": "upstream",
+      "baseSha256": "20a5df20fea39e8634d07ec7a71d9d466636df1ae3e9f33003f11eb90735c111"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-intro.fr.caf",
+      "bytes": 20168,
+      "sha256": "637f61eeccf674c058e14207db2bcfcbef279e0d1c843ca0a038e9320834df32",
+      "class": "upstream",
+      "baseSha256": "637f61eeccf674c058e14207db2bcfcbef279e0d1c843ca0a038e9320834df32"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-intro.it.caf",
+      "bytes": 21739,
+      "sha256": "39edf2a43c63d06cfabf95d7a421765fc99f0fd7845d2ce7a1d742f83dd6b6ea",
+      "class": "upstream",
+      "baseSha256": "39edf2a43c63d06cfabf95d7a421765fc99f0fd7845d2ce7a1d742f83dd6b6ea"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-intro.ja.caf",
+      "bytes": 26830,
+      "sha256": "376618284ca3dc6b16249da96c5d47d37861dd1c4e708599c884fd5833605ac3",
+      "class": "upstream",
+      "baseSha256": "376618284ca3dc6b16249da96c5d47d37861dd1c4e708599c884fd5833605ac3"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-intro.ko.caf",
+      "bytes": 18557,
+      "sha256": "6c522ca74f2699dde0f387c3cfd152a5c163018368063dc5535feddd03518c7b",
+      "class": "upstream",
+      "baseSha256": "6c522ca74f2699dde0f387c3cfd152a5c163018368063dc5535feddd03518c7b"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-intro.pt-BR.caf",
+      "bytes": 23549,
+      "sha256": "2583a0140c4018b0cf5de1fd1d5b8269db7d6c3a16c15ff959202cd5944ac6d1",
+      "class": "upstream",
+      "baseSha256": "2583a0140c4018b0cf5de1fd1d5b8269db7d6c3a16c15ff959202cd5944ac6d1"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-intro.zh-Hans.caf",
+      "bytes": 26118,
+      "sha256": "324a9d8cc18bc73d3069d512912f9789ec4b502d25e9cd71310a375cf9f09131",
+      "class": "upstream",
+      "baseSha256": "324a9d8cc18bc73d3069d512912f9789ec4b502d25e9cd71310a375cf9f09131"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-intro.zh-Hant.caf",
+      "bytes": 27536,
+      "sha256": "8d7aa0765aa9adf8007d6a0d89a903ea6ffef4b293d8b89daa39873646497428",
+      "class": "upstream",
+      "baseSha256": "8d7aa0765aa9adf8007d6a0d89a903ea6ffef4b293d8b89daa39873646497428"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-pass.de.caf",
+      "bytes": 18996,
+      "sha256": "865813784574d479bdeec0f9ce06d68cdd7fb1aea4343e608c536b111ce7c77d",
+      "class": "upstream",
+      "baseSha256": "865813784574d479bdeec0f9ce06d68cdd7fb1aea4343e608c536b111ce7c77d"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-pass.en.caf",
+      "bytes": 19567,
+      "sha256": "5cb45f59ec9ee9f5925168d207f6b5e0938361acd7d34c794142109c52a511a5",
+      "class": "upstream",
+      "baseSha256": "5cb45f59ec9ee9f5925168d207f6b5e0938361acd7d34c794142109c52a511a5"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-pass.es.caf",
+      "bytes": 19523,
+      "sha256": "cdc0db5365f46d8198f7dd5aad316a22a1e4cf9dbd9a3a5b9e4e3dd2ce995920",
+      "class": "upstream",
+      "baseSha256": "cdc0db5365f46d8198f7dd5aad316a22a1e4cf9dbd9a3a5b9e4e3dd2ce995920"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-pass.fr.caf",
+      "bytes": 19336,
+      "sha256": "b12db60f8350771b90af998f594f66619d529e0da5e6732206e08923ccaa7a1d",
+      "class": "upstream",
+      "baseSha256": "b12db60f8350771b90af998f594f66619d529e0da5e6732206e08923ccaa7a1d"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-pass.it.caf",
+      "bytes": 21031,
+      "sha256": "71f2028ce0d3126f3b38e2b30ae0e3244f8ec8fe8b39b596573a3c31c001cd1a",
+      "class": "upstream",
+      "baseSha256": "71f2028ce0d3126f3b38e2b30ae0e3244f8ec8fe8b39b596573a3c31c001cd1a"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-pass.ja.caf",
+      "bytes": 19854,
+      "sha256": "f0c970d50efdef502e8fd67afe6eb079a7766dc8e2a504e26d37ac66a174bab5",
+      "class": "upstream",
+      "baseSha256": "f0c970d50efdef502e8fd67afe6eb079a7766dc8e2a504e26d37ac66a174bab5"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-pass.ko.caf",
+      "bytes": 17230,
+      "sha256": "1614e9faee1dcca28f4da5128860d46cb4b0aca58104bce5f619b4aff0f61cd2",
+      "class": "upstream",
+      "baseSha256": "1614e9faee1dcca28f4da5128860d46cb4b0aca58104bce5f619b4aff0f61cd2"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-pass.pt-BR.caf",
+      "bytes": 21391,
+      "sha256": "2f3135eb7f45a3821c636f0e33a106dc036cbb7c6f714d560cd5fece258481e7",
+      "class": "upstream",
+      "baseSha256": "2f3135eb7f45a3821c636f0e33a106dc036cbb7c6f714d560cd5fece258481e7"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-pass.zh-Hans.caf",
+      "bytes": 22789,
+      "sha256": "ccac0d88e9036a7c68c188d42828208839ad98c486891a2fc48041d250244018",
+      "class": "upstream",
+      "baseSha256": "ccac0d88e9036a7c68c188d42828208839ad98c486891a2fc48041d250244018"
+    },
+    {
+      "path": "assets/ExploreNarration/allowed-pass.zh-Hant.caf",
+      "bytes": 22309,
+      "sha256": "1f2e7c7055b2a383f914d3133f72c66a56a8d8a9e1ac67306053d13acb897a3b",
+      "class": "upstream",
+      "baseSha256": "1f2e7c7055b2a383f914d3133f72c66a56a8d8a9e1ac67306053d13acb897a3b"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-intro.de.caf",
+      "bytes": 23787,
+      "sha256": "86b5c8acbca87d2d125a1e2da379203326a9575e0dc5ea4869677eab3490d611",
+      "class": "upstream",
+      "baseSha256": "86b5c8acbca87d2d125a1e2da379203326a9575e0dc5ea4869677eab3490d611"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-intro.en.caf",
+      "bytes": 21014,
+      "sha256": "4500b01c511455212a1d4c21def7751e78e3d19aee296afeac3d254b88d63627",
+      "class": "upstream",
+      "baseSha256": "4500b01c511455212a1d4c21def7751e78e3d19aee296afeac3d254b88d63627"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-intro.es.caf",
+      "bytes": 22707,
+      "sha256": "ad96f816871b28bf0c05bbf9dc909417d91b3645cce3f81ebe04466059aa23c7",
+      "class": "upstream",
+      "baseSha256": "ad96f816871b28bf0c05bbf9dc909417d91b3645cce3f81ebe04466059aa23c7"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-intro.fr.caf",
+      "bytes": 22137,
+      "sha256": "06bc48f86522c27c0e8cf249c16a2de7018cfef1d5ed563504977ec828f04c34",
+      "class": "upstream",
+      "baseSha256": "06bc48f86522c27c0e8cf249c16a2de7018cfef1d5ed563504977ec828f04c34"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-intro.it.caf",
+      "bytes": 21310,
+      "sha256": "955df894aa41a1c76d4c28a784f0cac469ed098c49f580c7a2128a75b04cb211",
+      "class": "upstream",
+      "baseSha256": "955df894aa41a1c76d4c28a784f0cac469ed098c49f580c7a2128a75b04cb211"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-intro.ja.caf",
+      "bytes": 22139,
+      "sha256": "659e8f5a3ed41af36315d61193e9ced63502916e51651c6d27a8a2386f3c30ca",
+      "class": "upstream",
+      "baseSha256": "659e8f5a3ed41af36315d61193e9ced63502916e51651c6d27a8a2386f3c30ca"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-intro.ko.caf",
+      "bytes": 17485,
+      "sha256": "f1fe3aec54c9304e0a7f2ea95b6f800ea69a41f6090d7f5cb0de9a740896900b",
+      "class": "upstream",
+      "baseSha256": "f1fe3aec54c9304e0a7f2ea95b6f800ea69a41f6090d7f5cb0de9a740896900b"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-intro.pt-BR.caf",
+      "bytes": 22170,
+      "sha256": "61760b143ff8ebf07a05c909f760e949613152dd9d6f99271679e274a94597a2",
+      "class": "upstream",
+      "baseSha256": "61760b143ff8ebf07a05c909f760e949613152dd9d6f99271679e274a94597a2"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-intro.zh-Hans.caf",
+      "bytes": 24834,
+      "sha256": "3f903c2c43866eddd62351bbd25587baa57e491b85b25ce184bcd27f90c8850d",
+      "class": "upstream",
+      "baseSha256": "3f903c2c43866eddd62351bbd25587baa57e491b85b25ce184bcd27f90c8850d"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-intro.zh-Hant.caf",
+      "bytes": 26127,
+      "sha256": "3cd2d41c8fd9ddcc92814af0f3cfd373f77e05121dfb4657c065e00db733fe70",
+      "class": "upstream",
+      "baseSha256": "3cd2d41c8fd9ddcc92814af0f3cfd373f77e05121dfb4657c065e00db733fe70"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-stop.de.caf",
+      "bytes": 25490,
+      "sha256": "3243ed26ff9e02d4cace6e33a5b82cc785fea3b6800182234ac3c68b3861714b",
+      "class": "upstream",
+      "baseSha256": "3243ed26ff9e02d4cace6e33a5b82cc785fea3b6800182234ac3c68b3861714b"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-stop.en.caf",
+      "bytes": 27235,
+      "sha256": "d7f10673d0a9b554316c2528ab374bbdd9a031d7a0484b0da00a155c38c36990",
+      "class": "upstream",
+      "baseSha256": "d7f10673d0a9b554316c2528ab374bbdd9a031d7a0484b0da00a155c38c36990"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-stop.es.caf",
+      "bytes": 24049,
+      "sha256": "73c05679a6dfa74dc9179f834ada042045222b4680772dc2a622cd5bdf5296d5",
+      "class": "upstream",
+      "baseSha256": "73c05679a6dfa74dc9179f834ada042045222b4680772dc2a622cd5bdf5296d5"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-stop.fr.caf",
+      "bytes": 21780,
+      "sha256": "a8f8c2bcc0bf0f810a6fefbdb675a2214e48402e3c818232743db611fca08e90",
+      "class": "upstream",
+      "baseSha256": "a8f8c2bcc0bf0f810a6fefbdb675a2214e48402e3c818232743db611fca08e90"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-stop.it.caf",
+      "bytes": 25249,
+      "sha256": "3bedead1c83f1a9c6b0dd094d5dbd89c7ba3ef7eed44affd1b735ecb2cbdd347",
+      "class": "upstream",
+      "baseSha256": "3bedead1c83f1a9c6b0dd094d5dbd89c7ba3ef7eed44affd1b735ecb2cbdd347"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-stop.ja.caf",
+      "bytes": 24513,
+      "sha256": "b133cefaf029954edb2a500f8d0ca163f72135d759175936815a1378acdce62d",
+      "class": "upstream",
+      "baseSha256": "b133cefaf029954edb2a500f8d0ca163f72135d759175936815a1378acdce62d"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-stop.ko.caf",
+      "bytes": 23809,
+      "sha256": "c1012ae3ac9dd82585cc2229b9db68c62eac10bc649b867f3d4379745fa46169",
+      "class": "upstream",
+      "baseSha256": "c1012ae3ac9dd82585cc2229b9db68c62eac10bc649b867f3d4379745fa46169"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-stop.pt-BR.caf",
+      "bytes": 28729,
+      "sha256": "2747d21678195dc6554a780c588a4f5008706c7a2521718259bf3d635e1f8158",
+      "class": "upstream",
+      "baseSha256": "2747d21678195dc6554a780c588a4f5008706c7a2521718259bf3d635e1f8158"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-stop.zh-Hans.caf",
+      "bytes": 27217,
+      "sha256": "6c1072924088d7ced3b15df5525c1396ced3246cf885f019cf120ebd27b0a95f",
+      "class": "upstream",
+      "baseSha256": "6c1072924088d7ced3b15df5525c1396ced3246cf885f019cf120ebd27b0a95f"
+    },
+    {
+      "path": "assets/ExploreNarration/blocked-stop.zh-Hant.caf",
+      "bytes": 26327,
+      "sha256": "ce132a2c5ace658b3abdcb3b5fa275a893912d069f8ad8defe4824277dd99372",
+      "class": "upstream",
+      "baseSha256": "ce132a2c5ace658b3abdcb3b5fa275a893912d069f8ad8defe4824277dd99372"
+    },
+    {
+      "path": "assets/ExploreNarration/device.de.caf",
+      "bytes": 25100,
+      "sha256": "2760dcce62ef7cd468e6affc19f3a8df3a288bebcb60ae5bee0e43d4980792ec",
+      "class": "upstream",
+      "baseSha256": "2760dcce62ef7cd468e6affc19f3a8df3a288bebcb60ae5bee0e43d4980792ec"
+    },
+    {
+      "path": "assets/ExploreNarration/device.en.caf",
+      "bytes": 31396,
+      "sha256": "b21a48bcc38aa8cb3cad080e07e0fcc36ebf10e6637c957015cc2ec22c330c92",
+      "class": "upstream",
+      "baseSha256": "b21a48bcc38aa8cb3cad080e07e0fcc36ebf10e6637c957015cc2ec22c330c92"
+    },
+    {
+      "path": "assets/ExploreNarration/device.es.caf",
+      "bytes": 25702,
+      "sha256": "7190cc892be4e1b785494599f2ab134546f13d47a66aa9f1915de98fa9730101",
+      "class": "upstream",
+      "baseSha256": "7190cc892be4e1b785494599f2ab134546f13d47a66aa9f1915de98fa9730101"
+    },
+    {
+      "path": "assets/ExploreNarration/device.fr.caf",
+      "bytes": 22490,
+      "sha256": "5c3d8f1ea911e5255851f3df29e7dc83e465caaedd170bd7774ce7015508e1cb",
+      "class": "upstream",
+      "baseSha256": "5c3d8f1ea911e5255851f3df29e7dc83e465caaedd170bd7774ce7015508e1cb"
+    },
+    {
+      "path": "assets/ExploreNarration/device.it.caf",
+      "bytes": 30978,
+      "sha256": "5d3be45cda30174323e310896f2b3296ca168ab038c850b4a06f3262c4fa8fa4",
+      "class": "upstream",
+      "baseSha256": "5d3be45cda30174323e310896f2b3296ca168ab038c850b4a06f3262c4fa8fa4"
+    },
+    {
+      "path": "assets/ExploreNarration/device.ja.caf",
+      "bytes": 31150,
+      "sha256": "2079d4898ef0433e9a5bd2bfbb4936a25fc615739164b9b231ae9faba1b20c06",
+      "class": "upstream",
+      "baseSha256": "2079d4898ef0433e9a5bd2bfbb4936a25fc615739164b9b231ae9faba1b20c06"
+    },
+    {
+      "path": "assets/ExploreNarration/device.ko.caf",
+      "bytes": 26750,
+      "sha256": "0b53360c798f9fd4e4cae3f091fa03526dcf07631018974dc6e9c76d91aeefda",
+      "class": "upstream",
+      "baseSha256": "0b53360c798f9fd4e4cae3f091fa03526dcf07631018974dc6e9c76d91aeefda"
+    },
+    {
+      "path": "assets/ExploreNarration/device.pt-BR.caf",
+      "bytes": 30770,
+      "sha256": "c0506ee66e031f7204f9ad18a6e6b4c24d3235c7963302c43e79cc26d0453f7c",
+      "class": "upstream",
+      "baseSha256": "c0506ee66e031f7204f9ad18a6e6b4c24d3235c7963302c43e79cc26d0453f7c"
+    },
+    {
+      "path": "assets/ExploreNarration/device.zh-Hans.caf",
+      "bytes": 31697,
+      "sha256": "6343276f3df3ad4a9a89c1a10f1efd3d4a7079ac6e1d08db6cc93d8203070882",
+      "class": "upstream",
+      "baseSha256": "6343276f3df3ad4a9a89c1a10f1efd3d4a7079ac6e1d08db6cc93d8203070882"
+    },
+    {
+      "path": "assets/ExploreNarration/device.zh-Hant.caf",
+      "bytes": 33983,
+      "sha256": "577087f53672b9d91e9912e2164f42b06f948fed037f295db412bfadab3cfa20",
+      "class": "upstream",
+      "baseSha256": "577087f53672b9d91e9912e2164f42b06f948fed037f295db412bfadab3cfa20"
+    },
+    {
+      "path": "assets/ExploreNarration/dns-choice.de.caf",
+      "bytes": 18821,
+      "sha256": "45500c2e06d17c090831adb34b8addbdb4180b4b18f03df908746703fe8a9728",
+      "class": "upstream",
+      "baseSha256": "45500c2e06d17c090831adb34b8addbdb4180b4b18f03df908746703fe8a9728"
+    },
+    {
+      "path": "assets/ExploreNarration/dns-choice.en.caf",
+      "bytes": 20918,
+      "sha256": "ab5d21e0e63ae41b962c2b98e7a990de414ce802628c30d1a01f27c5af777cca",
+      "class": "upstream",
+      "baseSha256": "ab5d21e0e63ae41b962c2b98e7a990de414ce802628c30d1a01f27c5af777cca"
+    },
+    {
+      "path": "assets/ExploreNarration/dns-choice.es.caf",
+      "bytes": 20249,
+      "sha256": "52a8aa5a9162da7c313e8ecf4f7ecb786a532e02e2d8c71f5492e85d001c8d04",
+      "class": "upstream",
+      "baseSha256": "52a8aa5a9162da7c313e8ecf4f7ecb786a532e02e2d8c71f5492e85d001c8d04"
+    },
+    {
+      "path": "assets/ExploreNarration/dns-choice.fr.caf",
+      "bytes": 19680,
+      "sha256": "accfe48428684d448790b6b0faf6ed6d39fdc18da6c6e2a7e1d39f58cb62ebad",
+      "class": "upstream",
+      "baseSha256": "accfe48428684d448790b6b0faf6ed6d39fdc18da6c6e2a7e1d39f58cb62ebad"
+    },
+    {
+      "path": "assets/ExploreNarration/dns-choice.it.caf",
+      "bytes": 22775,
+      "sha256": "49d5a4f0e0f3d33ac3d73a3dff7ed6f96169ec2328115bc21f47a966cf224145",
+      "class": "upstream",
+      "baseSha256": "49d5a4f0e0f3d33ac3d73a3dff7ed6f96169ec2328115bc21f47a966cf224145"
+    },
+    {
+      "path": "assets/ExploreNarration/dns-choice.ja.caf",
+      "bytes": 26868,
+      "sha256": "1537f4eef013797ffb652c649a52ac80b837450ee78e51c7994de10f65023cec",
+      "class": "upstream",
+      "baseSha256": "1537f4eef013797ffb652c649a52ac80b837450ee78e51c7994de10f65023cec"
+    },
+    {
+      "path": "assets/ExploreNarration/dns-choice.ko.caf",
+      "bytes": 20750,
+      "sha256": "4fd183ce2a94be424bbb8a62368fc69a45b7b6d299aeef868e53e60e2a47fbac",
+      "class": "upstream",
+      "baseSha256": "4fd183ce2a94be424bbb8a62368fc69a45b7b6d299aeef868e53e60e2a47fbac"
+    },
+    {
+      "path": "assets/ExploreNarration/dns-choice.pt-BR.caf",
+      "bytes": 22536,
+      "sha256": "59a9d8ed2d80bddeee1fd2cc5c5cebc737764c386d465a187321a4dbe78387c8",
+      "class": "upstream",
+      "baseSha256": "59a9d8ed2d80bddeee1fd2cc5c5cebc737764c386d465a187321a4dbe78387c8"
+    },
+    {
+      "path": "assets/ExploreNarration/dns-choice.zh-Hans.caf",
+      "bytes": 22157,
+      "sha256": "83582cbcbf6766c4858c60cf7a3894decb9f43d97762a1dd18b2a3acb27c3b49",
+      "class": "upstream",
+      "baseSha256": "83582cbcbf6766c4858c60cf7a3894decb9f43d97762a1dd18b2a3acb27c3b49"
+    },
+    {
+      "path": "assets/ExploreNarration/dns-choice.zh-Hant.caf",
+      "bytes": 22868,
+      "sha256": "0c57ac7f2325360414393c34ec0aaf0faceffad42012389abc3201b3ac286511",
+      "class": "upstream",
+      "baseSha256": "0c57ac7f2325360414393c34ec0aaf0faceffad42012389abc3201b3ac286511"
+    },
+    {
+      "path": "assets/ExploreNarration/ending.de.caf",
+      "bytes": 21584,
+      "sha256": "62c9ba5bdfa17e950f68a48a9762573a53c696a6d5aed375f8027ee516dcb4ba",
+      "class": "upstream",
+      "baseSha256": "62c9ba5bdfa17e950f68a48a9762573a53c696a6d5aed375f8027ee516dcb4ba"
+    },
+    {
+      "path": "assets/ExploreNarration/ending.en.caf",
+      "bytes": 20420,
+      "sha256": "f710225aec5d1ead8f1f3900169393353f31930d3803ccd888eeabb28e9b555d",
+      "class": "upstream",
+      "baseSha256": "f710225aec5d1ead8f1f3900169393353f31930d3803ccd888eeabb28e9b555d"
+    },
+    {
+      "path": "assets/ExploreNarration/ending.es.caf",
+      "bytes": 18587,
+      "sha256": "ad69dba88fc88f29673f8a94c5c9f01ec0a7bde4fd5841fa65d02b5d786e0d3c",
+      "class": "upstream",
+      "baseSha256": "ad69dba88fc88f29673f8a94c5c9f01ec0a7bde4fd5841fa65d02b5d786e0d3c"
+    },
+    {
+      "path": "assets/ExploreNarration/ending.fr.caf",
+      "bytes": 16192,
+      "sha256": "6a7765af08b2205bd2b9ba930ab8fe3bf51eb5baea9c76f03acbd303feb4c201",
+      "class": "upstream",
+      "baseSha256": "6a7765af08b2205bd2b9ba930ab8fe3bf51eb5baea9c76f03acbd303feb4c201"
+    },
+    {
+      "path": "assets/ExploreNarration/ending.it.caf",
+      "bytes": 21393,
+      "sha256": "cf6ea73cf38fd6f513d40e14e962925a85968d1e872cf8bd4d0a7c0bad1f1a09",
+      "class": "upstream",
+      "baseSha256": "cf6ea73cf38fd6f513d40e14e962925a85968d1e872cf8bd4d0a7c0bad1f1a09"
+    },
+    {
+      "path": "assets/ExploreNarration/ending.ja.caf",
+      "bytes": 25187,
+      "sha256": "c7c0b894f60bd8f2796653d47c46e37d597a528b131d59e0f6404d4121eedb22",
+      "class": "upstream",
+      "baseSha256": "c7c0b894f60bd8f2796653d47c46e37d597a528b131d59e0f6404d4121eedb22"
+    },
+    {
+      "path": "assets/ExploreNarration/ending.ko.caf",
+      "bytes": 24934,
+      "sha256": "ead292cdb5847fa97eb5f2a88445c45e8aac8af46463afe057548b9867bd2932",
+      "class": "upstream",
+      "baseSha256": "ead292cdb5847fa97eb5f2a88445c45e8aac8af46463afe057548b9867bd2932"
+    },
+    {
+      "path": "assets/ExploreNarration/ending.pt-BR.caf",
+      "bytes": 22398,
+      "sha256": "a8550927fd1090c121ccf9f5093e38548172b3c7c3b5af7ff392eb637963dc49",
+      "class": "upstream",
+      "baseSha256": "a8550927fd1090c121ccf9f5093e38548172b3c7c3b5af7ff392eb637963dc49"
+    },
+    {
+      "path": "assets/ExploreNarration/ending.zh-Hans.caf",
+      "bytes": 21788,
+      "sha256": "7f092e6d7e9a7b20306215b793b34781f4d4ccc1497b4ca104939efe09f33188",
+      "class": "upstream",
+      "baseSha256": "7f092e6d7e9a7b20306215b793b34781f4d4ccc1497b4ca104939efe09f33188"
+    },
+    {
+      "path": "assets/ExploreNarration/ending.zh-Hant.caf",
+      "bytes": 23078,
+      "sha256": "3ddc36e05f920fa859b76f294b787fdf5eeef513724a5b80f4fa5b72ff363a6b",
+      "class": "upstream",
+      "baseSha256": "3ddc36e05f920fa859b76f294b787fdf5eeef513724a5b80f4fa5b72ff363a6b"
+    },
+    {
+      "path": "assets/ExploreNarration/filter-policy.de.caf",
+      "bytes": 26643,
+      "sha256": "289f5dfa41be039c82b0c972dc069664cba13c17378def049faa3fc415995d3a",
+      "class": "upstream",
+      "baseSha256": "289f5dfa41be039c82b0c972dc069664cba13c17378def049faa3fc415995d3a"
+    },
+    {
+      "path": "assets/ExploreNarration/filter-policy.en.caf",
+      "bytes": 25516,
+      "sha256": "2eaf6ba22507e6c29df590c947d34f3d6d2ac43fe92308a0fd43faa960b4e121",
+      "class": "upstream",
+      "baseSha256": "2eaf6ba22507e6c29df590c947d34f3d6d2ac43fe92308a0fd43faa960b4e121"
+    },
+    {
+      "path": "assets/ExploreNarration/filter-policy.es.caf",
+      "bytes": 23732,
+      "sha256": "5556f1f1f6153688a960318bd2d31df5d4037509e83bd84fd7a99ae80f337e7f",
+      "class": "upstream",
+      "baseSha256": "5556f1f1f6153688a960318bd2d31df5d4037509e83bd84fd7a99ae80f337e7f"
+    },
+    {
+      "path": "assets/ExploreNarration/filter-policy.fr.caf",
+      "bytes": 32724,
+      "sha256": "f752a5c7f1071c52752f34ea47ad2a631004a7ecb014bbf83b3d3f0191321c11",
+      "class": "upstream",
+      "baseSha256": "f752a5c7f1071c52752f34ea47ad2a631004a7ecb014bbf83b3d3f0191321c11"
+    },
+    {
+      "path": "assets/ExploreNarration/filter-policy.it.caf",
+      "bytes": 23787,
+      "sha256": "16ccbaba001974a32815ac746994a89241e01f2790eb790ee35f769cd94683ce",
+      "class": "upstream",
+      "baseSha256": "16ccbaba001974a32815ac746994a89241e01f2790eb790ee35f769cd94683ce"
+    },
+    {
+      "path": "assets/ExploreNarration/filter-policy.ja.caf",
+      "bytes": 25557,
+      "sha256": "3ce93f0950b912036d5061dedee569dc1cf7060e059c1f6e919053ef388e27c6",
+      "class": "upstream",
+      "baseSha256": "3ce93f0950b912036d5061dedee569dc1cf7060e059c1f6e919053ef388e27c6"
+    },
+    {
+      "path": "assets/ExploreNarration/filter-policy.ko.caf",
+      "bytes": 23100,
+      "sha256": "07081307f0df0b016d4870bb560c8a3a9e57bf17faa7460e417918cebd398eba",
+      "class": "upstream",
+      "baseSha256": "07081307f0df0b016d4870bb560c8a3a9e57bf17faa7460e417918cebd398eba"
+    },
+    {
+      "path": "assets/ExploreNarration/filter-policy.pt-BR.caf",
+      "bytes": 24442,
+      "sha256": "62ab1a84cc7736e9b1b41e33e0e71b6776b4bffd80d0321c223377713af1511f",
+      "class": "upstream",
+      "baseSha256": "62ab1a84cc7736e9b1b41e33e0e71b6776b4bffd80d0321c223377713af1511f"
+    },
+    {
+      "path": "assets/ExploreNarration/filter-policy.zh-Hans.caf",
+      "bytes": 31458,
+      "sha256": "8a94cd23481e9930a8bc48ff333fd676d2a7d501c7e4c7cf724fbe453c43516c",
+      "class": "upstream",
+      "baseSha256": "8a94cd23481e9930a8bc48ff333fd676d2a7d501c7e4c7cf724fbe453c43516c"
+    },
+    {
+      "path": "assets/ExploreNarration/filter-policy.zh-Hant.caf",
+      "bytes": 31625,
+      "sha256": "b470b2697cd782751167950fae5059a4ea51db503ba70668a5716682b034d9b8",
+      "class": "upstream",
+      "baseSha256": "b470b2697cd782751167950fae5059a4ea51db503ba70668a5716682b034d9b8"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-complete.de.caf",
+      "bytes": 22798,
+      "sha256": "ee451a093f97080746137493fcfe4929b7b20efe0e2b5ea07a57b441fe88b28f",
+      "class": "upstream",
+      "baseSha256": "ee451a093f97080746137493fcfe4929b7b20efe0e2b5ea07a57b441fe88b28f"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-complete.en.caf",
+      "bytes": 21875,
+      "sha256": "9ddb7c992ab1b48581419ff19ff7e8471b3c1ee1cf8a96fff2ece3146289d59b",
+      "class": "upstream",
+      "baseSha256": "9ddb7c992ab1b48581419ff19ff7e8471b3c1ee1cf8a96fff2ece3146289d59b"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-complete.es.caf",
+      "bytes": 24432,
+      "sha256": "651423e4425432841e4f2547baa13d7b20b34f5e815dadfb7fda385d9ed0ae0f",
+      "class": "upstream",
+      "baseSha256": "651423e4425432841e4f2547baa13d7b20b34f5e815dadfb7fda385d9ed0ae0f"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-complete.fr.caf",
+      "bytes": 18766,
+      "sha256": "2a542c9290f4305fd69fe1140c09acaff0c52841996503a7b4cdbb80b955ffb7",
+      "class": "upstream",
+      "baseSha256": "2a542c9290f4305fd69fe1140c09acaff0c52841996503a7b4cdbb80b955ffb7"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-complete.it.caf",
+      "bytes": 26134,
+      "sha256": "69e01eb0af980ffb7c32486a68c78e64f4c3bede8c0d536edd0b372e2759e21d",
+      "class": "upstream",
+      "baseSha256": "69e01eb0af980ffb7c32486a68c78e64f4c3bede8c0d536edd0b372e2759e21d"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-complete.ja.caf",
+      "bytes": 27003,
+      "sha256": "17fb16ff11731558a6a20e550623f2f5f16b43392dcda5e6a3d098a07126e247",
+      "class": "upstream",
+      "baseSha256": "17fb16ff11731558a6a20e550623f2f5f16b43392dcda5e6a3d098a07126e247"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-complete.ko.caf",
+      "bytes": 21465,
+      "sha256": "0a592678ca0fafd1e611a6265accef70a438bee8321f7a48e207061d1d8508cd",
+      "class": "upstream",
+      "baseSha256": "0a592678ca0fafd1e611a6265accef70a438bee8321f7a48e207061d1d8508cd"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-complete.pt-BR.caf",
+      "bytes": 23178,
+      "sha256": "c89679b8c61029a784c72df55a2b75ac3df5ae513ca0d088ba0d3e701f1111a4",
+      "class": "upstream",
+      "baseSha256": "c89679b8c61029a784c72df55a2b75ac3df5ae513ca0d088ba0d3e701f1111a4"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-complete.zh-Hans.caf",
+      "bytes": 22848,
+      "sha256": "c5b7fd0ae771a563174e56c47c84d5351966eaa60c56adf4a9caf60663069784",
+      "class": "upstream",
+      "baseSha256": "c5b7fd0ae771a563174e56c47c84d5351966eaa60c56adf4a9caf60663069784"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-complete.zh-Hant.caf",
+      "bytes": 23155,
+      "sha256": "00768ab0e8fb40872de44d5995428c7f3b118ec89dd22655fb7e82744f39b12e",
+      "class": "upstream",
+      "baseSha256": "00768ab0e8fb40872de44d5995428c7f3b118ec89dd22655fb7e82744f39b12e"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-intro.de.caf",
+      "bytes": 26564,
+      "sha256": "5cbbb7d0d2b53f32feb10829f4219d8b8b1a89b295243517b9fdd7de0f778a5b",
+      "class": "upstream",
+      "baseSha256": "5cbbb7d0d2b53f32feb10829f4219d8b8b1a89b295243517b9fdd7de0f778a5b"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-intro.en.caf",
+      "bytes": 29596,
+      "sha256": "52217e875dd1373ccade57086470819b8d5546a5f75e6a82bb9fa4bf18057de8",
+      "class": "upstream",
+      "baseSha256": "52217e875dd1373ccade57086470819b8d5546a5f75e6a82bb9fa4bf18057de8"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-intro.es.caf",
+      "bytes": 29230,
+      "sha256": "2a4ba6b50ec6b3c45fef8335203db81073f53e029031e08115a09c7d95e8c054",
+      "class": "upstream",
+      "baseSha256": "2a4ba6b50ec6b3c45fef8335203db81073f53e029031e08115a09c7d95e8c054"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-intro.fr.caf",
+      "bytes": 22466,
+      "sha256": "81dd82dc2e8a90471fa64a854176e6317e2a3ea31b2de15955c7115f9fabe36c",
+      "class": "upstream",
+      "baseSha256": "81dd82dc2e8a90471fa64a854176e6317e2a3ea31b2de15955c7115f9fabe36c"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-intro.it.caf",
+      "bytes": 25943,
+      "sha256": "b6b112eff0d2fae76327995e6677da9e24b688b419d2be5b09da017adcdfcfd1",
+      "class": "upstream",
+      "baseSha256": "b6b112eff0d2fae76327995e6677da9e24b688b419d2be5b09da017adcdfcfd1"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-intro.ja.caf",
+      "bytes": 30561,
+      "sha256": "f2d7679bed6c35679bad3402716e8e3dd0cd5f57c5d3884788e27e5693d4624a",
+      "class": "upstream",
+      "baseSha256": "f2d7679bed6c35679bad3402716e8e3dd0cd5f57c5d3884788e27e5693d4624a"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-intro.ko.caf",
+      "bytes": 28643,
+      "sha256": "5ae3000ac56e7d724cf1f6db4d18ddb8ebd0a60258854ad4e718e2d8701f4c23",
+      "class": "upstream",
+      "baseSha256": "5ae3000ac56e7d724cf1f6db4d18ddb8ebd0a60258854ad4e718e2d8701f4c23"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-intro.pt-BR.caf",
+      "bytes": 28187,
+      "sha256": "7017a24a769414e068beefcf5021dad8920da8a06adce0c5b69593b6c96b9fce",
+      "class": "upstream",
+      "baseSha256": "7017a24a769414e068beefcf5021dad8920da8a06adce0c5b69593b6c96b9fce"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-intro.zh-Hans.caf",
+      "bytes": 29961,
+      "sha256": "e1b577cdb8d90665db39c1049f5000dfca4f10a3176439dd01251fcae898e739",
+      "class": "upstream",
+      "baseSha256": "e1b577cdb8d90665db39c1049f5000dfca4f10a3176439dd01251fcae898e739"
+    },
+    {
+      "path": "assets/ExploreNarration/lookup-intro.zh-Hant.caf",
+      "bytes": 29438,
+      "sha256": "d5e0e4527753bd1b67801f702823068f4f08b2137c21eb0e4aa1d9454dad3411",
+      "class": "upstream",
+      "baseSha256": "d5e0e4527753bd1b67801f702823068f4f08b2137c21eb0e4aa1d9454dad3411"
+    },
+    {
+      "path": "assets/ExploreNarration/manifest.json",
+      "bytes": 80917,
+      "sha256": "e668885aa69245725d8c6ec3b458efd9b1a7fc792e910161d62e6882c920ffe3",
+      "class": "upstream",
+      "baseSha256": "e668885aa69245725d8c6ec3b458efd9b1a7fc792e910161d62e6882c920ffe3"
+    },
+    {
+      "path": "assets/ExploreNarration/route.de.caf",
+      "bytes": 16872,
+      "sha256": "3ef3e96f49457ebcfe1d498ac8d210507bee712fa0f069386608dfbae15000a2",
+      "class": "upstream",
+      "baseSha256": "3ef3e96f49457ebcfe1d498ac8d210507bee712fa0f069386608dfbae15000a2"
+    },
+    {
+      "path": "assets/ExploreNarration/route.en.caf",
+      "bytes": 21011,
+      "sha256": "4e366ad26bf36e80c7690ca3bcad26a880ebe56e3ffb83435fac04e9644e0252",
+      "class": "upstream",
+      "baseSha256": "4e366ad26bf36e80c7690ca3bcad26a880ebe56e3ffb83435fac04e9644e0252"
+    },
+    {
+      "path": "assets/ExploreNarration/route.es.caf",
+      "bytes": 19399,
+      "sha256": "2eedff65751c8244a5a65bc0ad761a5e90a2f7e07f87b696f4fb75f147bffd30",
+      "class": "upstream",
+      "baseSha256": "2eedff65751c8244a5a65bc0ad761a5e90a2f7e07f87b696f4fb75f147bffd30"
+    },
+    {
+      "path": "assets/ExploreNarration/route.fr.caf",
+      "bytes": 15190,
+      "sha256": "85f2ae5bda7af966ab0d55bdf5bef5c83d8a6478661c41309d14944896da8e45",
+      "class": "upstream",
+      "baseSha256": "85f2ae5bda7af966ab0d55bdf5bef5c83d8a6478661c41309d14944896da8e45"
+    },
+    {
+      "path": "assets/ExploreNarration/route.it.caf",
+      "bytes": 24996,
+      "sha256": "d5253f06028845d5726cdeb9ba72fcdc5370b6ecedbd64d7207a958683f64c71",
+      "class": "upstream",
+      "baseSha256": "d5253f06028845d5726cdeb9ba72fcdc5370b6ecedbd64d7207a958683f64c71"
+    },
+    {
+      "path": "assets/ExploreNarration/route.ja.caf",
+      "bytes": 24053,
+      "sha256": "56351664f0564c01faabdb73e2a912309227c15bec5bade8c73c8ac63927cb06",
+      "class": "upstream",
+      "baseSha256": "56351664f0564c01faabdb73e2a912309227c15bec5bade8c73c8ac63927cb06"
+    },
+    {
+      "path": "assets/ExploreNarration/route.ko.caf",
+      "bytes": 20076,
+      "sha256": "74663ab639d5c2657ebc25f50fc3aeb53f57e31cfec58c31d92dd0cb893b8893",
+      "class": "upstream",
+      "baseSha256": "74663ab639d5c2657ebc25f50fc3aeb53f57e31cfec58c31d92dd0cb893b8893"
+    },
+    {
+      "path": "assets/ExploreNarration/route.pt-BR.caf",
+      "bytes": 17744,
+      "sha256": "06f4141bbb351bb78053fb6cc2ee4316d2ec363894a197dad07f9d87bb218691",
+      "class": "upstream",
+      "baseSha256": "06f4141bbb351bb78053fb6cc2ee4316d2ec363894a197dad07f9d87bb218691"
+    },
+    {
+      "path": "assets/ExploreNarration/route.zh-Hans.caf",
+      "bytes": 21911,
+      "sha256": "c3c18048ec30685bcab6afe4a91a7501abe70fcaa3a99f02febbdb9987a939d6",
+      "class": "upstream",
+      "baseSha256": "c3c18048ec30685bcab6afe4a91a7501abe70fcaa3a99f02febbdb9987a939d6"
+    },
+    {
+      "path": "assets/ExploreNarration/route.zh-Hant.caf",
+      "bytes": 22833,
+      "sha256": "f4b770e2597b9e091a948dc7e9e64a45f940e9040840d362298f90301e7dbf44",
+      "class": "upstream",
+      "baseSha256": "f4b770e2597b9e091a948dc7e9e64a45f940e9040840d362298f90301e7dbf44"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn-follow.de.caf",
+      "bytes": 22519,
+      "sha256": "7edb2db63da27bdbbcf59cc050a995abc141b19b47040a45d8def2beea229171",
+      "class": "upstream",
+      "baseSha256": "7edb2db63da27bdbbcf59cc050a995abc141b19b47040a45d8def2beea229171"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn-follow.en.caf",
+      "bytes": 24206,
+      "sha256": "ffd6938b13752d6a3b2d349eafd15d5cec9bd940069ff9bc91481ce0df460a87",
+      "class": "upstream",
+      "baseSha256": "ffd6938b13752d6a3b2d349eafd15d5cec9bd940069ff9bc91481ce0df460a87"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn-follow.es.caf",
+      "bytes": 26333,
+      "sha256": "b327b4ac85f63408d1fdf52ff75044ece4cfb217ae93f94bd8ac740da4ec54da",
+      "class": "upstream",
+      "baseSha256": "b327b4ac85f63408d1fdf52ff75044ece4cfb217ae93f94bd8ac740da4ec54da"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn-follow.fr.caf",
+      "bytes": 23803,
+      "sha256": "0ee0e91f126441824827e6947117d9a61263c073a59326dbe693fc5e75e8aa6e",
+      "class": "upstream",
+      "baseSha256": "0ee0e91f126441824827e6947117d9a61263c073a59326dbe693fc5e75e8aa6e"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn-follow.it.caf",
+      "bytes": 26383,
+      "sha256": "78a03bd61ea13da8695b00e0122dbcf0e8b4e87fc1d1883f788aed3edd0d9da4",
+      "class": "upstream",
+      "baseSha256": "78a03bd61ea13da8695b00e0122dbcf0e8b4e87fc1d1883f788aed3edd0d9da4"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn-follow.ja.caf",
+      "bytes": 23024,
+      "sha256": "e3d4d304b8d16e71aaf315b70f8c7cf6a150946e84247c4d39b185800507bb62",
+      "class": "upstream",
+      "baseSha256": "e3d4d304b8d16e71aaf315b70f8c7cf6a150946e84247c4d39b185800507bb62"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn-follow.ko.caf",
+      "bytes": 20830,
+      "sha256": "c9d3fd029ca00250fe523fc72a44cb4ac1251b547b563285af898151a81f7121",
+      "class": "upstream",
+      "baseSha256": "c9d3fd029ca00250fe523fc72a44cb4ac1251b547b563285af898151a81f7121"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn-follow.pt-BR.caf",
+      "bytes": 26950,
+      "sha256": "0b56d892007adcf41e035e957182d0730cac7adcd2e606f3d5ff5b177edefb7e",
+      "class": "upstream",
+      "baseSha256": "0b56d892007adcf41e035e957182d0730cac7adcd2e606f3d5ff5b177edefb7e"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn-follow.zh-Hans.caf",
+      "bytes": 25650,
+      "sha256": "bf272b9bfb597945917058f25cf250cb65a35e163ff5dd63c8a1a1f161bc6d6f",
+      "class": "upstream",
+      "baseSha256": "bf272b9bfb597945917058f25cf250cb65a35e163ff5dd63c8a1a1f161bc6d6f"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn-follow.zh-Hant.caf",
+      "bytes": 24410,
+      "sha256": "04fbc79528ebb1fd4bbaa76d0011d0742555c2dfc0644f982baf375b37ec70d2",
+      "class": "upstream",
+      "baseSha256": "04fbc79528ebb1fd4bbaa76d0011d0742555c2dfc0644f982baf375b37ec70d2"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn.de.caf",
+      "bytes": 24171,
+      "sha256": "e1211f4ad787a675f478579eda4e94d3ca2278b0e59ac068c7c3ceb2dd0ed6cf",
+      "class": "upstream",
+      "baseSha256": "e1211f4ad787a675f478579eda4e94d3ca2278b0e59ac068c7c3ceb2dd0ed6cf"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn.en.caf",
+      "bytes": 27370,
+      "sha256": "3088c32c163431db661a08ca612fb29638263a11f02ec23ce29d856ead17cd73",
+      "class": "upstream",
+      "baseSha256": "3088c32c163431db661a08ca612fb29638263a11f02ec23ce29d856ead17cd73"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn.es.caf",
+      "bytes": 29300,
+      "sha256": "94dcee70db611bb0609927f281570690bbcb718d8dfb5c7b6e41a38a9084fb6a",
+      "class": "upstream",
+      "baseSha256": "94dcee70db611bb0609927f281570690bbcb718d8dfb5c7b6e41a38a9084fb6a"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn.fr.caf",
+      "bytes": 25019,
+      "sha256": "b2f3ca19cd3de49538fbb36ee63179a7be448588f63fc770f47a3d775abe6b74",
+      "class": "upstream",
+      "baseSha256": "b2f3ca19cd3de49538fbb36ee63179a7be448588f63fc770f47a3d775abe6b74"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn.it.caf",
+      "bytes": 26546,
+      "sha256": "b52987aded8acb75a71f0f6da32b27e00906b5cc83742acf399231d7fdec2355",
+      "class": "upstream",
+      "baseSha256": "b52987aded8acb75a71f0f6da32b27e00906b5cc83742acf399231d7fdec2355"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn.ja.caf",
+      "bytes": 23727,
+      "sha256": "c4fb90ebefff8b94f6fbba058c1181e6aac1275f28891efab951d8865006782c",
+      "class": "upstream",
+      "baseSha256": "c4fb90ebefff8b94f6fbba058c1181e6aac1275f28891efab951d8865006782c"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn.ko.caf",
+      "bytes": 21134,
+      "sha256": "9ab8282419b86d67550317a153f46f62491025a19b2dc325edc47693694aaed1",
+      "class": "upstream",
+      "baseSha256": "9ab8282419b86d67550317a153f46f62491025a19b2dc325edc47693694aaed1"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn.pt-BR.caf",
+      "bytes": 28552,
+      "sha256": "b54998891958a748a454f5f9b672cf8ef4815f74866a8017691ce1072d4321c4",
+      "class": "upstream",
+      "baseSha256": "b54998891958a748a454f5f9b672cf8ef4815f74866a8017691ce1072d4321c4"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn.zh-Hans.caf",
+      "bytes": 28727,
+      "sha256": "d9b4439e4659dbd8ffff6e7cb60e96c889ad7aa24b4b4a1b080691800b24d39e",
+      "class": "upstream",
+      "baseSha256": "d9b4439e4659dbd8ffff6e7cb60e96c889ad7aa24b4b4a1b080691800b24d39e"
+    },
+    {
+      "path": "assets/ExploreNarration/vpn.zh-Hant.caf",
+      "bytes": 26096,
+      "sha256": "523e945869329b802955bd88b2697223700d6a25b79a1e5dd6f8a22c555e4422",
+      "class": "upstream",
+      "baseSha256": "523e945869329b802955bd88b2697223700d6a25b79a1e5dd6f8a22c555e4422"
+    },
+    {
+      "path": "gallery/LavaComponentGallery.tsx",
+      "bytes": 9309,
+      "sha256": "f70b7dff42cde9a5b1b646c57fe2684f076478ae0dc47f0c6bb1efcda6519771",
+      "class": "divergence",
+      "base": "gallery/LavaComponentGallery.tsx",
+      "baseSha256": "f371929e1b7edb7b9a55585f37003b3bdfb9a006be88cc10214955a04239fc19",
+      "rationale": "Debug-only component-gallery fixture adapted for Android."
+    },
+    {
+      "path": "gallery/index.ts",
+      "bytes": 187,
+      "sha256": "17d41c65c7972cf9eb6ec75ff570a9e2fa33d60457d9b74e2af01012060a55af",
+      "class": "upstream",
+      "baseSha256": "17d41c65c7972cf9eb6ec75ff570a9e2fa33d60457d9b74e2af01012060a55af"
+    },
+    {
+      "path": "review/AccountBackupFlow.android.tsx",
+      "bytes": 3564,
+      "sha256": "f2b3b7d6ce154e257fe851b91f2645167c45ac92881e5d51eff3b309fbe04a8d",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "review/ActivityScreen.tsx",
+      "bytes": 11711,
+      "sha256": "12748fad7a9b698fa55755de6d97bdcafef37ddef5baa64f59df1a947fc884e4",
+      "class": "divergence",
+      "base": "review/ActivityScreen.tsx",
+      "baseSha256": "70f7e20541cfe87378e167d8ea162b9056cd19b3731e4ae614f89d483e0e2e90",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/ActivityShareCard.tsx",
+      "bytes": 10830,
+      "sha256": "e7182bc02a5fc5aad73c7b08b3b17e6fa18be11cfaf8e42263cde4ccfa66d1f4",
+      "class": "divergence",
+      "base": "review/ActivityShareCard.tsx",
+      "baseSha256": "b274c490bf89d3057b4e9e38df147c53e94a6d2bb0f6a6a2ddee3e1912bcd10e",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/BufferedInput.android.tsx",
+      "bytes": 2994,
+      "sha256": "122298b27aa233c522c2630a591af7033a4a5999e1841aff2138bea8ebad2057",
+      "class": "overlay",
+      "base": "review/BufferedInput.tsx",
+      "baseSha256": "c643ad6c0549151bb296fc39e70747870c18dc5fca06b527eafc1fe60cd28a24",
+      "rationale": "Android platform override for review/BufferedInput.tsx; reviewed leaf/route adaptation kept behind the shared contract."
+    },
+    {
+      "path": "review/BufferedInput.tsx",
+      "bytes": 3129,
+      "sha256": "c643ad6c0549151bb296fc39e70747870c18dc5fca06b527eafc1fe60cd28a24",
+      "class": "upstream",
+      "baseSha256": "c643ad6c0549151bb296fc39e70747870c18dc5fca06b527eafc1fe60cd28a24"
+    },
+    {
+      "path": "review/ContextMenu.tsx",
+      "bytes": 979,
+      "sha256": "a6f685121ea9d08dcdfb5dc551cdab228e3b27fdb258a76357418427013b2356",
+      "class": "divergence",
+      "base": "review/ContextMenu.tsx",
+      "baseSha256": "89b9fec06d05204aa3a9a78a395d2b0eb20345cc5f4877b68d9a2a5d321e3912",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/CustomEntryScreen.tsx",
+      "bytes": 9826,
+      "sha256": "b709bca2129f06fc0e1243f33424b40893dd0b3753809b51724a86fbe39f1f39",
+      "class": "divergence",
+      "base": "review/CustomEntryScreen.tsx",
+      "baseSha256": "279cef684b897f4557d8fcaea12112a026b00962f7143992d52b963a91ff6453",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/DNSPatchScreen.tsx",
+      "bytes": 129,
+      "sha256": "7334f8f0c8e8c53dc730efdd2e8bc263b3fd777f37bdeee016c9dd199357c06f",
+      "class": "upstream",
+      "baseSha256": "7334f8f0c8e8c53dc730efdd2e8bc263b3fd777f37bdeee016c9dd199357c06f"
+    },
+    {
+      "path": "review/DNSScreen.tsx",
+      "bytes": 18742,
+      "sha256": "8322ec2d8fc0f93c51c793229bd63ab58ddfe38d600e848f907017a3177798dc",
+      "class": "divergence",
+      "base": "review/DNSScreen.tsx",
+      "baseSha256": "bcc7d18724850336b05d21d1ff5ccf9366b18f42a08f89aebd93a4fe3520b00f",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/DiagnosticScreens.tsx",
+      "bytes": 17928,
+      "sha256": "0ec89ce3b7d7a0271ece99bc18f172652682eac091b44ba78c4abcc0026ae1ab",
+      "class": "divergence",
+      "base": "review/DiagnosticScreens.tsx",
+      "baseSha256": "d6657ebebfc94a194ae4a002ea57b09e89922b673360edce7e6544de0d9df1cb",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/DomainCheckScreen.tsx",
+      "bytes": 11461,
+      "sha256": "202c73626541d03a3bbe4a704f90dd115fafcb6eb045d4cc83114a1ac13bd887",
+      "class": "divergence",
+      "base": "review/DomainCheckScreen.tsx",
+      "baseSha256": "c6f633e804d9ec799d65cd3119162b3a164e81da30b59b3b828070c08ab925cc",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/ExploreScreen.tsx",
+      "bytes": 7988,
+      "sha256": "ff008c2f601d31d4778d494cc30534a74ae6ea6260a2a16d9d5961689e5137bb",
+      "class": "divergence",
+      "base": "review/ExploreScreen.tsx",
+      "baseSha256": "9a30597f1d1a13848d8c816ee007d73343d5b900259739d007250343a4e08351",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/FeedbackFlow.tsx",
+      "bytes": 18034,
+      "sha256": "313d222ad6cb2c20af052717729e5e2fe2d2bb17ae4d4f1df5ab23dcdde80d72",
+      "class": "divergence",
+      "base": "review/FeedbackFlow.tsx",
+      "baseSha256": "bb637375dff871b478f440200353fc176f75ccd22b33a4521338a803c5a3202a",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/FeedbackScreen.tsx",
+      "bytes": 4074,
+      "sha256": "8da11fe97d9fd713242934d24220babfbfe141f2155af3ecca0d1266102152d2",
+      "class": "divergence",
+      "base": "review/FeedbackScreen.tsx",
+      "baseSha256": "7527978e7e84c6d1486a51f00b9a9531c00ce9d2cba44d9ac560497b9697d298",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/FilterRoute.tsx",
+      "bytes": 913,
+      "sha256": "8a1a89e1588856d522c25a282b4f49a86e39bda0e5944d29a24fbd94b4f8859b",
+      "class": "divergence",
+      "base": "review/FilterRoute.tsx",
+      "baseSha256": "6b09b3a993f68fcbf4012767c142a69ead0f9e3e165a3889a13fc85d3b508278",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/FilterScreens.tsx",
+      "bytes": 48685,
+      "sha256": "8ae7253a64bd00662bf90cee36541c53a3e28ea7294226b19a51c5c9c22a83a6",
+      "class": "divergence",
+      "base": "review/FilterScreens.tsx",
+      "baseSha256": "6aa8fceafc77cb5ff4555a68213424f23a0dfe26c3f47244a0f967424d33851e",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/FilterShareCard.tsx",
+      "bytes": 5609,
+      "sha256": "5898839b5a819d2c511c2dfc5cff3c2c0bb79a4e8e44951ef98948bd24324a5d",
+      "class": "upstream",
+      "baseSha256": "5898839b5a819d2c511c2dfc5cff3c2c0bb79a4e8e44951ef98948bd24324a5d"
+    },
+    {
+      "path": "review/ForegroundFlowScreen.tsx",
+      "bytes": 17662,
+      "sha256": "d361501c336ed10731671edf40f0e6847d155de090f4ed10524912a827a798c0",
+      "class": "divergence",
+      "base": "review/ForegroundFlowScreen.tsx",
+      "baseSha256": "d833ec3fb0e273233908a5e4807d610426086052704acb83e5b45ed8703e5b04",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/HelpScreens.android.tsx",
+      "bytes": 773,
+      "sha256": "17de3a8638156838af3379e0488c7705610c5a7a53e115a6359f3ea1b9dab6b3",
+      "class": "overlay",
+      "base": "review/HelpScreens.tsx",
+      "baseSha256": "30d0c7683028bdcffa7e773f5ed3208907e4953e5fc4fd0a27c46bb2a7acf7fa",
+      "rationale": "Android platform override for review/HelpScreens.tsx; reviewed leaf/route adaptation kept behind the shared contract."
+    },
+    {
+      "path": "review/HelpScreens.tsx",
+      "bytes": 1570,
+      "sha256": "30d0c7683028bdcffa7e773f5ed3208907e4953e5fc4fd0a27c46bb2a7acf7fa",
+      "class": "upstream",
+      "baseSha256": "30d0c7683028bdcffa7e773f5ed3208907e4953e5fc4fd0a27c46bb2a7acf7fa"
+    },
+    {
+      "path": "review/ImportScreen.android.tsx",
+      "bytes": 12175,
+      "sha256": "ecab83030d923c1c624f6a09120cd4eec43347ff2baaeeb534b76f76c53887e8",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "review/LavaUIReview.android.tsx",
+      "bytes": 37349,
+      "sha256": "2b3c5d6ed725844ebb71f8e45c85eca07739169679a0aae35979b94d5b67d4a5",
+      "class": "overlay",
+      "base": "review/LavaUIReview.tsx",
+      "baseSha256": "ab88a2f9f5dad62a731c5ada64c1a32fa8362881606e821ff5a56cc3efb50511",
+      "rationale": "Android platform override for review/LavaUIReview.tsx; reviewed leaf/route adaptation kept behind the shared contract."
+    },
+    {
+      "path": "review/LavaUIReview.tsx",
+      "bytes": 16575,
+      "sha256": "755b48e82ac4c35a3848d9e35a189cc693b8ddd92d3904a9c17b198a39f1e32f",
+      "class": "divergence",
+      "base": "review/LavaUIReview.tsx",
+      "baseSha256": "ab88a2f9f5dad62a731c5ada64c1a32fa8362881606e821ff5a56cc3efb50511",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/NativePageScreen.tsx",
+      "bytes": 25168,
+      "sha256": "ebbeff02ba87f89eca5ab4293d641fa614e2a5403eb219187bbd5043948f9d16",
+      "class": "divergence",
+      "base": "review/NativePageScreen.tsx",
+      "baseSha256": "53bc1fe263eacda774de9ee4072c831977eceb06fdd8679c551da695638b19b8",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/OnboardingFlow.tsx",
+      "bytes": 28310,
+      "sha256": "ef4afd6e157e77a734b4a54981ee021ee09ee04533e7db898c83dba893d6eac7",
+      "class": "divergence",
+      "base": "review/OnboardingFlow.tsx",
+      "baseSha256": "f44c000eee150dd69e3267e7c86eca418c4a1df6bf4cabe4ded977d68984faa9",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/OnboardingSurface.android.tsx",
+      "bytes": 5008,
+      "sha256": "c361cc3ef4326d3a36b3c462eac91627dfe4be79fdebc8b457c89225de47cbfb",
+      "class": "overlay",
+      "base": "review/OnboardingSurface.tsx",
+      "baseSha256": "783df35fb27d7e59248f8f9b5a9e6cf6499bb52244396b54f4f34b7031ec22c5",
+      "rationale": "Android platform override for review/OnboardingSurface.tsx; reviewed leaf/route adaptation kept behind the shared contract."
+    },
+    {
+      "path": "review/OnboardingSurface.tsx",
+      "bytes": 3588,
+      "sha256": "783df35fb27d7e59248f8f9b5a9e6cf6499bb52244396b54f4f34b7031ec22c5",
+      "class": "upstream",
+      "baseSha256": "783df35fb27d7e59248f8f9b5a9e6cf6499bb52244396b54f4f34b7031ec22c5"
+    },
+    {
+      "path": "review/PasscodeRoot.android.tsx",
+      "bytes": 2655,
+      "sha256": "a42320b3e32dd83fd5c6301252edc6206cb3ed2f68d6f71729fc33087869848b",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "review/PreparationScreen.android.tsx",
+      "bytes": 3786,
+      "sha256": "354832882c0ed8925f7c7122865afead41b11ac3f8f5e2364e636e21a6d9806e",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "review/PresentationCover.tsx",
+      "bytes": 1905,
+      "sha256": "77b8f12f085c6f3a5e964b21376f9dca3c38a3afe088978b57736fc9bf1e159f",
+      "class": "divergence",
+      "base": "review/PresentationCover.tsx",
+      "baseSha256": "ab5c336d8a848b48a00a1d408c7eddaa706521def30bfb168a833ce32eebd7bf",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/QARoot.android.tsx",
+      "bytes": 8947,
+      "sha256": "e80d2c7daf1133b5d41f630d039a94160d6eb5dd91671154d1012459ea984112",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "review/QueryContent.tsx",
+      "bytes": 1064,
+      "sha256": "a04bdce8a28c5f6f1abc3afd168d704e1b7cbb0d62fd9cf0d23e3a6445977b92",
+      "class": "upstream",
+      "baseSha256": "a04bdce8a28c5f6f1abc3afd168d704e1b7cbb0d62fd9cf0d23e3a6445977b92"
+    },
+    {
+      "path": "review/QuietTabButton.android.tsx",
+      "bytes": 1043,
+      "sha256": "ff12015a90004306a40a3bc742aff52e40789486315d92778788c9e419f6c771",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "review/ReviewContext.tsx",
+      "bytes": 7513,
+      "sha256": "916b2d502960d021ba26228b72994b1261369528a850ad89827546eebe9cd857",
+      "class": "divergence",
+      "base": "review/ReviewContext.tsx",
+      "baseSha256": "a6df213401628d74b9abdcd0cd78f25d5c74e5c318bdbf73363a1033035ca24e",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/SettingsScreens.tsx",
+      "bytes": 36826,
+      "sha256": "31abb8d3a97813342dfa200a776a8b9ed1a1cc091faf98d7a1faf7f9f3ea3851",
+      "class": "divergence",
+      "base": "review/SettingsScreens.tsx",
+      "baseSha256": "e7fb35a8cd253d58daddc7aa5d3465dc54add99b0f9c0a7c7955183b4044cbef",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/SudokuScreen.tsx",
+      "bytes": 37597,
+      "sha256": "3931f81a149ef5211cc36c5b90d1880ab3f73588d3f06d28f305ce95784f4019",
+      "class": "upstream",
+      "baseSha256": "3931f81a149ef5211cc36c5b90d1880ab3f73588d3f06d28f305ce95784f4019"
+    },
+    {
+      "path": "review/VPNEditorFlow.tsx",
+      "bytes": 9634,
+      "sha256": "d9ac35f2050ea7f28088813ca05aeae80b68bd3bdd94ddda7a333aeec78da24e",
+      "class": "divergence",
+      "base": "review/VPNEditorFlow.tsx",
+      "baseSha256": "004723b2f559a02039e35d560e187e98dd4ade447712735992997f23b97b4e43",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/activity-model.ts",
+      "bytes": 3426,
+      "sha256": "60a00fdccb735937a1bb5b0d52a79f8860695b27611f15ce4b50c0b50d718085",
+      "class": "upstream",
+      "baseSha256": "60a00fdccb735937a1bb5b0d52a79f8860695b27611f15ce4b50c0b50d718085"
+    },
+    {
+      "path": "review/activity-scaffold.tsx",
+      "bytes": 13803,
+      "sha256": "6919b8209b8e48ed3dfe5545f49006d81d54448f4381cac201bd41cb994c88ee",
+      "class": "divergence",
+      "base": "review/activity-scaffold.tsx",
+      "baseSha256": "3e9f0130ebf487e499cfd60974a8cfb3967fa6e37877eb390b33dbcca9f19709",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/activity-share-actions.ts",
+      "bytes": 3528,
+      "sha256": "a083d70a4c92325d59beac4b6cf0c2bb45410cebcee7cab7bb2af5e13f143b0e",
+      "class": "divergence",
+      "base": "review/activity-share-actions.ts",
+      "baseSha256": "ae9ca75ca7af9c8d61bc1c6b03d5158a4a932b3e53094e07538979394db1bf77",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/android-route-removal.ts",
+      "bytes": 4258,
+      "sha256": "1ab6b6b337af1afca9953c2ba0d361fe43e41f84f3c09a7d771c698fcdb307e9",
+      "class": "android-only",
+      "rationale": "Android-only module with no canonical iOS counterpart; reviewed."
+    },
+    {
+      "path": "review/appearance-store.ts",
+      "bytes": 3473,
+      "sha256": "1a4f5ea49febc72fa9b945334e183ff17a1051b02db073befbc7b9eef418cb68",
+      "class": "divergence",
+      "base": "review/appearance-store.ts",
+      "baseSha256": "b4ec7b4c9a2ca15c6ca16ccfac6da87f017ba8af258f3e4235f876155a3c6c10",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/billing-terms.ts",
+      "bytes": 1212,
+      "sha256": "1dfe4b7e4999dea4c743e10851169530dad9f1a0b83cef9fcb8dd114e5d95702",
+      "class": "android-only",
+      "rationale": "Android-only module with no canonical iOS counterpart; reviewed."
+    },
+    {
+      "path": "review/catalog-fixture.ts",
+      "bytes": 2399,
+      "sha256": "6d1dc70f0df5c6fe2b2f43f675e610e08b00543e092251b9dacb669061cded4c",
+      "class": "upstream",
+      "baseSha256": "6d1dc70f0df5c6fe2b2f43f675e610e08b00543e092251b9dacb669061cded4c"
+    },
+    {
+      "path": "review/connection-model.ts",
+      "bytes": 9378,
+      "sha256": "3a9afc2e200aea6b501e3cddef5d61079ebda1a1e4b993c8f16d384dbcc6e53e",
+      "class": "divergence",
+      "base": "review/connection-model.ts",
+      "baseSha256": "8b4a0b76e5384815a453a5e96075854cfcf217ffda8875f5523b4b2cf339a89f",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/connection-reveal.ts",
+      "bytes": 953,
+      "sha256": "8cf2f4fdcb67186959f4b9c8d8e5f0796ed84a84befe6ace07dce10a4fa6f7db",
+      "class": "upstream",
+      "baseSha256": "8cf2f4fdcb67186959f4b9c8d8e5f0796ed84a84befe6ace07dce10a4fa6f7db"
+    },
+    {
+      "path": "review/detail-scaffold.tsx",
+      "bytes": 8830,
+      "sha256": "2afd0e2e5fc408c1ae39d2f0b5f9d9defc22c19563ca17f0f8668894f6dc92a7",
+      "class": "divergence",
+      "base": "review/detail-scaffold.tsx",
+      "baseSha256": "903f8d35e79925c07cac541cc78b1963f787105780d5d2e115f6f68f5dfb9729",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/discovery.ts",
+      "bytes": 675,
+      "sha256": "c2b234c785c1f90c5cc33dd7c24cd23c30da15f5222d6f8a37d8693d72ecb87e",
+      "class": "upstream",
+      "baseSha256": "c2b234c785c1f90c5cc33dd7c24cd23c30da15f5222d6f8a37d8693d72ecb87e"
+    },
+    {
+      "path": "review/dns-editor.tsx",
+      "bytes": 4560,
+      "sha256": "7ad996d02539c850a3b90106e499c0777e5780a670ccdd5f88f84d5c3cd4de07",
+      "class": "divergence",
+      "base": "review/dns-editor.tsx",
+      "baseSha256": "50f908b12433f19708fcf1be5960eeac67d44d394796b696e9ed42da0165d8b5",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/explore-playback.ts",
+      "bytes": 709,
+      "sha256": "63d5cc8ff88a28fd36e2d0dc7ab302e3e540c08d93fa19518a6c3ff06cefdeec",
+      "class": "upstream",
+      "baseSha256": "63d5cc8ff88a28fd36e2d0dc7ab302e3e540c08d93fa19518a6c3ff06cefdeec"
+    },
+    {
+      "path": "review/filter-route.ts",
+      "bytes": 5068,
+      "sha256": "cae067fcb2e60f82353f538b56c8835945d7bb30da1efaf42453927594a0eb15",
+      "class": "divergence",
+      "base": "review/filter-route.ts",
+      "baseSha256": "3156f6d1a122ef2139cd68e07bb7c22511b37d4e790b5de3097709f5295690d1",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/form-scaffold.tsx",
+      "bytes": 18926,
+      "sha256": "a30f6da27340edaac4cd4c067bcce51b21204246185d0293f7ffd80088068d84",
+      "class": "divergence",
+      "base": "review/form-scaffold.tsx",
+      "baseSha256": "4de5dac84dca174def1bb0015fc9834614fb6a2ef21fdd097c114cd0569ee9e7",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/guard-material.tsx",
+      "bytes": 6166,
+      "sha256": "477ea3938d1d4ac037f93825e7b7def671f0a9bcc83acb0ad400861bea78c1e4",
+      "class": "divergence",
+      "base": "review/guard-material.tsx",
+      "baseSha256": "63b390ef80c852435615a74c1d9c01594c9310da97035876326a6cf8146c3d98",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/import-model.ts",
+      "bytes": 8167,
+      "sha256": "0a40f399e1f7aac9502985f64d802d101773dc590fa934d485dde50d5552ec11",
+      "class": "android-only",
+      "rationale": "Android-only module with no canonical iOS counterpart; reviewed."
+    },
+    {
+      "path": "review/independent-navigation.android.tsx",
+      "bytes": 12633,
+      "sha256": "fbef31b1d9bbb81cecdbd594358ac166110176f5c0fb3aaa38ce8d3831b54a5f",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "review/index.ts",
+      "bytes": 154,
+      "sha256": "fb3954ba5ab250595d36dc764ef5f995c46173d8ee75685b1089f2cdea5ae920",
+      "class": "upstream",
+      "baseSha256": "fb3954ba5ab250595d36dc764ef5f995c46173d8ee75685b1089f2cdea5ae920"
+    },
+    {
+      "path": "review/local-log-actions.ts",
+      "bytes": 3091,
+      "sha256": "78c45e95e25b18ead8a288f94d6e3962d2dc20088fb6aaeaeb99a254a99654d2",
+      "class": "upstream",
+      "baseSha256": "78c45e95e25b18ead8a288f94d6e3962d2dc20088fb6aaeaeb99a254a99654d2"
+    },
+    {
+      "path": "review/mascot-interaction.ts",
+      "bytes": 3291,
+      "sha256": "7cecae42158d8462bf1aad521344341c53abad13aee4e82ac51b71f580055101",
+      "class": "upstream",
+      "baseSha256": "7cecae42158d8462bf1aad521344341c53abad13aee4e82ac51b71f580055101"
+    },
+    {
+      "path": "review/navigation-scaffold.ts",
+      "bytes": 3443,
+      "sha256": "ecbe6e9223f4398ba6204b7432f3ebe1fc90e0283faab6f5c000f7db5ab7d9a7",
+      "class": "divergence",
+      "base": "review/navigation-scaffold.ts",
+      "baseSha256": "3d4b0c166a3a0b7790a42e80fef8223190b63bcd69963f85e955a326839739d0",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/navigation.ts",
+      "bytes": 6729,
+      "sha256": "034e51248b4484b37bcadcb16bdb343c01ec9c8dec9f5ec189c71643313427ea",
+      "class": "divergence",
+      "base": "review/navigation.ts",
+      "baseSha256": "934de144d942285c94ac2e77aad4142be0056539133f178c8d2e5bbc92cbd7a7",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/onboarding-geometry.ts",
+      "bytes": 5601,
+      "sha256": "1c74c9981434961055d0712a67874dd16ed69e2d6346d5a84a37c0582fdf5d36",
+      "class": "divergence",
+      "base": "review/onboarding-geometry.ts",
+      "baseSha256": "f14377227e58c0264d3cdcdc4e07e02457a84f00be93a3eab9b24cdd8b4bfbaa",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/onboarding-motion.ts",
+      "bytes": 4051,
+      "sha256": "3150301e54d919b2a68dbad248920ecec604b661b2f07d7defa26cc87e98e7f7",
+      "class": "upstream",
+      "baseSha256": "3150301e54d919b2a68dbad248920ecec604b661b2f07d7defa26cc87e98e7f7"
+    },
+    {
+      "path": "review/onboarding-scaffold.tsx",
+      "bytes": 11805,
+      "sha256": "eff8c3a9784f41b00973a3d657b16a47db1dbca115ce4523f3dc0b95632eb2d8",
+      "class": "upstream",
+      "baseSha256": "eff8c3a9784f41b00973a3d657b16a47db1dbca115ce4523f3dc0b95632eb2d8"
+    },
+    {
+      "path": "review/paging-scaffold.tsx",
+      "bytes": 3641,
+      "sha256": "aa082cd99d82236db30b40b0ff18f16c3ffa356e7152e4a835b654c06a362983",
+      "class": "divergence",
+      "base": "review/paging-scaffold.tsx",
+      "baseSha256": "82ef3209b337d1238aee0bc46a82037fbf43a237999744b0040e4154b9ec75de",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/plus-entry.ts",
+      "bytes": 1036,
+      "sha256": "fdd96e3abb08b0d82af28c9f10330dbd52ffb590c163a3e40c672b94b149ba8a",
+      "class": "divergence",
+      "base": "review/plus-entry.ts",
+      "baseSha256": "6711e95d91e1c56c62544a01838667f8ffff747a0fd54afd9fd6e2b962e7f6b8",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/plus-intents.tsx",
+      "bytes": 6502,
+      "sha256": "76ae7b8b8dc97f87af42e8df796776c70899ffefcb5202e97cab93db83033e75",
+      "class": "divergence",
+      "base": "review/plus-intents.tsx",
+      "baseSha256": "9523ac811c4f5cd719fd5b145fb80c48744180c0a16ca04b8702775c9f94920c",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/plus-scaffold.tsx",
+      "bytes": 8957,
+      "sha256": "44b7cd399dee71d5c09c8fbb86a66086074ad0cd0f46e3b114b35401fcd3304a",
+      "class": "divergence",
+      "base": "review/plus-scaffold.tsx",
+      "baseSha256": "e504526b117b14c8b4b23e04644d7fbf0e9d3fdbb6e9b4263a78058b52ae9c25",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/presentation-owner.android.tsx",
+      "bytes": 10172,
+      "sha256": "5aa77506b09540461f2ddb57bf6ea45630338892784fe1e02f1f0de97748d87e",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "review/preview-model.ts",
+      "bytes": 1274,
+      "sha256": "55f981bdbd0a0ea4baa28a678e15fdeba3946b3abd97b3220d039825a598c46e",
+      "class": "upstream",
+      "baseSha256": "55f981bdbd0a0ea4baa28a678e15fdeba3946b3abd97b3220d039825a598c46e"
+    },
+    {
+      "path": "review/primitives.tsx",
+      "bytes": 19680,
+      "sha256": "a26e3983cbdaa1be4f4b964982f6a651cecb3fec6cc4d3ace4f03816a466e8f2",
+      "class": "divergence",
+      "base": "review/primitives.tsx",
+      "baseSha256": "b7d9b749df132250d774e4f9263e3c616e06b797f1897a0f46b073b170f37f0f",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/scaffold.tsx",
+      "bytes": 48058,
+      "sha256": "8637ef09a816cf7186aa70b6ddc4dca209a1f05e8f6b887e59f7fdb1ef5aa9cc",
+      "class": "divergence",
+      "base": "review/scaffold.tsx",
+      "baseSha256": "ebc53cf86b56869ffc796de2d3da2f95413de023259f4ffb8ab203e4de3dbba1",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/screens.tsx",
+      "bytes": 8468,
+      "sha256": "742f87fc808f215b14b31734301cf2ebc05b89db4cc1316700dc6f0c7eb2c8fb",
+      "class": "divergence",
+      "base": "review/screens.tsx",
+      "baseSha256": "d316ef94e8fa40ec8067354a30a043ce9f1a3166c86150a01c6f62c8f0bb9784",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/session.ts",
+      "bytes": 2530,
+      "sha256": "235af81ea06e3957c46de0e335bfd3ac0e88735b9a6f8701fa19112ae6a8d2ee",
+      "class": "divergence",
+      "base": "review/session.ts",
+      "baseSha256": "d600c59853948d693961f6c20e25d75dc446fd7011baf09d2c1bb8f9b8f96010",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/settings-scaffold.tsx",
+      "bytes": 13955,
+      "sha256": "9cc20f9d47b57784593c5df79a068cba7ef25ca27b9108b1e002656d873e933d",
+      "class": "divergence",
+      "base": "review/settings-scaffold.tsx",
+      "baseSha256": "76c8132b16d3af289cc3e2bfafe8205f2433c6d1b02b181d5306c32d5f49219c",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/story-scaffold.tsx",
+      "bytes": 37954,
+      "sha256": "003fee97a17dc05566217c87b104b516098588f85807cf2ae3bb3aebb3eeb937",
+      "class": "divergence",
+      "base": "review/story-scaffold.tsx",
+      "baseSha256": "dd4e0ef4ca0e65c530c983544a052ed54d73aa08f63a701c8de9635a39a97801",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/sudoku-model.ts",
+      "bytes": 9432,
+      "sha256": "d20e7306aa69e8c453037a2d2129b82ad1ed6c7fdad2579e0b15e74c9086e0b0",
+      "class": "upstream",
+      "baseSha256": "d20e7306aa69e8c453037a2d2129b82ad1ed6c7fdad2579e0b15e74c9086e0b0"
+    },
+    {
+      "path": "review/sudoku-reveal.ts",
+      "bytes": 6197,
+      "sha256": "1e396f043051072a85d6a16c8b32e26d7453e7735f33aec48ef5aacaf5460093",
+      "class": "upstream",
+      "baseSha256": "1e396f043051072a85d6a16c8b32e26d7453e7735f33aec48ef5aacaf5460093"
+    },
+    {
+      "path": "review/sudoku-scaffold.tsx",
+      "bytes": 27056,
+      "sha256": "4a241a7d4095d31e0324172020804c98529d1addea77b98db35098bd6b5bdf62",
+      "class": "divergence",
+      "base": "review/sudoku-scaffold.tsx",
+      "baseSha256": "e28205d99d5e17f36d5090d9bf9896f89d7a9a0f9bccdbf250b0c34b47090be3",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "review/vpn-page-admission.ts",
+      "bytes": 7020,
+      "sha256": "b5a8f8afaa7133fe8659a450c446ecadb16aa6a7b7781a0b966e27a483e6ba58",
+      "class": "divergence",
+      "base": "review/vpn-page-admission.ts",
+      "baseSha256": "b99016b7631a47b20a7b81cb3afcb67c847e2b7901637ec095678ab8321db290",
+      "rationale": "Retained/adapted Android screen and native-owner integration; differs from the pinned iOS target. Adoption scope and remaining work are recorded in docs/android-ios-latest-sync-2026-11-09.md."
+    },
+    {
+      "path": "specs/LavaBackupCredentialNativeComponent.android.tsx",
+      "bytes": 376,
+      "sha256": "5e9e2f813b91ff2f73452d427ace9b91c38b157897012f6329a4564da4bae077",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "specs/LavaChoiceNativeComponent.android.tsx",
+      "bytes": 4811,
+      "sha256": "421163e090e3c3030ac2850dbcb1aa2997f8bb6ac0e1184c6b5474e747ef647e",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "specs/LavaChoiceNativeComponent.ios.ts",
+      "bytes": 870,
+      "sha256": "a9d4c43739570c62a95945194a12318956ab984df08cc537721c7d3fdf33e913",
+      "class": "ios-platform",
+      "base": "specs/LavaChoiceNativeComponent.ts",
+      "baseSha256": "a9d4c43739570c62a95945194a12318956ab984df08cc537721c7d3fdf33e913"
+    },
+    {
+      "path": "specs/LavaContextMenuNativeComponent.android.tsx",
+      "bytes": 2124,
+      "sha256": "98428c4f1e791a5d8a614b251ed6f1012da6231cbd25b81917a760c096af2b59",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "specs/LavaContextMenuNativeComponent.ios.ts",
+      "bytes": 519,
+      "sha256": "1f94aa3a5f011e191836ba3a1f622da8f7df1d59b0f92d269a62017d2cbd0421",
+      "class": "ios-platform",
+      "base": "specs/LavaContextMenuNativeComponent.ts",
+      "baseSha256": "f2a6474c84d2da398b6c83d6c51a7b9d10d4e92f1132e63820b0487df3150ed9",
+      "rationale": "Canonical iOS platform file retained under a .ios name so Android extensionless imports resolve to the .android implementation (base specs/LavaContextMenuNativeComponent.ts)."
+    },
+    {
+      "path": "specs/LavaDecorationNativeComponent.android.tsx",
+      "bytes": 571,
+      "sha256": "01d2d5e3bc51f3e57fea195a252bf31af3e942abe6318e4e742d0f5f5ce7949d",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "specs/LavaDecorationNativeComponent.ios.ts",
+      "bytes": 1254,
+      "sha256": "700b78d0fe7e74d16398408e4d12f02eff92190605d7daca65f218ddbe91111b",
+      "class": "ios-platform",
+      "base": "specs/LavaDecorationNativeComponent.ts",
+      "baseSha256": "0882f0f72eeb6047701ac29dec1bd0ccf61d9236ab76e843ceb3b038bfb8e5ab",
+      "rationale": "Canonical iOS platform file retained under a .ios name so Android extensionless imports resolve to the .android implementation (base specs/LavaDecorationNativeComponent.ts)."
+    },
+    {
+      "path": "specs/LavaNativePageNativeComponent.android.tsx",
+      "bytes": 512,
+      "sha256": "859acb084dc40a52c159160464c91bf2a603ec8c420c0874374cc7b7639bb97c",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "specs/LavaNativePageNativeComponent.ios.ts",
+      "bytes": 723,
+      "sha256": "d0f6eecf3ce6a7140a54da9fd9c96e16f736ae4a22a97cb4d8203fa90bc0badb",
+      "class": "ios-platform",
+      "base": "specs/LavaNativePageNativeComponent.ts",
+      "rationale": "Canonical iOS platform file retained under a .ios name so Android extensionless imports resolve to the .android implementation (base specs/LavaNativePageNativeComponent.ts)."
+    },
+    {
+      "path": "specs/LavaPasscodeFormNativeComponent.android.tsx",
+      "bytes": 366,
+      "sha256": "b60eb48a96305be84bfdb9b1e6b4109a5e55c74b6df5fc9f715312565581fbc7",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "specs/LavaShareCardSurfaceNativeComponent.android.tsx",
+      "bytes": 216,
+      "sha256": "9a8681370da0c9cb2eaf516e4b6500af6a43cce0b42a157699d8f220b8751c51",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "specs/LavaShareCardSurfaceNativeComponent.ios.ts",
+      "bytes": 442,
+      "sha256": "e39853fdd494c57bdfc1e76ee152aa360e821518ebc2211e7dad4658e996120d",
+      "class": "ios-platform",
+      "base": "specs/LavaShareCardSurfaceNativeComponent.ts",
+      "baseSha256": "e39853fdd494c57bdfc1e76ee152aa360e821518ebc2211e7dad4658e996120d"
+    },
+    {
+      "path": "specs/LavaShareQrNativeComponent.android.tsx",
+      "bytes": 199,
+      "sha256": "487d06704c7c2b28b9680395603a48b4450bf45cd79d283d855e794f2774ae51",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "specs/LavaShareQrNativeComponent.ios.ts",
+      "bytes": 447,
+      "sha256": "0d1c06b7d61872b22c63bee3102dcd3c55167ccb79979184b436f79c5647aad0",
+      "class": "ios-platform",
+      "base": "specs/LavaShareQrNativeComponent.ts",
+      "baseSha256": "0d1c06b7d61872b22c63bee3102dcd3c55167ccb79979184b436f79c5647aad0"
+    },
+    {
+      "path": "specs/LavaSliderNativeComponent.android.tsx",
+      "bytes": 187,
+      "sha256": "b11622e9d73e9f32dee081d66599e8f599a0a22dda4229d2685418cfd4a23d27",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "specs/LavaSliderNativeComponent.ios.ts",
+      "bytes": 622,
+      "sha256": "f8bcdab0a3bdcec68a80e4c178b2d889c1b10216df88af80bc669970a3513c93",
+      "class": "ios-platform",
+      "base": "specs/LavaSliderNativeComponent.ts",
+      "baseSha256": "f8bcdab0a3bdcec68a80e4c178b2d889c1b10216df88af80bc669970a3513c93"
+    },
+    {
+      "path": "specs/LavaSwitchNativeComponent.android.tsx",
+      "bytes": 1565,
+      "sha256": "f981f61096fb35ae51a9915f044de66d73fca1e96e01b833c816665e29ee823b",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "specs/LavaSwitchNativeComponent.ios.ts",
+      "bytes": 680,
+      "sha256": "08acb754128993d877890d810bcb6948c368a0fb3658745b88ed581876cb79b1",
+      "class": "ios-platform",
+      "base": "specs/LavaSwitchNativeComponent.ts",
+      "baseSha256": "08acb754128993d877890d810bcb6948c368a0fb3658745b88ed581876cb79b1"
+    },
+    {
+      "path": "specs/LavaTextFieldNativeComponent.android.tsx",
+      "bytes": 1493,
+      "sha256": "51e2b11e3f78ecf1a1b5fd781cf9c8ed4b53e9ba38e595418b38564b6987c5d2",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "specs/LavaTextFieldNativeComponent.ios.ts",
+      "bytes": 892,
+      "sha256": "8666ba0f501501c0726d3df4080400a1f9608ff0b567db1f654ae5e25c752b30",
+      "class": "ios-platform",
+      "base": "specs/LavaTextFieldNativeComponent.ts",
+      "baseSha256": "8f905158810426766c599653a1c1bb0f40ded655031a9ef8a8d44121dbdbbb71",
+      "rationale": "Canonical iOS platform file retained under a .ios name so Android extensionless imports resolve to the .android implementation (base specs/LavaTextFieldNativeComponent.ts)."
+    },
+    {
+      "path": "specs/NativeLavaApp.android.ts",
+      "bytes": 134,
+      "sha256": "614189a40091edac32db285aace1736df80008d2b3133693c9138a7fe0998c3b",
+      "class": "overlay",
+      "base": "specs/NativeLavaApp.ts",
+      "baseSha256": "f26f2eab4d0b165ff520ad96a1517149d641dd041a6870b54d36a7daeab49bdb",
+      "rationale": "Android platform override for specs/NativeLavaApp.ts; reviewed leaf/route adaptation kept behind the shared contract."
+    },
+    {
+      "path": "specs/NativeLavaApp.ts",
+      "bytes": 519,
+      "sha256": "f26f2eab4d0b165ff520ad96a1517149d641dd041a6870b54d36a7daeab49bdb",
+      "class": "upstream",
+      "baseSha256": "f26f2eab4d0b165ff520ad96a1517149d641dd041a6870b54d36a7daeab49bdb"
+    },
+    {
+      "path": "specs/NativeLavaAppearance.android.ts",
+      "bytes": 1484,
+      "sha256": "fe24a3c74cfe404dd574ccd51bbe6b240c64118db5c10e97c59b94a6ea62866d",
+      "class": "overlay",
+      "base": "specs/NativeLavaAppearance.ts",
+      "baseSha256": "18b73e381c0bc95f856d8fa729fdb0884db2c64a2a6ecc709ff74f5d0d4ab22f",
+      "rationale": "Android platform override for specs/NativeLavaAppearance.ts; reviewed leaf/route adaptation kept behind the shared contract."
+    },
+    {
+      "path": "specs/NativeLavaAppearance.ts",
+      "bytes": 514,
+      "sha256": "18b73e381c0bc95f856d8fa729fdb0884db2c64a2a6ecc709ff74f5d0d4ab22f",
+      "class": "upstream",
+      "baseSha256": "18b73e381c0bc95f856d8fa729fdb0884db2c64a2a6ecc709ff74f5d0d4ab22f"
+    },
+    {
+      "path": "specs/NativeLavaReview.android.ts",
+      "bytes": 3145,
+      "sha256": "ce15d4e55b4ec43d5a33f5598478453a7b1111aa46299308f0864714c6896c8d",
+      "class": "overlay",
+      "base": "specs/NativeLavaReview.ts",
+      "baseSha256": "84c927c68db8b64f321541854715b1da428d6323a559ce25c064be37c0bc9228",
+      "rationale": "Android platform override for specs/NativeLavaReview.ts; reviewed leaf/route adaptation kept behind the shared contract."
+    },
+    {
+      "path": "specs/NativeLavaReview.ts",
+      "bytes": 1059,
+      "sha256": "e687b5b2be9e4549e2e0a161f27b2ce79b733319b81a2a1df6d45908b33e8ac7",
+      "class": "divergence",
+      "base": "specs/NativeLavaReview.ts",
+      "baseSha256": "84c927c68db8b64f321541854715b1da428d6323a559ce25c064be37c0bc9228",
+      "rationale": "Reviewed Android adaptation of a canonical file."
+    },
+    {
+      "path": "src/GuardianDrawing.tsx",
+      "bytes": 8364,
+      "sha256": "b9d43b1735720a32ab83bbba146e18866cd715f23f520e41e3a8b405c3a9606f",
+      "class": "upstream",
+      "baseSha256": "b9d43b1735720a32ab83bbba146e18866cd715f23f520e41e3a8b405c3a9606f"
+    },
+    {
+      "path": "src/LavaDiscoveryDot.tsx",
+      "bytes": 1288,
+      "sha256": "06131be9bdcdf7e1fa12f4bb37c848478b5a056e7844dfbebede92f3a3b24516",
+      "class": "divergence",
+      "base": "src/LavaDiscoveryDot.tsx",
+      "baseSha256": "46afaa277673344e4fccd54121c18c3672aace54e05430125c0ecd42b202f3ba",
+      "rationale": "Shared foundation file with Android platform adaptation."
+    },
+    {
+      "path": "src/OnboardingDrawing.tsx",
+      "bytes": 4594,
+      "sha256": "423ccc4151aff7c11fd71f27d738ea23fdb0a14e61ba7057479070ce7cce9aca",
+      "class": "upstream",
+      "baseSha256": "423ccc4151aff7c11fd71f27d738ea23fdb0a14e61ba7057479070ce7cce9aca"
+    },
+    {
+      "path": "src/animation-clock.ts",
+      "bytes": 258,
+      "sha256": "076a4f0cf7d6823349d63d38a088d324910574cf338fd0b28ce7cacec1a3c263",
+      "class": "upstream",
+      "baseSha256": "076a4f0cf7d6823349d63d38a088d324910574cf338fd0b28ce7cacec1a3c263"
+    },
+    {
+      "path": "src/appearance.ts",
+      "bytes": 618,
+      "sha256": "a1527a8786fa1a4436f0c6eb268a7d554a242849088551135e3421e6f3e6aff0",
+      "class": "upstream",
+      "baseSha256": "a1527a8786fa1a4436f0c6eb268a7d554a242849088551135e3421e6f3e6aff0"
+    },
+    {
+      "path": "src/choice.android.tsx",
+      "bytes": 1195,
+      "sha256": "3f1f3dad2da035658721cdd08b3208596b13153dae1b4122e710446d106faad7",
+      "class": "overlay",
+      "base": "src/choice.tsx",
+      "baseSha256": "e47c7711961702e1fb84ecb354387e067cd714d8fb1978a4fb922c58386c65fb",
+      "rationale": "Android platform override for src/choice.tsx; reviewed leaf/route adaptation kept behind the shared contract."
+    },
+    {
+      "path": "src/choice.ios.tsx",
+      "bytes": 1225,
+      "sha256": "55e512c4cff92859c1851c60d6d2f98126e8800ac264714245c7bed887bc9123",
+      "class": "ios-platform",
+      "base": "src/choice.ios.tsx",
+      "baseSha256": "55e512c4cff92859c1851c60d6d2f98126e8800ac264714245c7bed887bc9123"
+    },
+    {
+      "path": "src/choice.tsx",
+      "bytes": 226,
+      "sha256": "e47c7711961702e1fb84ecb354387e067cd714d8fb1978a4fb922c58386c65fb",
+      "class": "upstream",
+      "baseSha256": "e47c7711961702e1fb84ecb354387e067cd714d8fb1978a4fb922c58386c65fb"
+    },
+    {
+      "path": "src/colors.android.ts",
+      "bytes": 1084,
+      "sha256": "b92cba21f815610f3fae556cbbda6d602a78a01d909571829c9f22addefb1128",
+      "class": "overlay",
+      "base": "src/colors.ts",
+      "baseSha256": "2261e5bd9d4f62cbef1559a60d2f3271f89921a54707c8986b1705e36dd5f2dc",
+      "rationale": "Android platform override for src/colors.ts; reviewed leaf/route adaptation kept behind the shared contract."
+    },
+    {
+      "path": "src/colors.ios.ts",
+      "bytes": 1458,
+      "sha256": "a707b6ba5331e8d7ba7f5024df7233188d761ad7ca6724d1d20c7a135db4fac4",
+      "class": "ios-platform",
+      "base": "src/colors.ios.ts",
+      "baseSha256": "a707b6ba5331e8d7ba7f5024df7233188d761ad7ca6724d1d20c7a135db4fac4"
+    },
+    {
+      "path": "src/components.android.tsx",
+      "bytes": 12544,
+      "sha256": "45e628153bb4deb895f7ff8b30e39b0ac94ec88b8c37b6f200c26ac18b819d77",
+      "class": "overlay",
+      "base": "src/components.tsx",
+      "baseSha256": "bc5af852f677bcb803674fa3a22dce5fb9541d42d1d9e396adb248d64a28c4e3",
+      "rationale": "Android platform override for src/components.tsx; reviewed leaf/route adaptation kept behind the shared contract."
+    },
+    {
+      "path": "src/components.ios.tsx",
+      "bytes": 12723,
+      "sha256": "b9746ed2703b2cc8ff80b0303db7602d657830c74ed0ced0586700a9e62a436c",
+      "class": "ios-platform",
+      "base": "src/components.ios.tsx",
+      "baseSha256": "b9746ed2703b2cc8ff80b0303db7602d657830c74ed0ced0586700a9e62a436c"
+    },
+    {
+      "path": "src/components.tsx",
+      "bytes": 1120,
+      "sha256": "bc5af852f677bcb803674fa3a22dce5fb9541d42d1d9e396adb248d64a28c4e3",
+      "class": "upstream",
+      "baseSha256": "bc5af852f677bcb803674fa3a22dce5fb9541d42d1d9e396adb248d64a28c4e3"
+    },
+    {
+      "path": "src/contracts.ts",
+      "bytes": 118,
+      "sha256": "012c5399f218eafe40cb1b69385ed9e5d0ba28dc1e2fecaeaf1c2018659464b0",
+      "class": "upstream",
+      "baseSha256": "012c5399f218eafe40cb1b69385ed9e5d0ba28dc1e2fecaeaf1c2018659464b0"
+    },
+    {
+      "path": "src/feedback.tsx",
+      "bytes": 951,
+      "sha256": "5f05a785aff8a7fcdcc2e47e72dd2309e5e7c0430541a0e602af8b4cfdf0e1a0",
+      "class": "upstream",
+      "baseSha256": "5f05a785aff8a7fcdcc2e47e72dd2309e5e7c0430541a0e602af8b4cfdf0e1a0"
+    },
+    {
+      "path": "src/flows/FlowConsentToggle.tsx",
+      "bytes": 1426,
+      "sha256": "a7a55b23e6683f45240000efd1c36cdb0ffb4ef75ba8384a0d9ec09e33f5879a",
+      "class": "upstream",
+      "baseSha256": "a7a55b23e6683f45240000efd1c36cdb0ffb4ef75ba8384a0d9ec09e33f5879a"
+    },
+    {
+      "path": "src/flows/FlowInfo.tsx",
+      "bytes": 1136,
+      "sha256": "c13cb7aede7e3a9ca31b648447b4176e8bb9d18b575b98bab38bff598144b063",
+      "class": "upstream",
+      "baseSha256": "c13cb7aede7e3a9ca31b648447b4176e8bb9d18b575b98bab38bff598144b063"
+    },
+    {
+      "path": "src/flows/FlowToggle.android.tsx",
+      "bytes": 803,
+      "sha256": "63d92d8d69872ad6b7884573db4b4771ca057f4515a471a20d832f00f9d08a87",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "src/flows/InlineSymbolText.android.tsx",
+      "bytes": 821,
+      "sha256": "0ffa66391a9d1535f3a2786fc12243e426e459746f319075cc73c4111ecd2e93",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "src/flows/InlineSymbolText.ios.tsx",
+      "bytes": 1612,
+      "sha256": "4459f85dd40957054ae12f28897ea02369728a1f0fda128f489a4fb8772716eb",
+      "class": "ios-platform",
+      "base": "src/flows/InlineSymbolText.ios.tsx",
+      "baseSha256": "4459f85dd40957054ae12f28897ea02369728a1f0fda128f489a4fb8772716eb"
+    },
+    {
+      "path": "src/flows/SetupSection.tsx",
+      "bytes": 1447,
+      "sha256": "6b5dae06d7b0f016652175c42a459f196f2c26e0c8354968a6b2d1d6530f6f7d",
+      "class": "upstream",
+      "baseSha256": "6b5dae06d7b0f016652175c42a459f196f2c26e0c8354968a6b2d1d6530f6f7d"
+    },
+    {
+      "path": "src/flows/StagedFlowTransition.tsx",
+      "bytes": 2168,
+      "sha256": "af262c3e41e483aa7c3c220d1c69a16fc4c512d9795e5749bc9a27d43a516b32",
+      "class": "upstream",
+      "baseSha256": "af262c3e41e483aa7c3c220d1c69a16fc4c512d9795e5749bc9a27d43a516b32"
+    },
+    {
+      "path": "src/flows/SystemButton.android.tsx",
+      "bytes": 1170,
+      "sha256": "d551b894e069d581c4deee452258210f2ddda0736d000322ec2999c9a6cde02a",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "src/flows/SystemButton.ios.tsx",
+      "bytes": 1274,
+      "sha256": "20c2d5c0071b4b9a04077a32b208e1f7ceabcb500cfb5e1467c2f245bf4f75e8",
+      "class": "ios-platform",
+      "base": "src/flows/SystemButton.ios.tsx",
+      "baseSha256": "20c2d5c0071b4b9a04077a32b208e1f7ceabcb500cfb5e1467c2f245bf4f75e8"
+    },
+    {
+      "path": "src/flows/account-backup/AccountBackupFlow.tsx",
+      "bytes": 11264,
+      "sha256": "fb6529204ac2766f1d991d50b55668ca6773bc7d14977c4c2eafbf34818884ad",
+      "class": "divergence",
+      "base": "src/flows/account-backup/AccountBackupFlow.tsx",
+      "baseSha256": "e725a85c6659f639fa690edaa0057618ad90f23907778f7cdd428c1530729a24",
+      "rationale": "Shared foundation file with Android platform adaptation."
+    },
+    {
+      "path": "src/flows/account-backup/types.ts",
+      "bytes": 1703,
+      "sha256": "1b475b1848a98ed33bcd5042c76fb47faee63abc63c362df5ba155f13b984f8a",
+      "class": "upstream",
+      "baseSha256": "1b475b1848a98ed33bcd5042c76fb47faee63abc63c362df5ba155f13b984f8a"
+    },
+    {
+      "path": "src/flows/dns-help/DNSHelpScreen.tsx",
+      "bytes": 2635,
+      "sha256": "62c881ae06b69ce2b57202907669f6d810d1b70e85e3f9e824aca9208596d58b",
+      "class": "upstream",
+      "baseSha256": "62c881ae06b69ce2b57202907669f6d810d1b70e85e3f9e824aca9208596d58b"
+    },
+    {
+      "path": "src/flows/import/ImportFlow.tsx",
+      "bytes": 12860,
+      "sha256": "8b18dffffeabe7e5d08d6d7c75703637b1a4e6e70142f100d85dac2826bc8621",
+      "class": "divergence",
+      "base": "src/flows/import/ImportFlow.tsx",
+      "baseSha256": "71bda70ffca2eab6733aa61d46bbf35c99d2c1f8b55207402d26b0d5ea0abbfe",
+      "rationale": "Shared foundation file with Android platform adaptation."
+    },
+    {
+      "path": "src/flows/import/contract.ts",
+      "bytes": 1937,
+      "sha256": "a4a042a5efe544d680f7a68433cac2b8f7544a0640906f73f710e296784fea70",
+      "class": "upstream",
+      "baseSha256": "a4a042a5efe544d680f7a68433cac2b8f7544a0640906f73f710e296784fea70"
+    },
+    {
+      "path": "src/flows/index.ts",
+      "bytes": 1009,
+      "sha256": "e75a79fb755eb99cfd79b33906fbb6dcc57d742c53f30418faf1a109fe9dff85",
+      "class": "upstream",
+      "baseSha256": "e75a79fb755eb99cfd79b33906fbb6dcc57d742c53f30418faf1a109fe9dff85"
+    },
+    {
+      "path": "src/flows/info-ui.android.ts",
+      "bytes": 766,
+      "sha256": "6ae968e615759d96f4c94eccb9c9314fefffefa06336939b1d551b354507bbb9",
+      "class": "overlay",
+      "base": "src/flows/info-ui.ts",
+      "baseSha256": "02ed2de7d68a1e38eda13c7103738766b98a46d87fac3e91f6e293a9cfea6f1e",
+      "rationale": "Android platform override for src/flows/info-ui.ts; reviewed leaf/route adaptation kept behind the shared contract."
+    },
+    {
+      "path": "src/flows/info-ui.ios.ts",
+      "bytes": 1161,
+      "sha256": "5774f347afc9f96a57f8f1a794b50c62490daedc44c49b0d84c705fedebcc3d1",
+      "class": "ios-platform",
+      "base": "src/flows/info-ui.ios.ts",
+      "baseSha256": "5774f347afc9f96a57f8f1a794b50c62490daedc44c49b0d84c705fedebcc3d1"
+    },
+    {
+      "path": "src/flows/info-ui.ts",
+      "bytes": 427,
+      "sha256": "5a1f7ae80fdd43f074b9c4063cf6ca3db060c8db47dcfb3ca7ffa463cac64fbd",
+      "class": "divergence",
+      "base": "src/flows/info-ui.ts",
+      "baseSha256": "02ed2de7d68a1e38eda13c7103738766b98a46d87fac3e91f6e293a9cfea6f1e",
+      "rationale": "Shared foundation file with Android platform adaptation."
+    },
+    {
+      "path": "src/flows/inline-symbol-text.ts",
+      "bytes": 307,
+      "sha256": "9ae5b271acf66bcd2f9ec8f849471bde19dbef7f9dfddc079b1b38186c3036b4",
+      "class": "upstream",
+      "baseSha256": "9ae5b271acf66bcd2f9ec8f849471bde19dbef7f9dfddc079b1b38186c3036b4"
+    },
+    {
+      "path": "src/flows/layout.android.tsx",
+      "bytes": 1332,
+      "sha256": "89a85c13941252325a454c03804dd469953537c6fbf43804747394b533b5f969",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "src/flows/passcode/PasscodeScreen.tsx",
+      "bytes": 1866,
+      "sha256": "71e5f5e0792e0b776905f066277d2009b201daebc1b806cc0d90796425464e4b",
+      "class": "upstream",
+      "baseSha256": "71e5f5e0792e0b776905f066277d2009b201daebc1b806cc0d90796425464e4b"
+    },
+    {
+      "path": "src/flows/passcode/types.ts",
+      "bytes": 373,
+      "sha256": "c5e40cf79404fe1d11b7db8eaa3b3fab2a79987d5a9b7e427486a6d09689a03a",
+      "class": "upstream",
+      "baseSha256": "c5e40cf79404fe1d11b7db8eaa3b3fab2a79987d5a9b7e427486a6d09689a03a"
+    },
+    {
+      "path": "src/flows/preparation/PreparationGuardian.tsx",
+      "bytes": 680,
+      "sha256": "b18172018691f2234952076bf5f9b832b0d161aeeb3aa56b677cac9e14381e6f",
+      "class": "upstream",
+      "baseSha256": "b18172018691f2234952076bf5f9b832b0d161aeeb3aa56b677cac9e14381e6f"
+    },
+    {
+      "path": "src/flows/preparation/PreparationScreen.tsx",
+      "bytes": 13024,
+      "sha256": "a355381f1c87054f9dbbfbb174361ab1df02e2029b8ed01f98e8bc3a82c0baad",
+      "class": "upstream",
+      "baseSha256": "a355381f1c87054f9dbbfbb174361ab1df02e2029b8ed01f98e8bc3a82c0baad"
+    },
+    {
+      "path": "src/flows/preparation/appearance.ts",
+      "bytes": 702,
+      "sha256": "e57817a0afe0b0c350346db1feb8f32344760c72d845203222f8e8b91a1422dc",
+      "class": "upstream",
+      "baseSha256": "e57817a0afe0b0c350346db1feb8f32344760c72d845203222f8e8b91a1422dc"
+    },
+    {
+      "path": "src/flows/preparation/contract.ts",
+      "bytes": 989,
+      "sha256": "2bc225478ee291dbfd5b2b4b4ea2411cf743b78b071e0bb12782f9e440bfe88a",
+      "class": "upstream",
+      "baseSha256": "2bc225478ee291dbfd5b2b4b4ea2411cf743b78b071e0bb12782f9e440bfe88a"
+    },
+    {
+      "path": "src/flows/preparation/motion.ts",
+      "bytes": 3481,
+      "sha256": "78508646f4033f269db9799148c27e5d4d4fb75f139569e732b1133f5c5a402f",
+      "class": "upstream",
+      "baseSha256": "78508646f4033f269db9799148c27e5d4d4fb75f139569e732b1133f5c5a402f"
+    },
+    {
+      "path": "src/flows/qa/QAScreens.tsx",
+      "bytes": 11660,
+      "sha256": "fca863605b83978d5783128a9a1c035a88295c19d7a32faccedf09835d591145",
+      "class": "divergence",
+      "base": "src/flows/qa/QAScreens.tsx",
+      "baseSha256": "41bcfe3d8538a468828532e0ed11f507a868748994ca9cb51fea820660f2ca0f",
+      "rationale": "Shared foundation file with Android platform adaptation."
+    },
+    {
+      "path": "src/flows/qa/contract.ts",
+      "bytes": 1046,
+      "sha256": "6da61e1adf031cd99e0fbff9441be1a0fb2176cbd359af2a393c9ed3db189e49",
+      "class": "divergence",
+      "base": "src/flows/qa/contract.ts",
+      "baseSha256": "a6a33f7182c9654761ded3e25efb852ebe09d891980affaf52c32cadfb0bb43b",
+      "rationale": "Shared foundation file with Android platform adaptation."
+    },
+    {
+      "path": "src/flows/system-button.ts",
+      "bytes": 151,
+      "sha256": "e566fa9df24da939704aaaa138290a5087bf259b3f0981601d07ba998840cd03",
+      "class": "upstream",
+      "baseSha256": "e566fa9df24da939704aaaa138290a5087bf259b3f0981601d07ba998840cd03"
+    },
+    {
+      "path": "src/flows/ui.android.ts",
+      "bytes": 739,
+      "sha256": "ea90b7a17c1222741cfc51824ee3b204befcde5f66c49e0be0747e6ee82d583b",
+      "class": "overlay",
+      "base": "src/flows/ui.ts",
+      "baseSha256": "d48f77e10282faab2804743eb7a808973f32199908371657c45340934c03190b",
+      "rationale": "Android platform override for src/flows/ui.ts; reviewed leaf/route adaptation kept behind the shared contract."
+    },
+    {
+      "path": "src/flows/ui.ios.ts",
+      "bytes": 619,
+      "sha256": "ab49353bb00197b03d2d44dd8787210e66c48399a30d8d00890bd78e99ccc5ee",
+      "class": "ios-platform",
+      "base": "src/flows/ui.ios.ts",
+      "baseSha256": "ab49353bb00197b03d2d44dd8787210e66c48399a30d8d00890bd78e99ccc5ee"
+    },
+    {
+      "path": "src/flows/ui.ts",
+      "bytes": 1794,
+      "sha256": "c50bf77415a5e7035a67016e1aec6dc8be84be26f5dce961e2479c247febf1d3",
+      "class": "divergence",
+      "base": "src/flows/ui.ts",
+      "baseSha256": "d48f77e10282faab2804743eb7a808973f32199908371657c45340934c03190b",
+      "rationale": "Shared foundation file with Android platform adaptation."
+    },
+    {
+      "path": "src/foundation.android.ts",
+      "bytes": 2829,
+      "sha256": "fa1146eac1d94663c1aa43122fd29142e015cf07ee64c4dbf682784cb129dd64",
+      "class": "overlay",
+      "base": "src/foundation.ts",
+      "baseSha256": "4225eab39d67bc8556d4e68d06f98504d875e1a51a412cc348b4afac5d9c1750",
+      "rationale": "Android platform override for src/foundation.ts; reviewed leaf/route adaptation kept behind the shared contract."
+    },
+    {
+      "path": "src/foundation.ts",
+      "bytes": 3035,
+      "sha256": "064fb2b9be08ce1a90f8e55f6fbe335b832aba65e12771d5dbb056f705b77d15",
+      "class": "divergence",
+      "base": "src/foundation.ts",
+      "baseSha256": "4225eab39d67bc8556d4e68d06f98504d875e1a51a412cc348b4afac5d9c1750",
+      "rationale": "Shared foundation file with Android platform adaptation."
+    },
+    {
+      "path": "src/generated/tokens.android.ts",
+      "bytes": 8170,
+      "sha256": "0572c7825206f82e49a01552c76fc9672fef56837169a9c570c18c830e7acbf5",
+      "class": "overlay",
+      "base": "src/generated/tokens.ts",
+      "baseSha256": "76e8a6a726de289e2d7d384a87e508cbb0103c39e4de4b7510adbd4c395f1ab3",
+      "rationale": "Android platform override for src/generated/tokens.ts; reviewed leaf/route adaptation kept behind the shared contract."
+    },
+    {
+      "path": "src/generated/tokens.ts",
+      "bytes": 8180,
+      "sha256": "76e8a6a726de289e2d7d384a87e508cbb0103c39e4de4b7510adbd4c395f1ab3",
+      "class": "upstream",
+      "baseSha256": "76e8a6a726de289e2d7d384a87e508cbb0103c39e4de4b7510adbd4c395f1ab3"
+    },
+    {
+      "path": "src/guard-accent.android.ts",
+      "bytes": 174,
+      "sha256": "5ddfa1db9ceab39226772bbc2ae9de10e314ff1805b16cbb9d553ffceef039c5",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "src/guard-accent.ios.ts",
+      "bytes": 403,
+      "sha256": "75cfab3daa505685a7ca88343cc12bfeca509f78ea93c4d108e0fd237a410f14",
+      "class": "ios-platform",
+      "base": "src/guard-accent.ios.ts",
+      "baseSha256": "e992ed09a65fcbd674873c1c2e1a50ae96da32db8497acb2bd5bd74e33271a6a",
+      "rationale": "Canonical iOS platform file retained under a .ios name so Android extensionless imports resolve to the .android implementation (base src/guard-accent.ios.ts)."
+    },
+    {
+      "path": "src/guardian-motion.ts",
+      "bytes": 4772,
+      "sha256": "54bd53235eceeeae8797c731637097fb2c1a6a74bc301d63b02179e62292542a",
+      "class": "upstream",
+      "baseSha256": "54bd53235eceeeae8797c731637097fb2c1a6a74bc301d63b02179e62292542a"
+    },
+    {
+      "path": "src/guardian-palettes.ts",
+      "bytes": 6060,
+      "sha256": "9b103fe2b32f34bf0a39104d50ee2931459b07201cec102fb3a7c631b09f6b0f",
+      "class": "upstream",
+      "baseSha256": "9b103fe2b32f34bf0a39104d50ee2931459b07201cec102fb3a7c631b09f6b0f"
+    },
+    {
+      "path": "src/icon-presentation.android.ts",
+      "bytes": 1245,
+      "sha256": "4f66529badc2f7e1aca7138c714fc7b949d6d98fc9905492aa70b49ba03712a2",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "src/icon-presentation.ios.ts",
+      "bytes": 871,
+      "sha256": "e3346a4c110912aef0512786f1f6e91128700a856a3a64dbf8ebc6e9368ab969",
+      "class": "ios-platform",
+      "base": "src/icon-presentation.ios.ts",
+      "baseSha256": "e3346a4c110912aef0512786f1f6e91128700a856a3a64dbf8ebc6e9368ab969"
+    },
+    {
+      "path": "src/index.android.ts",
+      "bytes": 534,
+      "sha256": "61438d40f6d7ac9e17aca9896020226557ae4dde7c1a2838f7aa016e37499c64",
+      "class": "overlay",
+      "base": "src/index.ts",
+      "baseSha256": "aedd20f1eda528c30fae2292b73e5168b3094aa29c68582678489dca92a0a26c",
+      "rationale": "Android platform override for src/index.ts; reviewed leaf/route adaptation kept behind the shared contract."
+    },
+    {
+      "path": "src/index.ts",
+      "bytes": 748,
+      "sha256": "aedd20f1eda528c30fae2292b73e5168b3094aa29c68582678489dca92a0a26c",
+      "class": "upstream",
+      "baseSha256": "aedd20f1eda528c30fae2292b73e5168b3094aa29c68582678489dca92a0a26c"
+    },
+    {
+      "path": "src/interaction-lock.ts",
+      "bytes": 1959,
+      "sha256": "efa63014581acabdecdb986aa2f430a6e1e309e6227f30a9a6ff99c4c4bfe590",
+      "class": "upstream",
+      "baseSha256": "efa63014581acabdecdb986aa2f430a6e1e309e6227f30a9a6ff99c4c4bfe590"
+    },
+    {
+      "path": "src/row-content.tsx",
+      "bytes": 3952,
+      "sha256": "90a6871c73fad385bb68ce8dab1d14bcc9b795473569467bbd2372f051fe136c",
+      "class": "divergence",
+      "base": "src/row-content.tsx",
+      "baseSha256": "07409c81ea50bbc5ff9c47b308c629696a116ccc6be9a44be67081ee0d4a02dd",
+      "rationale": "Shared foundation file with Android platform adaptation."
+    },
+    {
+      "path": "src/surface.android.tsx",
+      "bytes": 1482,
+      "sha256": "72052a4a3b5e3b0bc53898edbf81f3a3482fb580e41d50a26e52058fbcca292b",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "src/surface.ios.tsx",
+      "bytes": 1701,
+      "sha256": "12fc33f3926353579ef21d7aabadc6620e595c116b5f8611f23caaa77131c07f",
+      "class": "ios-platform",
+      "base": "src/surface.ios.tsx",
+      "baseSha256": "69f876a4bac852d16f9c9cac9d2e1eb604435bf63df9bbffb660afe2328a61ea",
+      "rationale": "Canonical iOS platform file retained under a .ios name so Android extensionless imports resolve to the .android implementation (base src/surface.ios.tsx)."
+    },
+    {
+      "path": "src/toggle-row.android.tsx",
+      "bytes": 2145,
+      "sha256": "bfb2a5a858906161e19fb1884583f1576912acccac70265b88b03cea46ccf335",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "src/toggle-row.ios.tsx",
+      "bytes": 2265,
+      "sha256": "2b849ed99974cc95816bb7eacd74427861e8cb657ed1060381ec22f520cd7440",
+      "class": "ios-platform",
+      "base": "src/toggle-row.ios.tsx",
+      "baseSha256": "2b849ed99974cc95816bb7eacd74427861e8cb657ed1060381ec22f520cd7440"
+    },
+    {
+      "path": "src/ui/behavior/choice.ts",
+      "bytes": 2279,
+      "sha256": "be9b22c79d93ded6a3a4cd312ab54efa9f6f50b15063052cdf98064b7acbee55",
+      "class": "upstream",
+      "baseSha256": "be9b22c79d93ded6a3a4cd312ab54efa9f6f50b15063052cdf98064b7acbee55"
+    },
+    {
+      "path": "src/ui/behavior/index.ts",
+      "bytes": 86,
+      "sha256": "ae11f4c79a1c52d35d9af6d1488af317712b153a8687d7bc0b25f79d0dcadbd8",
+      "class": "upstream",
+      "baseSha256": "ae11f4c79a1c52d35d9af6d1488af317712b153a8687d7bc0b25f79d0dcadbd8"
+    },
+    {
+      "path": "src/ui/behavior/toggle.ts",
+      "bytes": 1213,
+      "sha256": "3be0c39b1f28ae9591824f3cc528e0aea0dbe1d2ce207a62dee4327ce411cd8b",
+      "class": "upstream",
+      "baseSha256": "3be0c39b1f28ae9591824f3cc528e0aea0dbe1d2ce207a62dee4327ce411cd8b"
+    },
+    {
+      "path": "src/ui/components/choice.tsx",
+      "bytes": 704,
+      "sha256": "11e4a0aefb866ff7633c9fcaabb24e440cd772c6b7c6f9fc869e7324d2e7df9a",
+      "class": "upstream",
+      "baseSha256": "11e4a0aefb866ff7633c9fcaabb24e440cd772c6b7c6f9fc869e7324d2e7df9a"
+    },
+    {
+      "path": "src/ui/contracts/action.ts",
+      "bytes": 1072,
+      "sha256": "ce23f9e75a191da969d19f226e1b616953d1096544c6dcf6bd4b6322d9e94a8e",
+      "class": "upstream",
+      "baseSha256": "ce23f9e75a191da969d19f226e1b616953d1096544c6dcf6bd4b6322d9e94a8e"
+    },
+    {
+      "path": "src/ui/contracts/adapter.ts",
+      "bytes": 1033,
+      "sha256": "8c0bed053036e5028b1f6ef37eeb3c3570a8ee2d833479a2a1381b7f71f1c9b5",
+      "class": "upstream",
+      "baseSha256": "8c0bed053036e5028b1f6ef37eeb3c3570a8ee2d833479a2a1381b7f71f1c9b5"
+    },
+    {
+      "path": "src/ui/contracts/choice.ts",
+      "bytes": 879,
+      "sha256": "44f110367eff93b20c00fbc654bf4b47cb7fcfd89b6aec772b332fb6ae5e957f",
+      "class": "upstream",
+      "baseSha256": "44f110367eff93b20c00fbc654bf4b47cb7fcfd89b6aec772b332fb6ae5e957f"
+    },
+    {
+      "path": "src/ui/contracts/icon.ts",
+      "bytes": 1467,
+      "sha256": "9b258afe6b76205a263f4b602f7ae664be3c09f8b49de4756034a532b0b49664",
+      "class": "upstream",
+      "baseSha256": "9b258afe6b76205a263f4b602f7ae664be3c09f8b49de4756034a532b0b49664"
+    },
+    {
+      "path": "src/ui/contracts/index.ts",
+      "bytes": 284,
+      "sha256": "4f2fbde302bd10e5c06c7d983056001bc88de70fc347bd28d338937b12a6138e",
+      "class": "upstream",
+      "baseSha256": "4f2fbde302bd10e5c06c7d983056001bc88de70fc347bd28d338937b12a6138e"
+    },
+    {
+      "path": "src/ui/contracts/navigation.ts",
+      "bytes": 294,
+      "sha256": "0419c00a047389b50ebf5af95cc213a4791c3e704e5bc478b3aa8e67e0723870",
+      "class": "upstream",
+      "baseSha256": "0419c00a047389b50ebf5af95cc213a4791c3e704e5bc478b3aa8e67e0723870"
+    },
+    {
+      "path": "src/ui/contracts/selection.ts",
+      "bytes": 236,
+      "sha256": "84bd6112547ba4a8bc604d09afc3c9b9506664505bdde4f9feaff7f13e0c7636",
+      "class": "divergence",
+      "base": "src/ui/contracts/selection.ts",
+      "baseSha256": "218b8a593b908edd424cd446e3a3e73dccbd8dfbec979bdb4efdaa0646d436c0",
+      "rationale": "Shared foundation file with Android platform adaptation."
+    },
+    {
+      "path": "src/ui/contracts/surface.ts",
+      "bytes": 241,
+      "sha256": "7e1d7d5e92ec77de50cd1fbb65d46fbae0bf5e37f87a8432c289c64e9658a28f",
+      "class": "upstream",
+      "baseSha256": "7e1d7d5e92ec77de50cd1fbb65d46fbae0bf5e37f87a8432c289c64e9658a28f"
+    },
+    {
+      "path": "src/ui/contracts/text.ts",
+      "bytes": 505,
+      "sha256": "fc58e2ffccd7870a2b2027a935b7a9fd410f1c15364a0e70af169506f382ddfd",
+      "class": "upstream",
+      "baseSha256": "fc58e2ffccd7870a2b2027a935b7a9fd410f1c15364a0e70af169506f382ddfd"
+    },
+    {
+      "path": "src/ui/contracts/toggle.ts",
+      "bytes": 912,
+      "sha256": "240325b2bc91afb7eea077465a59f6b389e750ec68731167a024bcb5ea75ec1b",
+      "class": "upstream",
+      "baseSha256": "240325b2bc91afb7eea077465a59f6b389e750ec68731167a024bcb5ea75ec1b"
+    },
+    {
+      "path": "src/ui/index.ts",
+      "bytes": 186,
+      "sha256": "c4c8dc23c45537db4d52035916c66e2617a31c72d6748681826bed30e8a3b227",
+      "class": "upstream",
+      "baseSha256": "c4c8dc23c45537db4d52035916c66e2617a31c72d6748681826bed30e8a3b227"
+    },
+    {
+      "path": "src/ui/platform/android/README.md",
+      "bytes": 938,
+      "sha256": "92bdf2381ca030a04b1b84833ad2617097e77db096db0e450715c6736e6aabe7",
+      "class": "divergence",
+      "base": "src/ui/platform/android/README.md",
+      "baseSha256": "c8efdab22f8ca06071ede718f18055d00b9ad3f46100d436f3e95f8e31cf2451",
+      "rationale": "Shared foundation file with Android platform adaptation."
+    },
+    {
+      "path": "src/ui/platform/android/adapter.ts",
+      "bytes": 670,
+      "sha256": "bca833a56ab5a64251e1e2480f36f3a4e5175abc1ae92027a874c33c6bcf8fb8",
+      "class": "android-only",
+      "rationale": "Android-only module with no canonical iOS counterpart; reviewed."
+    },
+    {
+      "path": "src/ui/platform/ios/icons.ts",
+      "bytes": 1883,
+      "sha256": "0edf0ce158c772f0acb81c13dd90f5cefe0600afd1cfdf896cda0061c2595a40",
+      "class": "upstream",
+      "baseSha256": "0edf0ce158c772f0acb81c13dd90f5cefe0600afd1cfdf896cda0061c2595a40"
+    },
+    {
+      "path": "src/ui/platform/toolbar.android.ts",
+      "bytes": 837,
+      "sha256": "15b7084552fb27ab8239075d9bfcf95e559b00f1a207b391a4302ff79aab4373",
+      "class": "overlay",
+      "rationale": "Android-only platform module with no iOS sibling; reviewed."
+    },
+    {
+      "path": "src/ui/platform/toolbar.ios.ts",
+      "bytes": 2072,
+      "sha256": "dc95cf4e1ff7fadbb69fc12e5dfd7c5ab2cd1597b363dde90da911487d34842f",
+      "class": "ios-platform",
+      "base": "src/ui/platform/toolbar.ios.ts",
+      "baseSha256": "dc95cf4e1ff7fadbb69fc12e5dfd7c5ab2cd1597b363dde90da911487d34842f"
+    },
+    {
+      "path": "src/window-layout.ts",
+      "bytes": 6587,
+      "sha256": "f47f8e8924f8b0b31c0de1b55fccbd33c9516d10c2618fed281643494b69ee97",
+      "class": "divergence",
+      "base": "src/window-layout.ts",
+      "baseSha256": "477c5096e54a2836514307ebb3797ef515d77a5c13fa76276e6430c2905ec453",
+      "rationale": "Shared foundation file with Android platform adaptation."
+    }
+  ]
+}

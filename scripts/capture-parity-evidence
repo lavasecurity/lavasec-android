@@ -1,0 +1,290 @@
+#!/usr/bin/env bash
+#
+# Slice-07 visual evidence harness.
+#
+# Captures named product states on an attached device through adb, stores each
+# screenshot under a filename that carries the state name, the device
+# configuration, the repository commit SHA, and the capture timestamp, and
+# appends a matching metadata record to manifest.json in the output directory.
+# No screenshot is ever written as a bare name like current.png: the metadata is
+# in the filename by construction, and the manifest is the machine-readable
+# record of the same facts.
+#
+# The script is operator-run: it performs the navigation it can do
+# deterministically (launch, deep links, repeat swipes) and pauses with printed
+# instructions for the steps only an operator can confirm (onboarding walk,
+# system VPN-consent dialog, "verify you are at the exact state"). The operator
+# runs the same states once on the API 28 device and once on the API 36 device;
+# the device configuration lands in the filename, so the two runs never collide.
+#
+# Written for bash 3.2 (the macOS default): no associative arrays, no mapfile.
+#
+# Usage:
+#   scripts/capture-parity-evidence [--serial SERIAL] [--out DIR]
+#       [--states state,...] [--list]
+#
+# Options:
+#   --serial SERIAL   adb device to use (defaults to the single attached device)
+#   --out DIR         output directory (default: ./parity-evidence)
+#   --states LIST     comma-separated state names (default: every shipped state)
+#   --list            print the available state names and exit
+#   --skip-nav        capture only; do not run the per-state navigation
+#   --no-install      skip the build+install provenance step (captures are then
+#                     recorded WITHOUT a commit pin and with the installed
+#                     version as provenance — use only for exploratory captures)
+#
+# By default the harness builds and installs the debug APK from the current
+# checkout before capturing, so the recorded commit SHA is the exact revision
+# running on the device. Use --no-install to capture an existing install; those
+# captures carry no commit pin and must never gate a parity decision.
+#
+# Run `adb devices` first. The script refuses to run without exactly one
+# reachable device unless --serial selects one.
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+SERIAL=""
+OUT_DIR="parity-evidence"
+STATES_ARG=""
+SKIP_NAV=0
+LIST_ONLY=0
+NO_INSTALL=0
+
+usage() {
+    cat <<'EOF'
+Usage:
+  scripts/capture-parity-evidence [--serial SERIAL] [--out DIR]
+      [--states state,...] [--list]
+
+Options:
+  --serial SERIAL   adb device to use (defaults to the single attached device)
+  --out DIR         output directory (default: ./parity-evidence)
+  --states LIST     comma-separated state names (default: every shipped state)
+  --list            print the available state names and exit
+  --skip-nav        capture only; do not run the per-state navigation
+  --no-install      skip the build+install provenance step (no commit pin)
+
+Run `adb devices` first. The script refuses to run without exactly one
+reachable device unless --serial selects one.
+EOF
+    exit 2
+}
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --serial) SERIAL="${2:?--serial needs a value}"; shift 2 ;;
+        --out) OUT_DIR="${2:?--out needs a value}"; shift 2 ;;
+        --states) STATES_ARG="${2:?--states needs a value}"; shift 2 ;;
+        --list) LIST_ONLY=1; shift ;;
+        --skip-nav) SKIP_NAV=1; shift ;;
+        --no-install) NO_INSTALL=1; shift ;;
+        -h|--help) usage ;;
+        *) echo "unknown option: $1" >&2; usage ;;
+    esac
+done
+
+# The shipped capture states (lowercase, hyphenated) matching every non-deferred
+# fixture column of docs/parity/parity-matrix.md. `ALL_STATES` is the default
+# capture set; a state named in the matrix must be capturable here.
+ALL_STATES="account-unavailable activity-overview ambient-notification bug-report customization dns-resolver domain-action-review domain-history filter-detail filter-editor filter-preparing filter-review filters-library filters-overview guard-fallback guard-off guard-paused guard-protected guard-reconnecting legal-notices nerd-stats network-activity-empty network-activity-events onboarding privacy-data security settings-root-max settings-root-middle settings-root-top top-domains upgrade-unavailable"
+
+if [[ $LIST_ONLY -eq 1 ]]; then
+    echo "$ALL_STATES" | tr ' ' '\n'
+    exit 0
+fi
+
+if [[ -n "$STATES_ARG" ]]; then
+    STATES="$(echo "$STATES_ARG" | tr ',' ' ')"
+else
+    STATES="$ALL_STATES"
+fi
+for state in $STATES; do
+    case " $ALL_STATES " in
+        *" $state "*) ;;
+        *) echo "unknown state '$state'; run --list for the available names" >&2; exit 2 ;;
+    esac
+done
+
+adb_run() { command adb ${SERIAL:+-s "$SERIAL"} "$@"; }
+
+if [[ -z "$SERIAL" ]]; then
+    devices="$(command adb devices | awk 'NR>1 && $2=="device" {print $1}')"
+    if [[ -z "$devices" ]]; then
+        echo "no attached device; start an emulator or plug in a device" >&2
+        exit 1
+    fi
+    SERIAL="$(echo "$devices" | head -n1)"
+    if [[ "$(echo "$devices" | wc -l | tr -d ' ')" -gt 1 ]]; then
+        echo "multiple devices attached; pass --serial (devices: $devices)" >&2
+        exit 1
+    fi
+fi
+adb_run get-state >/dev/null
+
+APP_ID="com.lavasec.app.debug"
+SHA="$(git -C "$REPO_ROOT" rev-parse --short=12 HEAD 2>/dev/null || echo unknown-sha)"
+PROVENANCE="built-from-head"
+MODEL="$(adb_run shell getprop ro.product.model | tr -d '\r' | tr ' /' '_-')"
+SDK="$(adb_run shell getprop ro.build.version.sdk | tr -d '\r')"
+SIZE="$(adb_run shell wm size | awk '/Physical size:/{print $3}')"
+DENSITY="$(adb_run shell wm density | awk '/Physical density:/{print $3}')"
+LOCALE="$(adb_run shell getprop persist.sys.locale | tr -d '\r')"
+[[ -n "$LOCALE" ]] || LOCALE="$(adb_run shell getprop ro.product.locale | tr -d '\r')"
+DEVICE_TAG="$(printf '%s' "${MODEL}-api${SDK}-${SIZE}-${DENSITY}dpi" | tr -cd '[:alnum:]_-')"
+
+# Provenance gate: the commit pin is only truthful when the device runs the
+# APK built from this exact checkout. The default build+install guarantees it;
+# --no-install captures an existing install and must never carry a commit pin.
+if [[ $NO_INSTALL -eq 0 ]]; then
+    JAVA_HOME="${JAVA_HOME:-$(/usr/libexec/java_home 2>/dev/null || true)}"
+    export JAVA_HOME
+    ANDROID_HOME="${ANDROID_HOME:-${HOME}/Library/Android/sdk}"
+    export ANDROID_HOME
+    if [[ ! -x "$REPO_ROOT/android/gradlew" ]] || [[ ! -d "$ANDROID_HOME" ]]; then
+        echo "cannot verify the installed app matches HEAD: need android/gradlew and ANDROID_HOME (pass --no-install for exploratory captures without a commit pin)" >&2
+        exit 1
+    fi
+    echo "building and installing the debug APK from $SHA ..."
+    (cd "$REPO_ROOT/android" && ./gradlew --no-daemon -q :app:assemblePlayDebug)
+    adb_run install -r "$REPO_ROOT/android/app/build/outputs/apk/play/debug/app-play-debug.apk" >/dev/null
+    echo "installed: the debug APK built from $SHA"
+else
+    INSTALLED_VERSION="$(adb_run shell dumpsys package "$APP_ID" | awk -F= '/versionName=/{name=$2} /versionCode=/{code=$2} END{printf "%s (%s)", name, code}')"
+    SHA="no-commit-pin"
+    PROVENANCE="unverified-installed"
+    echo "provenance: NO COMMIT PIN (--no-install); installed app reports $INSTALLED_VERSION"
+fi
+
+mkdir -p "$OUT_DIR"
+MANIFEST="$OUT_DIR/manifest.json"
+[[ -f "$MANIFEST" ]] || printf '[]\n' > "$MANIFEST"
+
+open_app() {
+    # Deep links land on the canonical root path; guard is the launcher default.
+    adb_run shell am start -W -a android.intent.action.VIEW \
+        -d "lavasecurity://${1:-guard}" >/dev/null
+}
+
+scroll_up() {
+    # Swipe from the lower third to the upper third; the operator fine-tunes the
+    # exact "middle"/"max" positions before confirming the capture.
+    adb_run shell input swipe 540 1500 540 600 300 >/dev/null
+}
+
+# Per-state operator instructions; the deterministic navigation below.
+state_instructions() {
+    case "$1" in
+        onboarding) echo "Fresh install (adb uninstall first): walk the first onboarding page and leave it visible." ;;
+        guard-off) echo "Force-stop and relaunch Lava, then leave Guard with protection off (walk onboarding once on a fresh install)." ;;
+        guard-protected) echo "Tap Turn on in Guard, accept the Android VPN-consent dialog, and wait for the Protected status." ;;
+        guard-paused) echo "Long-press the protection action, pick a pause duration, and leave Guard showing the Resume countdown." ;;
+        guard-reconnecting) echo "Enter a state where the runtime reports Reconnecting (e.g. airplane-mode toggle) and leave Guard visible." ;;
+        guard-fallback) echo "With protection on, force a resolver failure so the fallback status shows, and leave Guard visible." ;;
+        filters-overview) echo "Open Filters from Guard (or lavasecurity://filters) and leave the overview scrolled to the top." ;;
+        filters-library) echo "From the Filters overview, open Your filters (the library list)." ;;
+        filter-detail) echo "Open the active filter's detail (Now filtering or View & edit) and leave the editor visible." ;;
+        filter-editor) echo "In the filter detail, add a blocked domain so the draft shows a pending edit." ;;
+        filter-review) echo "Commit a draft and leave the review diff visible." ;;
+        filter-preparing) echo "Confirm a review so the preparation cover shows (capture before it settles)." ;;
+        settings-root-top) echo "Open Settings (or lavasecurity://settings) and leave it at the top." ;;
+        settings-root-middle) echo "Scroll Settings until the Support group is centered on screen." ;;
+        settings-root-max) echo "Scroll Settings to its absolute bottom so the version footer is fully visible." ;;
+        dns-resolver) echo "Open Settings -> DNS Resolver and leave the provider list visible." ;;
+        privacy-data) echo "Open Settings -> Privacy & data and leave the retention toggles visible." ;;
+        security) echo "Open Settings -> Security and leave the app-lock controls visible." ;;
+        customization) echo "Open Settings -> Customization and leave the appearance controls visible." ;;
+        account-unavailable) echo "Open Settings -> Account & Backup and leave the unavailable panel visible." ;;
+        upgrade-unavailable) echo "Open Settings -> Upgrade and leave the unavailable panel visible." ;;
+        bug-report) echo "Open Settings -> Bug report and leave the topic step visible." ;;
+        legal-notices) echo "Open Settings -> Legal Notices and leave the first section visible." ;;
+        nerd-stats) echo "Open Settings -> Nerd Stats and leave the stats list visible." ;;
+        network-activity-events) echo "Toggle protection on/off a couple of times, then open Settings -> Network Activity with recorded rows visible." ;;
+        network-activity-empty) echo "Open Settings -> Network Activity on a state with no recorded rows (fresh install before any protection change)." ;;
+        activity-overview) echo "Open Activity from Guard and leave the overview (counts + flow bar) visible." ;;
+        top-domains) echo "Open Activity -> Top Domains and leave the ranking visible." ;;
+        domain-history) echo "Open Activity -> Domain History and leave the paged rows visible." ;;
+        domain-action-review) echo "In Top Domains or Domain History, tap a domain decision so the review dialog shows." ;;
+        ambient-notification) echo "With protection on, pull down the notification shade so the Protection status notification is visible." ;;
+    esac
+}
+
+capture_state() {
+    local state="$1"
+    if [[ $SKIP_NAV -ne 1 ]]; then
+        echo ""
+        echo "=== $state ==="
+        case "$state" in
+            onboarding) adb_run shell am force-stop "$APP_ID" >/dev/null; open_app guard ;;
+            guard-off)
+                adb_run shell am force-stop "$APP_ID" >/dev/null
+                open_app guard
+                echo "Onboarding may appear on a fresh install; walk it once (VPN + notifications + choices + finish)."
+                ;;
+            guard-protected|guard-paused|guard-reconnecting|guard-fallback) open_app guard ;;
+            filters-overview|filters-library) open_app filters ;;
+            filter-detail|filter-editor|filter-review|filter-preparing) open_app filters ;;
+            settings-root-top|privacy-data|security|customization|account-unavailable|upgrade-unavailable|bug-report|legal-notices|nerd-stats|dns-resolver|network-activity-events|network-activity-empty) open_app settings ;;
+            settings-root-middle)
+                open_app settings
+                scroll_up
+                ;;
+            settings-root-max)
+                open_app settings
+                scroll_up; sleep 1
+                scroll_up; sleep 1
+                scroll_up; sleep 1
+                ;;
+            activity-overview|top-domains|domain-history|domain-action-review) open_app activity ;;
+            ambient-notification) open_app guard ;;
+        esac
+        echo "Navigation: $(state_instructions "$state")"
+    fi
+    local answer
+    read -r -p "Confirm the device shows exactly '$state', then press Enter to capture (q quits): " answer
+    if [[ "$answer" == "q" ]]; then
+        echo "aborted by operator" >&2
+        exit 1
+    fi
+
+    local stamp
+    stamp="$(date -u +%Y-%m-%dT%H%M%SZ)"
+    local filename="${state}__${DEVICE_TAG}__${SHA}__${stamp}.png"
+    adb_run exec-out screencap -p > "$OUT_DIR/$filename"
+    if [[ ! -s "$OUT_DIR/$filename" ]]; then
+        echo "screencap produced no bytes for $state; is the screen on and unlocked?" >&2
+        rm -f "$OUT_DIR/$filename"
+        exit 1
+    fi
+    echo "captured $OUT_DIR/$filename"
+
+    # Append one metadata record: the same facts the filename encodes, plus the
+    # locale and the provenance of the running app.
+    python3 - "$MANIFEST" "$state" "$filename" "$MODEL" "$SDK" "$SIZE" "$DENSITY" "$LOCALE" "$SHA" "$stamp" "$PROVENANCE" <<'PY'
+import json, sys
+path, state, filename, model, sdk, size, density, locale, sha, stamp, provenance = sys.argv[1:]
+with open(path, "r", encoding="utf-8") as f:
+    records = json.load(f)
+records.append({
+    "state": state,
+    "file": filename,
+    "device": {"model": model, "api": int(sdk), "display": size, "densityDpi": int(density), "locale": locale},
+    "commit": sha,
+    "appProvenance": provenance,
+    "capturedAtUtc": stamp,
+})
+with open(path, "w", encoding="utf-8") as f:
+    json.dump(records, f, indent=2)
+    f.write("\n")
+PY
+}
+
+echo "device:      $SERIAL ($MODEL, API $SDK, $SIZE @ ${DENSITY}dpi, locale $LOCALE)"
+echo "commit:      $SHA ($PROVENANCE)"
+echo "output:      $OUT_DIR (manifest: $MANIFEST)"
+echo "states:      $STATES"
+for state in $STATES; do
+    capture_state "$state"
+done
+echo "done; run the same invocation on the other API level to complete the pair."
