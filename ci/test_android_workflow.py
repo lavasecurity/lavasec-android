@@ -97,7 +97,7 @@ class AndroidWorkflowContractTest(unittest.TestCase):
                     elif "ubuntu-24.04" in line:
                         self.assertEqual("android-release.yml", path.name)
                         self.assertEqual("runs-on: ubuntu-24.04", line.strip())
-                        for job in ("build", "draft"):
+                        for job in ("build", "sign_play", "draft"):
                             self.assertIn("    if: ${{ github.repository == 'lavasecurity/lavasec-android' &&", _job(source, job))
                     else:
                         self.assertIn("ubicloud-standard-", line)

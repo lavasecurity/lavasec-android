@@ -218,9 +218,9 @@ def package(root: Path, ctx: dict, output: Path, bundletool: Path, analyzer: Pat
     verify(output, ctx, root)
 
 
-def verify(directory: Path, ctx: dict, root: Path) -> dict:
+def verify(directory: Path, ctx: dict, root: Path, *, extra_files=()) -> dict:
     allowed = {*names(ctx).values(), *REPORTS, MANIFEST, SUMS}
-    if directory.is_symlink() or {p.name for p in directory.iterdir()} != allowed:
+    if directory.is_symlink() or {p.name for p in directory.iterdir()} != allowed | set(extra_files):
         raise ValueError("unexpected release artifact inventory")
     for p in directory.iterdir():
         if p.is_symlink() or not p.is_file() or not 0 < p.stat().st_size <= MAX_ARTIFACT:
@@ -246,10 +246,10 @@ def verify(directory: Path, ctx: dict, root: Path) -> dict:
     return manifest
 
 
-def unpack(archive: Path, expected_digest: str, output: Path, ctx: dict, root: Path) -> None:
+def unpack(archive: Path, expected_digest: str, output: Path, ctx: dict, root: Path, *, extra_files=()) -> None:
     if not HASH.fullmatch(expected_digest) or digest(archive) != expected_digest or output.exists():
         raise ValueError("release archive digest or destination mismatch")
-    allowed = {*names(ctx).values(), *REPORTS, MANIFEST, SUMS}
+    allowed = {*names(ctx).values(), *REPORTS, MANIFEST, SUMS, *extra_files}
     with zipfile.ZipFile(archive) as z:
         entries = z.infolist()
         if len(entries) != len(allowed) or {p.filename for p in entries} != allowed:
@@ -262,7 +262,7 @@ def unpack(archive: Path, expected_digest: str, output: Path, ctx: dict, root: P
         for p in entries:
             with z.open(p) as source, (output / p.filename).open("xb") as target:
                 shutil.copyfileobj(source, target)
-    verify(output, ctx, root)
+    verify(output, ctx, root, extra_files=extra_files)
 
 
 def main() -> None:

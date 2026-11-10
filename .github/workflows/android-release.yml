@@ -10,8 +10,12 @@ on:
       - '.github/workflows/android-release.yml'
       - 'ci/android_release_artifacts.py'
       - 'ci/test_android_release_artifacts.py'
+      - 'ci/android_play_signing.py'
+      - 'ci/test_android_play_signing.py'
+      - 'ci/VerifyPlaySignature.java'
       - 'ci/release_policy.py'
       - 'release/android-version.properties'
+      - 'release/android-play-signing.json'
       - 'release/release-policy.json'
 
 permissions:
@@ -72,7 +76,7 @@ jobs:
         uses: gradle/actions/setup-gradle@748248ddd2a24f49513d8f472f81c3a07d4d50e1 # v4.4.4
       - name: Verify release contracts and source foundation
         run: |
-          python3 -m unittest ci.test_android_release_artifacts ci.test_android_release_policy -v
+          python3 -m unittest ci.test_android_release_artifacts ci.test_android_play_signing ci.test_android_release_policy -v
           scripts/verify-android-foundation
       - name: Build native engines from the tagged source
         env:
@@ -135,23 +139,32 @@ jobs:
         run: |
           echo 'Produced a universal FOSS APK and a Google Play AAB, both unsigned, with SHA256SUMS and source/audit receipts. Signing is required before installation or Play upload. F-Droid builds and admission are managed separately.' >> "$GITHUB_STEP_SUMMARY"
 
-  draft:
-    name: Prepare draft GitHub Release
+  sign_play:
+    name: Sign Play AAB with protected upload key
     needs: build
-    if: ${{ github.repository == 'lavasecurity/lavasec-android' && github.event_name == 'push' && needs.build.outputs.mode == 'tag' }}
+    if: ${{ github.repository == 'lavasecurity/lavasec-android' && ((github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && needs.build.outputs.mode == 'manual') || (github.event_name == 'push' && needs.build.outputs.mode == 'tag')) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 10
+    environment: play-release-signing
     permissions:
-      contents: write
+      contents: read
       actions: read
+    outputs:
+      artifact_id: ${{ steps.artifacts.outputs.artifact-id }}
+      artifact_digest: ${{ steps.artifacts.outputs.artifact-digest }}
     steps:
-      - name: Check out trusted artifact verifier
+      - name: Check out trusted signing verifier
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
           persist-credentials: false
-      - name: Download and verify the exact build archive
+      - name: Set up JDK 21
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Verify the exact unsigned build before signing
         env:
           GH_TOKEN: ${{ github.token }}
           ARTIFACT_ID: ${{ needs.build.outputs.artifact_id }}
@@ -169,8 +182,76 @@ jobs:
           assert artifact['workflow_run']['head_sha'] == os.environ['GITHUB_SHA']
           assert artifact['name'] == f"android-release-unsigned-{os.environ['GITHUB_RUN_ID']}-{os.environ['GITHUB_RUN_ATTEMPT']}"
           PY
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$ARTIFACT_ID/zip" > "$RUNNER_TEMP/unsigned-release.zip"
+          python3 -m ci.android_play_signing unpack-build \
+            --archive "$RUNNER_TEMP/unsigned-release.zip" --digest "$ARTIFACT_DIGEST" \
+            --output "$RUNNER_TEMP/verified-unsigned-release"
+      - name: Sign only the Play AAB and verify its upload certificate
+        env:
+          ANDROID_UPLOAD_KEYSTORE_BASE64: ${{ secrets.ANDROID_UPLOAD_KEYSTORE_BASE64 }}
+          ANDROID_UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_UPLOAD_KEYSTORE_PASSWORD }}
+          ANDROID_UPLOAD_KEY_PASSWORD: ${{ secrets.ANDROID_UPLOAD_KEY_PASSWORD }}
+        run: |
+          python3 -m ci.android_play_signing sign \
+            --directory "$RUNNER_TEMP/verified-unsigned-release" \
+            --output "$RUNNER_TEMP/play-signed-release"
+      - name: Scrub temporary signing material
+        if: ${{ always() }}
+        run: find "$RUNNER_TEMP" -maxdepth 1 -type d -name 'lavasec-play-signing-*' -exec rm -rf -- {} +
+      - name: Upload verified Play-signed distribution artifacts
+        id: artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: android-release-play-signed-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/play-signed-release/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
+      - name: Summarize Play signing and FOSS status
+        run: |
+          echo 'Play AAB signed with the existing upload key; FOSS APK remains unsigned. The package includes the original unsigned build, upload-signed AAB, signing record and PLAY-SIGNED-SHA256SUMS. No store upload performed.' >> "$GITHUB_STEP_SUMMARY"
+
+  draft:
+    name: Prepare draft GitHub Release
+    needs: [build, sign_play]
+    if: ${{ github.repository == 'lavasecurity/lavasec-android' && github.event_name == 'push' && needs.build.outputs.mode == 'tag' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - name: Check out trusted artifact verifier
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set up JDK 21
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Download and verify the exact build archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARTIFACT_ID: ${{ needs.sign_play.outputs.artifact_id }}
+          ARTIFACT_DIGEST: ${{ needs.sign_play.outputs.artifact_digest }}
+        run: |
+          set -euo pipefail
+          [[ "$ARTIFACT_ID" =~ ^[1-9][0-9]*$ ]]
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$ARTIFACT_ID" > "$RUNNER_TEMP/artifact-metadata.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          artifact = json.loads((Path(os.environ['RUNNER_TEMP']) / 'artifact-metadata.json').read_text())
+          assert not artifact['expired']
+          assert artifact['workflow_run']['id'] == int(os.environ['GITHUB_RUN_ID'])
+          assert artifact['workflow_run']['head_sha'] == os.environ['GITHUB_SHA']
+          assert artifact['name'] == f"android-release-play-signed-{os.environ['GITHUB_RUN_ID']}-{os.environ['GITHUB_RUN_ATTEMPT']}"
+          PY
           gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$ARTIFACT_ID/zip" > "$RUNNER_TEMP/release-assets.zip"
-          python3 -m ci.android_release_artifacts unpack \
+          python3 -m ci.android_play_signing unpack-signed \
             --archive "$RUNNER_TEMP/release-assets.zip" --digest "$ARTIFACT_DIGEST" \
             --output "$RUNNER_TEMP/verified-release-assets"
       - name: Create a new draft without replacing existing assets
@@ -187,17 +268,17 @@ jobs:
             exit 1
           fi
           cat > "$RUNNER_TEMP/release-notes.md" <<EOF
-          Unsigned distribution build for Lava Security $VERSION_NAME.
+          Play-signed distribution build for Lava Security $VERSION_NAME.
 
-          - FOSS APK: com.lavasec.app.foss (all four supported ABIs).
-          - Play AAB: com.lavasec.app.
+          - FOSS APK: com.lavasec.app.foss (all four supported ABIs), unsigned for qualification.
+          - Play AAB: use the upload-signed.aab file for com.lavasec.app, signed with the existing upload key.
           - Source: $SOURCE_SHA
-          - Signing is required before installation or Google Play upload.
+          - The original unsigned Play AAB is retained as signing evidence.
           - F-Droid rebuild, signing and repository admission are separate steps.
 
-          Verify SHA256SUMS and release-manifest.json before signing. This draft does not publish to either store.
+          Verify PLAY-SIGNED-SHA256SUMS and play-signing-record.json. This draft does not publish to either store.
           EOF
           gh release create "$RELEASE_TAG" "$RUNNER_TEMP/verified-release-assets/"* \
             --repo "$GITHUB_REPOSITORY" --verify-tag --target "$SOURCE_SHA" \
-            --draft --latest=false --title "Lava Security $VERSION_NAME — unsigned build" \
+            --draft --latest=false --title "Lava Security $VERSION_NAME — Play-signed build" \
             --notes-file "$RUNNER_TEMP/release-notes.md"
