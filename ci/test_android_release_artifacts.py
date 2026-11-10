@@ -280,11 +280,21 @@ class AndroidReleaseArtifactsTest(unittest.TestCase):
 class AndroidReleaseWorkflowTest(unittest.TestCase):
     def test_all_release_jobs_use_standard_github_runners_and_build_is_unprivileged(self):
         source = (ROOT / ".github/workflows/android-release.yml").read_text()
-        self.assertEqual(["ubuntu-24.04", "ubuntu-24.04"], re.findall(r"runs-on: (.+)", source))
-        build, draft = source.split("\n  draft:", 1)
+        self.assertEqual(["ubuntu-24.04"] * 3, re.findall(r"runs-on: (.+)", source))
+        build, protected = source.split("\n  sign_play:", 1)
+        signer, draft = protected.split("\n  draft:", 1)
         for forbidden in ("secrets.", "environment:", "id-token:", "contents: write", "gh release create"):
             self.assertNotIn(forbidden, build)
         self.assertIn("github.repository == 'lavasecurity/lavasec-android'", build)
+        self.assertIn("environment: play-release-signing", signer)
+        self.assertIn("github.event_name == 'workflow_dispatch'", signer)
+        self.assertIn("github.ref == 'refs/heads/main'", signer)
+        self.assertNotIn("github.event_name == 'pull_request'", signer)
+        self.assertIn("ci.android_play_signing unpack-build", signer)
+        self.assertIn("secrets.ANDROID_UPLOAD_KEYSTORE_BASE64", signer)
+        self.assertLess(signer.index("ci.android_play_signing unpack-build"), signer.index("secrets.ANDROID_UPLOAD_KEYSTORE_BASE64"))
+        for forbidden in ("id-token:", "contents: write", "./gradlew", "npm ci", "google-github-actions/auth"):
+            self.assertNotIn(forbidden, signer)
         self.assertIn("github.event_name == 'push'", draft)
         self.assertIn("needs.build.outputs.mode == 'tag'", draft)
         self.assertIn("contents: write", draft)
@@ -294,7 +304,10 @@ class AndroidReleaseWorkflowTest(unittest.TestCase):
         self.assertIn("RELEASE_TAG: ${{ github.ref_name }}", draft)
         self.assertNotIn("needs.build.outputs.source_sha", draft)
         self.assertNotIn("needs.build.outputs.tag", draft)
-        self.assertLess(draft.index("android_release_artifacts unpack"), draft.index("gh release create"))
+        self.assertIn("needs: [build, sign_play]", draft)
+        self.assertIn("needs.sign_play.outputs.artifact_digest", draft)
+        self.assertNotIn("secrets.", draft)
+        self.assertLess(draft.index("android_play_signing unpack-signed"), draft.index("gh release create"))
         for forbidden in ("--clobber", "google-github-actions/auth", "upload_to_play_store", "./gradlew", "npm ci"):
             self.assertNotIn(forbidden, draft)
         self.assertIn("retention-days: 1", build)
