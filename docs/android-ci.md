@@ -1,5 +1,7 @@
 # Android check tiers
 
+For FOSS APK and Play AAB downloads, see [release artifacts](android-release-artifacts.md).
+
 Android follows the same separation as the iOS internal and public repositories.
 Every ready pull request gets repository checks and the shared secret/mobile
 security scans. Do not use skip-CI commit markers for documentation: required

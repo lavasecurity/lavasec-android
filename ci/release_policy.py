@@ -18,10 +18,10 @@ def load_policy() -> dict[str, Any]:
     return json.loads(POLICY_PATH.read_text(encoding="utf-8"))
 
 
-def release_defaults() -> tuple[str, int]:
+def release_defaults(root: Path = ROOT) -> tuple[str, int]:
     """Validate the single source shared by Gradle, preflight and source export."""
     properties = {}
-    for raw in (ROOT / "release/android-version.properties").read_text(encoding="utf-8").splitlines():
+    for raw in (root / "release/android-version.properties").read_text(encoding="utf-8").splitlines():
         if not raw.strip() or raw.lstrip().startswith("#"):
             continue
         key, separator, value = raw.partition("=")

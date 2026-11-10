@@ -94,6 +94,11 @@ class AndroidWorkflowContractTest(unittest.TestCase):
                     elif "ubuntu-latest" in line:
                         self.assertEqual("codeql.yml", path.name)
                         self.assertIn("github.repository == 'lavasecurity/lavasec-android'", source)
+                    elif "ubuntu-24.04" in line:
+                        self.assertEqual("android-release.yml", path.name)
+                        self.assertEqual("runs-on: ubuntu-24.04", line.strip())
+                        for job in ("build", "draft"):
+                            self.assertIn("    if: ${{ github.repository == 'lavasecurity/lavasec-android' &&", _job(source, job))
                     else:
                         self.assertIn("ubicloud-standard-", line)
         self.assertIn("Require a trusted internal branch", self.read(WORKFLOW))

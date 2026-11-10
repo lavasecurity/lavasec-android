@@ -1,0 +1,206 @@
+name: Android release artifacts
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, converted_to_draft]
+    paths:
+      - '.github/workflows/android-release.yml'
+      - 'ci/android_release_artifacts.py'
+      - 'ci/test_android_release_artifacts.py'
+      - 'ci/release_policy.py'
+      - 'release/android-version.properties'
+      - 'release/release-policy.json'
+
+permissions:
+  contents: read
+
+# Each tag/manual run keeps its evidence. PR edits refresh their validation build.
+concurrency:
+  group: android-release-artifacts-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    name: Build FOSS APK and Play AAB
+    if: ${{ github.repository == 'lavasecurity/lavasec-android' && github.event.pull_request.draft != true }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    outputs:
+      source_sha: ${{ steps.coordinates.outputs.sourceSha }}
+      version_name: ${{ steps.coordinates.outputs.versionName }}
+      tag: ${{ steps.coordinates.outputs.tag }}
+      mode: ${{ steps.coordinates.outputs.mode }}
+      artifact_id: ${{ steps.artifacts.outputs.artifact-id }}
+      artifact_digest: ${{ steps.artifacts.outputs.artifact-digest }}
+    steps:
+      - name: Check out exact source
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Validate public source and release coordinates
+        id: coordinates
+        run: python3 -m ci.android_release_artifacts prepare --output "$RUNNER_TEMP/release-context.json"
+      - name: Reserve hosted-runner disk space
+        run: |
+          set -euo pipefail
+          sudo rm -rf /usr/share/dotnet /usr/local/.ghcup /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h "$GITHUB_WORKSPACE"
+      - name: Set up JDK 21
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2
+        with:
+          packages: 'platform-tools'
+      - name: Install pinned Android tools
+        run: |
+          set -euo pipefail
+          sdkmanager "platforms;android-36" "build-tools;36.0.0" "ndk;27.2.12479018" "cmake;3.30.5"
+          command -v apkanalyzer
+          test -x "$ANDROID_SDK_ROOT/build-tools/36.0.0/zipalign"
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: android/react-native/package-lock.json
+      - name: Set up Gradle dependency cache
+        uses: gradle/actions/setup-gradle@748248ddd2a24f49513d8f472f81c3a07d4d50e1 # v4.4.4
+      - name: Verify release contracts and source foundation
+        run: |
+          python3 -m unittest ci.test_android_release_artifacts ci.test_android_release_policy -v
+          scripts/verify-android-foundation
+      - name: Build native engines from the tagged source
+        env:
+          SOURCE_DATE_EPOCH: ${{ steps.coordinates.outputs.sourceDateEpoch }}
+        run: bash scripts/prepare-wireguard-core-android.sh
+      - name: Test, lint and build both release editions
+        env:
+          SOURCE_DATE_EPOCH: ${{ steps.coordinates.outputs.sourceDateEpoch }}
+          VERSION_NAME: ${{ steps.coordinates.outputs.versionName }}
+          VERSION_CODE: ${{ steps.coordinates.outputs.versionCode }}
+        working-directory: android
+        run: |
+          set -euo pipefail
+          ./gradlew --no-daemon --no-build-cache --max-workers=2 --stacktrace \
+            "-PlavasecVersionName=$VERSION_NAME" "-PlavasecVersionCode=$VERSION_CODE" \
+            testDebugUnitTest :app:testPlayDebugUnitTest :app:testFossDebugUnitTest \
+            lintDebug :app:lintPlayDebug :app:lintFossDebug \
+            :app:bundlePlayRelease :app:bundleFossRelease :app:assembleFossRelease \
+            :app:dependencies --configuration fossReleaseRuntimeClasspath \
+            | tee "$RUNNER_TEMP/foss-dependencies.txt"
+      - name: Fetch checksum-pinned bundletool
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 2 --silent --show-error \
+            https://github.com/google/bundletool/releases/download/1.18.3/bundletool-all-1.18.3.jar \
+            --output "$RUNNER_TEMP/bundletool.jar"
+          printf '%s  %s\n' a099cfa1543f55593bc2ed16a70a7c67fe54b1747bb7301f37fdfd6d91028e29 \
+            "$RUNNER_TEMP/bundletool.jar" | sha256sum --check
+      - name: Verify actual APK and AAB contents and assemble distribution files
+        run: |
+          python3 -m ci.android_release_artifacts package \
+            --context "$RUNNER_TEMP/release-context.json" \
+            --bundletool "$RUNNER_TEMP/bundletool.jar" \
+            --apkanalyzer "$(command -v apkanalyzer)" \
+            --zipalign "$ANDROID_SDK_ROOT/build-tools/36.0.0/zipalign" \
+            --dependencies "$RUNNER_TEMP/foss-dependencies.txt" \
+            --output "$RUNNER_TEMP/release-assets"
+      - name: Retain failed test and lint diagnostics
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: android-release-diagnostics-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            android/*/build/test-results/**
+            android/*/build/reports/tests/**
+            android/*/build/reports/lint-results-*.html
+            android/*/build/reports/lint-results-*.xml
+          if-no-files-found: warn
+          retention-days: 1
+      - name: Upload unsigned distribution artifacts
+        id: artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: android-release-unsigned-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/release-assets/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
+      - name: Summarize artifact signing status
+        run: |
+          echo 'Produced a universal FOSS APK and a Google Play AAB, both unsigned, with SHA256SUMS and source/audit receipts. Signing is required before installation or Play upload. F-Droid builds and admission are managed separately.' >> "$GITHUB_STEP_SUMMARY"
+
+  draft:
+    name: Prepare draft GitHub Release
+    needs: build
+    if: ${{ github.repository == 'lavasecurity/lavasec-android' && github.event_name == 'push' && needs.build.outputs.mode == 'tag' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - name: Check out trusted artifact verifier
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Download and verify the exact build archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARTIFACT_ID: ${{ needs.build.outputs.artifact_id }}
+          ARTIFACT_DIGEST: ${{ needs.build.outputs.artifact_digest }}
+        run: |
+          set -euo pipefail
+          [[ "$ARTIFACT_ID" =~ ^[1-9][0-9]*$ ]]
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$ARTIFACT_ID" > "$RUNNER_TEMP/artifact-metadata.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          artifact = json.loads((Path(os.environ['RUNNER_TEMP']) / 'artifact-metadata.json').read_text())
+          assert not artifact['expired']
+          assert artifact['workflow_run']['id'] == int(os.environ['GITHUB_RUN_ID'])
+          assert artifact['workflow_run']['head_sha'] == os.environ['GITHUB_SHA']
+          assert artifact['name'] == f"android-release-unsigned-{os.environ['GITHUB_RUN_ID']}-{os.environ['GITHUB_RUN_ATTEMPT']}"
+          PY
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$ARTIFACT_ID/zip" > "$RUNNER_TEMP/release-assets.zip"
+          python3 -m ci.android_release_artifacts unpack \
+            --archive "$RUNNER_TEMP/release-assets.zip" --digest "$ARTIFACT_DIGEST" \
+            --output "$RUNNER_TEMP/verified-release-assets"
+      - name: Create a new draft without replacing existing assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_SHA: ${{ needs.build.outputs.source_sha }}
+          RELEASE_TAG: ${{ needs.build.outputs.tag }}
+          VERSION_NAME: ${{ needs.build.outputs.version_name }}
+        run: |
+          set -euo pipefail
+          test "$(gh api "repos/$GITHUB_REPOSITORY/commits/$RELEASE_TAG" --jq .sha)" = "$SOURCE_SHA"
+          if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo '::error::A release already exists for this tag; inspect it without overwriting assets.'
+            exit 1
+          fi
+          cat > "$RUNNER_TEMP/release-notes.md" <<EOF
+          Unsigned distribution build for Lava Security $VERSION_NAME.
+
+          - FOSS APK: com.lavasec.app.foss (all four supported ABIs).
+          - Play AAB: com.lavasec.app.
+          - Source: $SOURCE_SHA
+          - Signing is required before installation or Google Play upload.
+          - F-Droid rebuild, signing and repository admission are separate steps.
+
+          Verify SHA256SUMS and release-manifest.json before signing. This draft does not publish to either store.
+          EOF
+          gh release create "$RELEASE_TAG" "$RUNNER_TEMP/verified-release-assets/"* \
+            --repo "$GITHUB_REPOSITORY" --verify-tag --target "$SOURCE_SHA" \
+            --draft --latest=false --title "Lava Security $VERSION_NAME — unsigned build" \
+            --notes-file "$RUNNER_TEMP/release-notes.md"
