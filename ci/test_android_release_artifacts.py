@@ -290,6 +290,10 @@ class AndroidReleaseWorkflowTest(unittest.TestCase):
         self.assertIn("contents: write", draft)
         self.assertIn("--draft --latest=false", draft)
         self.assertIn("--verify-tag", draft)
+        self.assertIn("SOURCE_SHA: ${{ github.sha }}", draft)
+        self.assertIn("RELEASE_TAG: ${{ github.ref_name }}", draft)
+        self.assertNotIn("needs.build.outputs.source_sha", draft)
+        self.assertNotIn("needs.build.outputs.tag", draft)
         self.assertLess(draft.index("android_release_artifacts unpack"), draft.index("gh release create"))
         for forbidden in ("--clobber", "google-github-actions/auth", "upload_to_play_store", "./gradlew", "npm ci"):
             self.assertNotIn(forbidden, draft)

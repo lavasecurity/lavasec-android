@@ -29,9 +29,6 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     outputs:
-      source_sha: ${{ steps.coordinates.outputs.sourceSha }}
-      version_name: ${{ steps.coordinates.outputs.versionName }}
-      tag: ${{ steps.coordinates.outputs.tag }}
       mode: ${{ steps.coordinates.outputs.mode }}
       artifact_id: ${{ steps.artifacts.outputs.artifact-id }}
       artifact_digest: ${{ steps.artifacts.outputs.artifact-digest }}
@@ -179,11 +176,11 @@ jobs:
       - name: Create a new draft without replacing existing assets
         env:
           GH_TOKEN: ${{ github.token }}
-          SOURCE_SHA: ${{ needs.build.outputs.source_sha }}
-          RELEASE_TAG: ${{ needs.build.outputs.tag }}
-          VERSION_NAME: ${{ needs.build.outputs.version_name }}
+          SOURCE_SHA: ${{ github.sha }}
+          RELEASE_TAG: ${{ github.ref_name }}
         run: |
           set -euo pipefail
+          VERSION_NAME="${RELEASE_TAG#v}"
           test "$(gh api "repos/$GITHUB_REPOSITORY/commits/$RELEASE_TAG" --jq .sha)" = "$SOURCE_SHA"
           if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             echo '::error::A release already exists for this tag; inspect it without overwriting assets.'
