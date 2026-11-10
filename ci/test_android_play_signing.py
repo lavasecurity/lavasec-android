@@ -142,7 +142,10 @@ class ProtectedPlaySigningTest(unittest.TestCase):
         actual = signing.run_tool
         def capture(command, env):
             calls.append((command, env))
-            return actual(command, env)
+            result = actual(command, env)
+            if command[0] == "java":
+                self.assertEqual(b"", result)
+            return result
         with patch.object(signing, "run_tool", side_effect=capture):
             self.signed()
         for command, env in calls:

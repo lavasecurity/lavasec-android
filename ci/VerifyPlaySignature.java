@@ -33,9 +33,7 @@ class VerifyPlaySignature {
                 }
             }
             if (verified == 0) throw new Exception();
-            System.out.println("Verified Play upload signature for " + verified + " entries.");
         } catch (Exception error) {
-            System.err.println("Play signature verification failed.");
             System.exit(1);
         }
     }
