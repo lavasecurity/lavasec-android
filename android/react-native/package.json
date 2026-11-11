@@ -27,7 +27,7 @@
     "react-native-svg": "15.15.5"
   },
   "devDependencies": {
-    "@babel/core": "7.29.0",
+    "@babel/core": "7.29.13",
     "@react-native-community/cli": "20.2.0",
     "@react-native-community/cli-platform-android": "20.2.0",
     "@react-native/babel-preset": "0.87.1",
