@@ -82,7 +82,7 @@ jobs:
         run: python3 -m unittest ci.test_android_ci_scope ci.test_android_workflow.AndroidWorkflowContractTest ci.test_android_react_native_contract -v
       - name: Set up JDK 21
         if: ${{ needs.changes.outputs.docs_only != 'true' }}
-        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
         with:
           distribution: temurin
           java-version: '21'
@@ -203,7 +203,7 @@ jobs:
           persist-credentials: false
       - name: Set up JDK 21
         if: ${{ needs.changes.outputs.docs_only != 'true' }}
-        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
         with:
           distribution: temurin
           java-version: '21'
@@ -270,7 +270,7 @@ jobs:
           persist-credentials: false
       - name: Set up JDK 21
         if: ${{ needs.changes.outputs.docs_only != 'true' && needs.changes.outputs.native_required != 'false' }}
-        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
         with:
           distribution: temurin
           java-version: '21'
@@ -345,7 +345,7 @@ jobs:
 
       - name: Set up JDK 21
         if: ${{ needs.changes.outputs.full_build != 'false' }}
-        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
         with:
           distribution: temurin
           java-version: '21'
@@ -527,7 +527,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up JDK 21
-        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
         with:
           distribution: temurin
           java-version: '21'
