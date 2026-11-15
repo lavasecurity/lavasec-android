@@ -53,6 +53,6 @@ jobs:
         working-directory: android
         # Do not reuse compiled classes: CodeQL must observe an actual Kotlin build.
         run: ./gradlew --no-daemon --no-build-cache --rerun-tasks :app:compilePlayDebugKotlin :app:compileFossDebugKotlin :app:compilePlayDebugJavaWithJavac :app:compileFossDebugJavaWithJavac
-      - uses: github/codeql-action/analyze@5895b2c9be147bc7f1c75ce72c5cb577febb1907 # v4
+      - uses: github/codeql-action/analyze@33d7b85da1a04171e211befe2c739303b9a4c066 # v4
         with:
           category: '/language:java-kotlin'
