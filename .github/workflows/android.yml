@@ -235,7 +235,7 @@ jobs:
         run: ./gradlew --no-daemon --max-workers=2 --stacktrace testDebugUnitTest :app:testPlayDebugUnitTest :app:testFossDebugUnitTest
       - name: Retain failed unit test and lint diagnostics
         if: ${{ failure() }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: android-unit-test-diagnostics
           path: |
@@ -441,7 +441,7 @@ jobs:
 
       - name: Retain failed unit test and lint diagnostics
         if: ${{ failure() }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: android-verification-diagnostics
           path: |
@@ -454,7 +454,7 @@ jobs:
 
       - name: Upload debug APK
         if: ${{ needs.changes.outputs.full_build != 'false' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: lavasec-android-debug-apk
           path: |
@@ -468,7 +468,7 @@ jobs:
 
       - name: Upload unsigned release AAB
         if: ${{ needs.changes.outputs.full_build != 'false' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: lavasec-android-release-unsigned-aab
           path: |
@@ -505,7 +505,7 @@ jobs:
 
       - name: Retain the optimized startup candidate
         if: ${{ needs.changes.outputs.full_build != 'false' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: android-minified-startup
           path: ${{ runner.temp }}/android-minified-startup/
@@ -594,7 +594,7 @@ jobs:
 
       - name: Retain optimized startup evidence, including failures
         if: ${{ always() }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: android-minified-startup-evidence
           path: device-evidence/minified-startup/
